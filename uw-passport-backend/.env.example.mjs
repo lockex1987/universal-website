@@ -1,4 +1,6 @@
 export default {
+  CODE: 'universal-website',
+
   PORT: 3000,
 
   LOG_LEVEL: 'info',
