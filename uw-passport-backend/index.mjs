@@ -4,7 +4,6 @@
 import cors from 'cors'
 import express from 'express'
 
-import edgeTemplateEngine from '#app/helpers/edgeTemplateEngine.mjs'
 import { connect as connectMongodb } from '#app/helpers/mongodb.mjs'
 import redis from '#app/helpers/redis.mjs'
 import checkLogin from '#app/middleware/checkLogin.mjs'
@@ -20,15 +19,15 @@ await redis.connect()
 
 const app = express()
 
-app.engine('edge', edgeTemplateEngine)
 app.set('view engine', 'edge')
 app.use(express.static('public'))
 app.use(express.json())
 app.use(cors())
 
 app.get('/', (request, response) => {
-  response.render('index', {
-    greeting: 'Hello world 2',
+  response.json({
+    code: 0,
+    message: 'Hello world',
   })
 })
 
