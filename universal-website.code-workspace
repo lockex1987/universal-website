@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "uw-passport-backend"
+    },
+    {
+      "path": "uw-passport-frontend"
+    },
+    {
+      "path": "uw-frontend"
+    }
+  ],
+  "settings": {}
+}

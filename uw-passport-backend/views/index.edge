@@ -1,0 +1,18 @@
+<html>
+<body>
+<p>{{ greeting }}</p>
+<p>{{ '<script> alert(`foo`) </script>' }}</p>
+
+<div id="app"></div>
+
+<!-- if development -->
+<!--
+<script type="module" src="http://localhost:5173/@vite/client"></script>
+<script type="module" src="http://localhost:5173/frontend/js/script.js"></script>
+-->
+
+<!-- if production -->
+{{{ vite('frontend/js/script.js') }}}
+
+</body>
+</html>
