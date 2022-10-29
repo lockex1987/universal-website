@@ -91,7 +91,6 @@
   </form>
 </template>
 
-
 <script setup>
 import axios from 'axios'
 import { ref } from 'vue'
@@ -104,7 +103,7 @@ const isProcessing = ref(false)
 const isCapsLockOn = ref(false)
 const root = ref(null)
 
-const handleCapsLockWarning = (evt) => {
+const handleCapsLockWarning = evt => {
   // Thêm đoạn kiểm tra getModifierState vì khi focus thì bị lỗi
   if (evt.getModifierState) {
     isCapsLockOn.value = evt.getModifierState('CapsLock')
