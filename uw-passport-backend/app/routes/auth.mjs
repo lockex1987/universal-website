@@ -83,6 +83,8 @@ router.post('/logout', async (request, response) => {
 router.get('/me', async (request, response) => {
   const redisUser = await getUser(request)
   if (! redisUser) {
+    response.clearCookie('sessionId')
+
     return response.json({
       code: 1,
       message: 'Not in Redis',
@@ -93,6 +95,10 @@ router.get('/me', async (request, response) => {
   const id = redisUser.id
   const dbUser = await db.collection('users').findOne({ _id: ObjectId(id) })
   if (! dbUser) {
+    await removeUser(request)
+
+    response.clearCookie('sessionId')
+
     return response.json({
       code: 1,
       message: 'Not in DB',
