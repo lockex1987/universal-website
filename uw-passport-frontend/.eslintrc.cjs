@@ -4,7 +4,7 @@ module.exports = {
     'standard',
   ],
   env: {
-    'vue/setup-compiler-macros': true,
+    // 'vue/setup-compiler-macros': true,
   },
   globals: {
     axios: 'readonly',
@@ -40,7 +40,7 @@ module.exports = {
       words: true,
       nonwords: false, // no space before ++, --
       overrides: {
-        '!': true, // space after !
+        // '!': true, // space after !
       },
     }],
   },
