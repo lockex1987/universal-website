@@ -1,0 +1,6 @@
+.form-control-inline-width {
+  // Hiện .form-control đang có width là 100%, nên nhiều khi trông dài quá
+  // Giới hạn ngắn lại
+  // max-width: 200px;
+  width: 200px;
+}
