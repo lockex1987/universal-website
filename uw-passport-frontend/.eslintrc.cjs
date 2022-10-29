@@ -6,9 +6,20 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
+    // "standard", // eslint-config-standard
   ],
   env: {
     'vue/setup-compiler-macros': true,
+  },
+  globals: {
+    axios: 'readonly',
+    noti: 'readonly',
+
+    Highcharts: 'readonly',
+    $: 'readonly',
+    ExcelJS: 'readonly',
+    moment: 'readonly',
+    CV: 'readonly',
   },
   rules: {
     'semi': ['error', 'never'],

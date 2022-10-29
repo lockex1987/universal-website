@@ -2,6 +2,9 @@ import './scss/style.scss'
 
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
+import './libs/noti/scss/noti.scss'
+import './libs/noti/js/noti.js'
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
