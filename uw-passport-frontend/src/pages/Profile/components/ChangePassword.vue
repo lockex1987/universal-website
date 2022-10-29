@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="changePassword()">
+  <form
+    @submit.prevent="changePassword()"
+    ref="root"
+  >
     <div class="mb-3 validate-container">
       <label class="form-label required">
         Mật khẩu cũ
@@ -7,12 +10,12 @@
 
       <div class="input-group form-control-max-width">
         <input
-          v-model.trim="oldPassword"
           :type="showOldPassword ? 'text' : 'password'"
           class="form-control"
           placeholder="Mật khẩu cũ"
+          v-model.trim="oldPassword"
           data-validation="required"
-          autocomplete="new-password"
+          autocomplete="off"
         />
 
         <span
@@ -21,8 +24,8 @@
           :title="showOldPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
         >
           <i
-            class="la"
-            :class="[showOldPassword ? 'la-eye-slash' : 'la-eye']"
+            class="bi"
+            :class="[showOldPassword ? 'bi-eye-slash' : 'bi-eye']"
           ></i>
         </span>
       </div>
@@ -35,12 +38,12 @@
 
       <div class="input-group form-control-max-width">
         <input
-          v-model.trim="newPassword"
           :type="showNewPassword ? 'text' : 'password'"
           class="form-control"
           placeholder="Mật khẩu mới"
+          v-model.trim="newPassword"
           data-validation="required|minLength:8|maxLength:50"
-          autocomplete="new-password"
+          autocomplete="off"
           @keydown="handleCapsLockWarning($event)"
         />
         <!-- password|passwordStrong -->
@@ -51,8 +54,8 @@
           :title="showNewPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
         >
           <i
-            class="la"
-            :class="[showNewPassword ? 'la-eye-slash' : 'la-eye']"
+            class="bi"
+            :class="[showNewPassword ? 'bi-eye-slash' : 'bi-eye']"
           ></i>
         </span>
       </div>
@@ -72,8 +75,8 @@
       >
         Đổi mật khẩu
         <span
-          class="spinner-border spinner-border-sm"
           v-show="isProcessing"
+          class="spinner-border spinner-border-sm"
         ></span>
       </button>
 
@@ -90,92 +93,65 @@
 
 
 <script setup>
-export default {
-  data() {
-    return {
-      // Mật khẩu cũ
-      oldPassword: '',
-      showOldPassword: false,
+import axios from 'axios'
+import { ref } from 'vue'
 
-      // Mật khẩu mới
-      newPassword: '',
-      showNewPassword: false,
+const oldPassword = ref('')
+const showOldPassword = ref(false)
+const newPassword = ref('')
+const showNewPassword = ref(false)
+const isProcessing = ref(false)
+const isCapsLockOn = ref(false)
+const root = ref(null)
 
-      // Đánh dấu đang xử lý
-      isProcessing: false,
+const handleCapsLockWarning = (evt) => {
+  // Thêm đoạn kiểm tra getModifierState vì khi focus thì bị lỗi
+  if (evt.getModifierState) {
+    isCapsLockOn.value = evt.getModifierState('CapsLock')
+  }
+}
 
-      // Có phải đang bật Caps Lock hay không
-      isCapsLockOn: false,
-    }
-  },
+const toggleOldPassword = () => {
+  showOldPassword.value = !showOldPassword.value
+}
 
-  methods: {
-    /**
-     * Khi Caps Lock đang được bật thì cảnh báo người dùng.
-     * Đơn giản, nhưng rất hữu ích.
-     */
-    handleCapsLockWarning(evt) {
-      // Thêm đoạn kiểm tra getModifierState vì khi focus thì bị lỗi
-      if (evt.getModifierState) {
-        this.isCapsLockOn = evt.getModifierState('CapsLock')
-      }
-    },
+const toggleNewPassword = () => {
+  showNewPassword.value = !showNewPassword.value
+}
 
-    /**
-     * Ẩn / hiện password cũ.
-     */
-    toggleOldPassword() {
-      this.showOldPassword = !this.showOldPassword
-    },
+const changePassword = async () => {
+  if (isProcessing.value) {
+    return
+  }
 
-    /**
-     * Ẩn / hiện password mới.
-     */
-    toggleNewPassword() {
-      this.showNewPassword = !this.showNewPassword
-    },
+  /*
+  if (CV.invalidForm(root.value)) {
+    return
+  }
+  */
 
-    /**
-     * Đổi mật khẩu.
-     */
-    async changePassword() {
-      if (this.isProcessing) {
-        return
-      }
+  isProcessing.value = true
+  const params = {
+    oldPassword: oldPassword.value,
+    newPassword: newPassword.value,
+  }
+  const { data } = await axios.post('/change-password', params)
+  isProcessing.value = false
 
-      if (CV.invalidForm(this.$el)) {
-        return
-      }
+  if (data.code == 0) {
+    this.cancelForm()
+    noti.success('Đổi mật khẩu thành công')
+  } else if (data.code == 1) {
+    noti.error(data.message)
+  }
+}
 
-      this.isProcessing = true
-      const params = {
-        oldPassword: this.oldPassword,
-        newPassword: this.newPassword,
-      }
-      const { data } = await axios.post('/change-password', params)
-      this.isProcessing = false
+const cancelForm = () => {
+  // CV.clearErrorMessages(root.value)
 
-      if (data.code == 0) {
-        this.cancelForm()
-        noti.success('Đổi mật khẩu thành công')
-      } else if (data.code == 1) {
-        noti.error(data.message)
-      }
-    },
-
-    /**
-     * Nhấn nút hủy.
-     */
-    cancelForm() {
-      // Xóa các thông báo lỗi (nếu có)
-      CV.clearErrorMessages(this.$el)
-
-      // Reset lại form
-      this.oldPassword = ''
-      this.newPassword = ''
-      this.showOldPassword = false
-      this.showNewPassword = false
-    },
-  },
+  oldPassword.value = ''
+  newPassword.value = ''
+  showOldPassword.value = false
+  showNewPassword.value = false
 }
 </script>
