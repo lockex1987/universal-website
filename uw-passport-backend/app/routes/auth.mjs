@@ -49,7 +49,7 @@ router.post('/login', async (request, response, next) => {
   if (! bcrypt.compareSync(password, user.password)) {
     // throw new Error('Login failed 2 ')
     return response.json({
-      code: 2,
+      code: 1,
       message: 'Login failed',
     })
   }

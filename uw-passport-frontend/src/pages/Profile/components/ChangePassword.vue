@@ -135,7 +135,7 @@ const changePassword = async () => {
     oldPassword: oldPassword.value,
     newPassword: newPassword.value,
   }
-  const { data } = await axios.post('/change-password', params)
+  const { data } = await axios.post('/api/profile/change-password', params)
   isProcessing.value = false
 
   if (data.code == 0) {

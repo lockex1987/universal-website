@@ -78,7 +78,6 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
-// import { setToken } from '@/helpers/sso'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -100,12 +99,11 @@ const processLogin = async () => {
     username: username.value,
     password: password.value,
   }
-  const { data } = await axios.post('/login', params)
+  const { data } = await axios.post('/api/auth/login', params)
   isProcessing.value = false
 
   if (data.code == 0) {
     errorMessage.value = ''
-    // setToken(data.token)
     authStore.user = data.user
     const defaultPagePath = '/Backend/Profile'
     router.push(authStore.beforeLoginPath || defaultPagePath)

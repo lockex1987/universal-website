@@ -7,7 +7,7 @@ export default async to => {
   const authStore = useAuthStore()
 
   if (!authStore.user.id) {
-    const { data } = await axios.get('/me')
+    const { data } = await axios.get('/api/auth/me')
     if (data.code == 0) {
       authStore.user = data.user
     }
