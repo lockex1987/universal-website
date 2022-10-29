@@ -2,43 +2,28 @@ import bcrypt from 'bcrypt'
 import express from 'express'
 import { ObjectId } from 'mongodb'
 import {
+  generateRandomSessionId,
   getUser,
   removeUser,
   saveUser,
 } from '#app/helpers/auth.mjs'
 import { getDb } from '#app/helpers/mongodb.mjs'
+import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
 
-/*
-curl --header "Content-Type: application/json" \
-  --request POST \
-  --data '{ "username": "lockex1987", "password": "123456aA@" }' \
-  http://localhost:3000/auth/login
-*/
 router.post('/login', async (request, response, next) => {
-  // throw new Error('Login') // do là async nên không vào handle500, nếu muốn vào thì có thể sử dụng Express 5
-  // next(new Error('Login')) // phải làm thế này mới vào handle500
-
   const rules = {
-    username: 'required|string', // |unique:users,username
-    password: 'required|string', // |strongPassword
+    username: 'required|string',
+    password: 'required|string',
   }
   await request.validate(request.body, rules)
 
   const { username, password } = request.body
   const db = getDb()
-  // Có phân biệt hoa thường
   const user = await db.collection('users')
-    // .findOne({ username })
-    // .findOne({ username: new RegExp('^' + username + '$', 'i') })
     .findOne({ username: { $regex: '^' + username + '$', $options: 'i' } })
-    /*
-    .collation({
-      locale: 'en',
-      strength: 2
-    })
-    */
+
   if (! user) {
     return response.json({
       code: 1,
@@ -47,31 +32,48 @@ router.post('/login', async (request, response, next) => {
   }
 
   if (! bcrypt.compareSync(password, user.password)) {
-    // throw new Error('Login failed 2 ')
     return response.json({
       code: 1,
       message: 'Login failed',
     })
   }
 
-  // Save into Redis
-  // TODO: Cookie
+  // Save into Redis, cookie
   const redisUser = {
     id: user._id,
     username: user.username,
   }
-  const token = await saveUser(redisUser, request)
+  const sessionId = generateRandomSessionId()
+  await saveUser(redisUser, request, sessionId)
+
+  response.cookie('sessionId', sessionId, {
+    // Theo milli giây
+    maxAge: 120 * 60 * 1000,
+    // expires works the same as the maxAge
+    // expires: new Date('01 12 2023'),
+    secure: false,
+    // secure: true,
+    // Dùng JS document.cookie sẽ không ra
+    httpOnly: true,
+    sameSite: 'lax',
+    // sameSite: 'none', // cần secure
+    // signed: false,
+    // domain: 'http://localhost:3000'
+    // domain: 'localhost',
+  })
 
   response.json({
     code: 0,
     message: 'Login success',
     user: redisUser,
-    token,
   })
 })
 
 router.post('/logout', async (request, response) => {
   await removeUser(request)
+
+  response.clearCookie('sessionId')
+
   response.json({
     code: 0,
     message: 'Logout',
@@ -88,7 +90,8 @@ router.get('/me', async (request, response) => {
   }
 
   const db = getDb()
-  const dbUser = await db.collection('users').findOne({ _id: ObjectId(redisUser.id) })
+  const id = redisUser.id
+  const dbUser = await db.collection('users').findOne({ _id: ObjectId(id) })
   if (! dbUser) {
     return response.json({
       code: 1,
@@ -98,7 +101,10 @@ router.get('/me', async (request, response) => {
 
   response.json({
     code: 0,
-    user: redisUser,
+    user: {
+      ...pick(dbUser, 'username'),
+      id,
+    },
   })
 })
 
