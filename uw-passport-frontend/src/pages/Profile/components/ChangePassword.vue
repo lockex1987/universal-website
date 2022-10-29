@@ -139,7 +139,7 @@ const changePassword = async () => {
   isProcessing.value = false
 
   if (data.code == 0) {
-    this.cancelForm()
+    cancelForm()
     noti.success('Đổi mật khẩu thành công')
   } else if (data.code == 1) {
     noti.error(data.message)
