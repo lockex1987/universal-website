@@ -8,13 +8,13 @@
     </h4>
 
     <div>
-      <RouterLink :to="{ name: 'Home' }">
-        Home
+      <RouterLink to="/">
+        Quay lại
       </RouterLink>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { RouterLink } from 'vue-router'
 </script>
