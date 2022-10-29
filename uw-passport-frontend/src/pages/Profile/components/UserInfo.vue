@@ -93,7 +93,9 @@
 </template>
 
 
-<script>
+<script setup>
+import axios from 'axios';
+
 export default {
   data() {
     return {
