@@ -1,3 +1,5 @@
+import { fileURLToPath, URL } from 'url'
+
 export const pick = (obj, ...props) => {
   if (! obj || ! props) {
     return null
@@ -8,4 +10,8 @@ export const pick = (obj, ...props) => {
     picked[prop] = obj[prop]
   })
   return picked
+}
+
+export const getBasePath = () => {
+  return fileURLToPath(new URL('../..', import.meta.url))
 }
