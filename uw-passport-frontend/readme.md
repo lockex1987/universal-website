@@ -1,4 +1,5 @@
-    "vite": "^3.1.8"
+## UW Passport frontend
 
-    "vite-dev": "vite",
-    "vite-build": "vite build"
+Vue 3 (Composition API), Vue Router, Vite
+
+No: Pinia

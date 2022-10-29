@@ -1,8 +1,7 @@
 node_modules
-build
-dist
-.env
-.env.mjs
 package-lock.json
 pnpm-lock.yaml
 
+dist
+
+public/js/.env.js
