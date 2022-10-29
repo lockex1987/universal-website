@@ -1,20 +1,22 @@
 <template>
-  <form @submit.prevent="updateInfo()">
+  <form
+    ref="root"
+    @submit.prevent="updateInfo()"
+  >
     <div class="mb-3 form-control-max-width py-4 text-center">
       <label class="d-block mb-0 cursor-pointer">
         <img
           class="rounded-circle avatar object-fit-cover image-box-shadow"
-          :src="loginUser?.avatar || '/images/user_avatar.png'"
           title="Đổi ảnh đại diện"
           onerror="this.src = '/images/user_avatar.png'"
-          ref="theImage"
+          ref="avatarImgTag"
         />
 
         <input
           type="file"
-          ref="avatarFile"
+          ref="avatarFileInputTag"
           @change="previewAvatar()"
-          accept=".png,.jpg,.jpeg,.gif;capture=camera"
+          accept=".png, .jpg, .jpeg, .gif; capture=camera"
           class="d-none"
         />
       </label>
@@ -30,7 +32,7 @@
       </label>
 
       <div class="text-body">
-        {{ loginUser?.username }}
+        {{ authStore.user?.username }}
       </div>
     </div>
 
@@ -94,87 +96,71 @@
 
 
 <script setup>
-import axios from 'axios';
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth.js'
 
-export default {
-  data() {
-    return {
-      // Tên hiển thị
-      fullName: '',
+const authStore = useAuthStore()
 
-      // Địa chỉ email
-      email: '',
+const fullName = ref('')
+const email = ref('')
+const phone = ref('')
 
-      // Số điện thoại
-      phone: '',
+const root = ref(null)
+const avatarImgTag = ref(null)
+const avatarFileInputTag = ref(null)
 
-      // File upload ảnh avatar
-      avatar: null,
-    }
-  },
+const initInfo = () => {
+  const loginUser = authStore.user
+  fullName.value = loginUser.full_name
+  email.value = loginUser.email
+  phone.value = loginUser.phone
 
-  mounted() {
-    // this.initInfo()
-  },
-
-  methods: {
-    /**
-     * Lấy thông tin người dùng.
-     */
-    initInfo() {
-      this.fullName = this.loginUser.full_name
-      this.email = this.loginUser.email
-      this.phone = this.loginUser.phone
-      this.avatar = null
-      this.$refs.avatarFile.value = ''
-      this.$refs.theImage.src = this.loginUser.avatar
-    },
-
-    /**
-     * Cập nhật lại thông tin.
-     */
-    async updateInfo() {
-      /*
-      if (CV.invalidForm(this.$el)) {
-        return
-      }
-      */
-
-      const params = new FormData()
-      params.append('fullName', this.fullName)
-      params.append('email', this.email)
-      params.append('phone', this.phone)
-      if (this.avatar) {
-        params.append('avatar', this.avatar)
-      }
-
-      const { data } = await axios.post('/user', params)
-      if (data.code == 0) {
-        // Cập nhật lại vuex (thông tin email)
-        this.loginUser.full_name = this.fullName
-        this.loginUser.email = this.email
-        this.loginUser.phone = this.phone
-        this.loginUser.avatar = data.avatar
-
-        this.$store.commit('auth/setUser', this.loginUser)
-
-        this.initInfo()
-
-        noti.success('Cập nhật thông tin thành công')
-      } else if (data.code == 1) {
-        noti.error(data.message)
-      }
-    },
-
-    /**
-     * Xem trước ảnh avatar khi chọn file ảnh.
-     */
-    previewAvatar() {
-      this.avatar = this.$refs.avatarFile.files[0]
-      this.$refs.theImage.src = URL.createObjectURL(this.avatar)
-    },
-  },
+  avatarFileInputTag.value.value = ''
+  avatarImgTag.value.src = loginUser.avatar || '/images/user_avatar.png'
 }
+
+const updateInfo = async () => {
+  /*
+  if (CV.invalidForm(root.value)) {
+    return
+  }
+  */
+
+  const params = new FormData()
+  params.append('fullName', fullName.value)
+  params.append('email', email.value)
+  params.append('phone', phone.value)
+
+  const avatarFile = avatarFileInputTag.value.files[0]
+  if (avatarFile) {
+    params.append('avatar', avatarFile)
+  }
+
+  const { data } = await axios.post('/user', params)
+  if (data.code == 0) {
+    authStore.user = {
+      ...authStore.user,
+      full_name: fullName.value,
+      email: email.value,
+      phone: phone.value,
+      avatar: data.avatar,
+    }
+    initInfo()
+    noti.success('Cập nhật thông tin thành công')
+  } else if (data.code == 1) {
+    noti.error(data.message)
+  }
+}
+
+const previewAvatar = () => {
+  const avatarFile = avatarFileInputTag.value.files[0]
+  avatarImgTag.value.src = URL.createObjectURL(avatarFile)
+}
+
+onMounted(() => {
+  initInfo()
+})
 </script>
 
 
