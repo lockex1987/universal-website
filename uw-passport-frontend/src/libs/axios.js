@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 axios.defaults.baseURL = window.ROOT_API
+axios.defaults.withCredentials = true
 
 
 // Response interceptor

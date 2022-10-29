@@ -1,15 +1,9 @@
 export default [
   {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/pages/Home/HomeIndex.vue'),
-  },
-  {
     path: '/Login',
     name: 'Login',
     component: () => import('@/pages/Login/LoginIndex.vue'),
   },
-
   {
     path: '/Backend',
     name: 'Backend',
@@ -54,7 +48,6 @@ export default [
       */
     ],
   },
-
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
