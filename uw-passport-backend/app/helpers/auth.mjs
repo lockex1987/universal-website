@@ -1,6 +1,6 @@
-// import crypto from 'node:crypto' // Node.js old
+import crypto from 'node:crypto' // Node.js old
 // Same as browser
-import { webcrypto as crypto } from 'node:crypto'
+// import { webcrypto as crypto } from 'node:crypto'
 import redis from '#app/helpers/redis.mjs'
 import { code } from '#config/app.mjs'
 
@@ -39,10 +39,13 @@ const generateRandomToken = () => {
   // console.log(uuid)
 
   // TODO: Cần dài hơn
+  /*
   const array = new Uint32Array(1)
   crypto.getRandomValues(array)
   const num = array[0]
+  */
   // console.log(num)
+  const num = ''
 
   // const n2 = crypto.randomBytes(40).toString('hex')
   // console.log(n2)
