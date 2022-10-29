@@ -1,12 +1,8 @@
-/* eslint-env node */
-// require('@rushstack/eslint-patch/modern-module-resolution')
-
 module.exports = {
-  root: true,
   extends: [
     'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    // "standard", // eslint-config-standard
+    // 'eslint:recommended',
+    'standard', // eslint-config-standard
   ],
   env: {
     'vue/setup-compiler-macros': true,
@@ -40,6 +36,13 @@ module.exports = {
     'object-curly-spacing': ['error','always'],
     'vue/multi-word-component-names': 'off',
     'vue/require-v-for-key': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    'eqeqeq': 'off',
+    'space-unary-ops': ['error', {
+      words: true,
+      nonwords: false, // no space before ++, --
+      overrides: {
+        '!': true, // space after !
+      },
+    }],
   },
 }
