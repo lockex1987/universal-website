@@ -9,7 +9,7 @@ const router = express.Router()
 router.post('/change-password', async (request, response) => {
   const rules = {
     oldPassword: 'required|string',
-    newPassword: 'required|string',
+    newPassword: 'required|string|strongPassword',
   }
   await request.validate(request.body, rules)
 
@@ -21,14 +21,14 @@ router.post('/change-password', async (request, response) => {
   if (! dbUser) {
     return response.json({
       code: 1,
-      message: 'Not in DB',
+      message: 'Người dùng không tồn tại',
     })
   }
 
   if (! bcrypt.compareSync(oldPassword, dbUser.password)) {
     return response.json({
       code: 1,
-      message: 'Old password not matched',
+      message: 'Mật khẩu cũ không chính xác',
     })
   }
 
@@ -40,6 +40,7 @@ router.post('/change-password', async (request, response) => {
 
   response.json({
     code: 0,
+    message: 'Đổi mật khẩu thành công',
     result,
   })
 })

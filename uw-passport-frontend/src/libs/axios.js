@@ -14,11 +14,11 @@ axios.interceptors.response.use(
     const { status } = error.response
 
     if (status >= 500) {
-      // noti.error('Đã có lỗi xảy ra')
+      noti.error('Đã có lỗi xảy ra')
     }
 
     if (status == 403) {
-      // noti.error('Bạn không có quyền thực hiện chức năng này')
+      noti.error('Bạn không có quyền thực hiện chức năng này')
     }
 
     // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
@@ -43,8 +43,7 @@ axios.interceptors.response.use(
           message += s + '<br />'
         })
       }
-      // noti.error(message.trim())
-      alert(message.trim())
+      noti.error(message.trim())
     }
 
     // return Promise.reject(error)

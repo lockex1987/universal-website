@@ -15,7 +15,6 @@ const exceptPaths = [
   '/api/auth/login',
   '/api/auth/logout',
   '/api/auth/me',
-  '/',
 ]
 
 export default async (request, response, next) => {

@@ -8,7 +8,7 @@ export default (error, request, response, next) => {
 
   // Lỗi validate
   if (error.type == 'validate') {
-    return response.status(412)
+    return response.status(422)
       .json({
         code: 1,
         message: 'Validation failed',

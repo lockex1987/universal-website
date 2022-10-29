@@ -1,6 +1,5 @@
 import { request } from 'express'
 import Validator from 'validatorjs'
-// import 'validatorjs/dist/lang/vi.js' // Node.js không cần
 import { getDb } from '#app/helpers/mongodb.mjs'
 
 const addValidator = () => {
@@ -39,7 +38,7 @@ const addValidator = () => {
     (value, requirement, attribute) => {
       return strongPasswordRegex.test(value)
     },
-    'Password must contain at least one uppercase letter, one lowercase letter and one number',
+    'Mật khẩu phải chứa chữ hoa, chữ thường, số',
   )
 
   Validator.register(
@@ -47,7 +46,7 @@ const addValidator = () => {
     (value, requirement, attribute) => {
       return value.match(/^\d{3}-\d{3}-\d{4}$/)
     },
-    'The :attribute phone number is not in the format XXX-XXX-XXXX',
+    'Trường :attribute không đúng định dạng số điện thoại XXX-XXX-XXXX',
   )
 
   // Checks if incoming value already exist for unique and non-unique fields in the database
@@ -74,7 +73,7 @@ const addValidator = () => {
     // console.log(count)
 
     if (count > 0) {
-      const errorMessage = `${field} already in use`
+      const errorMessage = `Trường :attribute ${field} đã tồn tại`
       passes(false, errorMessage)
       return
     }
