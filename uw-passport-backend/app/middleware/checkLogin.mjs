@@ -33,7 +33,7 @@ export default async (request, response, next) => {
 
   const sessionId = getSessionId(request)
   const expiredTimeInSeconds = redisUser.expiredTime
-  updateExpiredTime(sessionId, expiredTimeInSeconds)
+  updateExpiredTime(sessionId, expiredTimeInSeconds, request)
   setCookie(response, sessionId, expiredTimeInSeconds)
 
   next()

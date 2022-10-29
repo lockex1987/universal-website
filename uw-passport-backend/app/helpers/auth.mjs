@@ -8,10 +8,10 @@ const getSessionId = request => {
   return sessionId ?? ''
 }
 
-const getRedisKeyFromSessionId = (token, request) => {
+const getRedisKeyFromSessionId = (sessionId, request) => {
   // Thêm IP của người dùng để nếu lỡ bị lộ thông tin token thì cũng không thực hiện được ở máy khác
   const ip = (request.header('x-forwarded-for') || request.socket.remoteAddress).replace('::ffff:', '')
-  const redisKey = code + '-session:' + token + '-' + ip
+  const redisKey = code + '-session:' + sessionId + '-' + ip
   return redisKey
 }
 
@@ -62,8 +62,8 @@ const saveUser = async (user, request, sessionId, expiredTimeSeconds) => {
   await redis.set(redisKey, redisValue, 'EX', expiredTimeSeconds)
 }
 
-const updateExpiredTime = async (sessionId, expiredTimeSeconds) => {
-  const redisKey = getRedisKeyFromSessionId(sessionId)
+const updateExpiredTime = async (sessionId, expiredTimeSeconds, request) => {
+  const redisKey = getRedisKeyFromSessionId(sessionId, request)
   await redis.expire(redisKey, expiredTimeSeconds)
 }
 
