@@ -4,7 +4,7 @@ import redis from '#app/helpers/redis.mjs'
 import { code } from '#config/app.mjs'
 
 const getSessionId = request => {
-  const sessionId = request.cookies.sessionId
+  const sessionId = request.cookies?.sessionId
   return sessionId ?? ''
 }
 

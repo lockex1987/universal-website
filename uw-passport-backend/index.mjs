@@ -1,8 +1,5 @@
-// "express@>=5.0.0-beta.1"
-// "express": "^4.18.2"
-
-import cors from 'cors'
 import express from 'express'
+import cookieParser from 'cookie-parser'
 
 import { connect as connectMongodb } from '#app/helpers/mongodb.mjs'
 import redis from '#app/helpers/redis.mjs'
@@ -18,18 +15,8 @@ await connectMongodb()
 await redis.connect()
 
 const app = express()
-
-app.set('view engine', 'edge')
-app.use(express.static('public'))
 app.use(express.json())
-app.use(cors())
-
-app.get('/', (request, response) => {
-  response.json({
-    code: 0,
-    message: 'Hello world',
-  })
-})
+app.use(cookieParser())
 
 const prefix = '/api'
 routes.forEach(({ path, router }) => {
@@ -43,7 +30,6 @@ routes.forEach(({ path, router }) => {
   }
 })
 
-// app.use(checkLogin)
 app.use(handle404)
 app.use(handle500)
 
