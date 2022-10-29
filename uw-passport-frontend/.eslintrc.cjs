@@ -1,14 +1,7 @@
-/* eslint-env node */
-// require('@rushstack/eslint-patch/modern-module-resolution')
-
-// TODO: đang bị lỗi
 module.exports = {
-  root: true,
-
   extends: [
     'plugin:vue/vue3-essential',
-    // 'eslint:recommended',
-    'standard', // eslint-config-standard
+    'standard',
   ],
   env: {
     'vue/setup-compiler-macros': true,
@@ -39,7 +32,7 @@ module.exports = {
     'quotes': ['error', 'single'],
     'quote-props': ['error', 'consistent-as-needed'],
     'arrow-parens': ['error', 'as-needed'],
-    'object-curly-spacing': ['error','always'],
+    'object-curly-spacing': ['error', 'always'],
     'vue/multi-word-component-names': 'off',
     'vue/require-v-for-key': 'off',
     'eqeqeq': 'off',
