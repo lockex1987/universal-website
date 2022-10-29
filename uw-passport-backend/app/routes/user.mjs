@@ -3,14 +3,12 @@ import { getDb } from '#app/helpers/mongodb.mjs'
 
 const router = express.Router()
 
-router.get('/search', async (request, response) => {
-  const search = request.query.search
-  const page = parseInt(request.query.page)
-  const size = parseInt(request.query.size)
+router.post('/search', async (request, response) => {
+  const { text, page, size } = request.body
 
   const query = {}
-  if (search) {
-    query.username = { $regex: search, $options: 'i' }
+  if (text) {
+    query.username = { $regex: text, $options: 'i' }
   }
   const order = { _id: -1 }
   const db = getDb()
@@ -28,10 +26,10 @@ router.get('/search', async (request, response) => {
     .limit(size)
     .toArray()
 
-  return {
+  response.json({
     total,
     list,
-  }
+  })
 })
 
 export default router

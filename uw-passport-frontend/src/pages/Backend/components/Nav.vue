@@ -29,35 +29,15 @@
             </RouterLink>
           </li>
 
-          <!--li class="nav-item">
+          <li class="nav-item">
             <RouterLink
-              :to="{ name: 'user' }"
+              :to="{ name: 'User' }"
               class="nav-link"
               activeClass="active"
             >
               User
             </RouterLink>
           </li>
-
-          <li class="nav-item">
-            <RouterLink
-              :to="{ name: 'product' }"
-              class="nav-link"
-              activeClass="active"
-            >
-              Product
-            </RouterLink>
-          </li>
-
-          <li class="nav-item">
-            <RouterLink
-              :to="{ name: 'order' }"
-              class="nav-link"
-              activeClass="active"
-            >
-              Order
-            </RouterLink>
-          </li-->
         </ul>
 
         <div class="dropdown text-end">
@@ -68,16 +48,8 @@
           >
             {{ authStore.user.username }}
           </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <!--li>
-              <RouterLink
-                :to="{ name: 'changePassword' }"
-                class="dropdown-item"
-              >
-                Change password
-              </RouterLink>
-            </li-->
 
+          <ul class="dropdown-menu dropdown-menu-end">
             <li>
               <a
                 class="dropdown-item"

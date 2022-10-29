@@ -6,9 +6,9 @@
   <div class="d-flex flex-wrap align-items-center">
     <input
       type="text"
-      placeholder="Name"
       class="form-control form-control-inline-width mb-3"
-      v-model.trim="searchText"
+      placeholder="Username"
+      v-model.trim="text"
       @input="debouncedSearch()"
     />
   </div>
@@ -26,10 +26,10 @@
         <thead>
           <tr>
             <th class="text-center">
-              STT
+              #
             </th>
             <th class="text-center">
-              Name
+              Username
             </th>
             <th class="text-center">
               Actions
@@ -43,11 +43,11 @@
             :key="user.id"
           >
             <td class="text-center">
-              {{ (currentPage - 1) * limit + i + 1 }}
+              {{ (currentPage - 1) * size + i + 1 }}
             </td>
 
             <td>
-              {{ user.user_name }}
+              {{ user.username }}
             </td>
 
             <td class="text-center">
@@ -63,47 +63,41 @@
 
     <div>
       <div class="text-muted">
-        {{ total }} records
+        Tìm thấy {{ total }} bản ghi
       </div>
 
-      <ElPagination
+      <!--ElPagination
         layout="prev, pager, next"
         :hideOnSinglePage="true"
-        :pageSize="limit"
+        :pageSize="size"
         :total="total"
         v-model:currentPage="currentPage"
-      />
+      /-->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ElPagination } from 'element-plus'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { debounce } from '@/composables/common'
+import { debounce } from '@/helpers/common.js'
 
-type User = {
-  id: number
-  user_name: string
-}
-
-const limit = 10
+const size = 10
 const total = ref(-1)
 const currentPage = ref(1)
-const userList = ref([] as any[]) // as User[]
-const searchText = ref('')
+const userList = ref([])
+const text = ref('')
 
-const search = async (page: number) => {
+const search = async page => {
   const params = {
-    search: searchText.value,
+    text: text.value,
     page,
-    limit,
+    size,
   }
-  const { data } = await axios.post('/user/search', params)
-  total.value = data.meta.total
-  currentPage.value = data.meta.current_page ?? page
-  userList.value = data.data
+  const { data } = await axios.post('/api/user/search', params)
+  total.value = data.total
+  currentPage.value = page
+  userList.value = data.list
 }
 
 const debouncedSearch = debounce(() => search(1), 500)

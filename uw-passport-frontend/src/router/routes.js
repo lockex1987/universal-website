@@ -14,36 +14,16 @@ export default [
         name: 'Profile',
         component: () => import('@/pages/Profile/ProfileIndex.vue'),
       },
+      {
+        path: 'User',
+        name: 'User',
+        component: () => import('@/pages/User/UserIndex.vue'),
+      },
       /*
-      {
-        path: 'change-password',
-        name: 'changePassword',
-        component: () => import('@/pages/ChangePassword.vue'),
-      },
-      {
-        path: 'product',
-        name: 'product',
-        component: () => import('@/pages/Product.vue'),
-      },
-      {
-        path: 'product/:productId',
-        name: 'productForm',
-        component: () => import('@/pages/ProductForm.vue'),
-      },
-      {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/pages/User.vue'),
-      },
       {
         path: 'user/:userId',
         name: 'userForm',
         component: () => import('@/pages/UserForm.vue'),
-      },
-      {
-        path: 'order',
-        name: 'order',
-        component: () => import('@/pages/Order.vue'),
       },
       */
     ],
