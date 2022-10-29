@@ -5,10 +5,9 @@ import { getUser } from '#app/helpers/auth.mjs'
  * Có ký tự / ở đầu.
  */
 const exceptPaths = [
-  '/auth/login',
-  '/auth/logout',
-  '/auth/me',
-  '/product/search',
+  '/api/auth/login',
+  '/api/auth/logout',
+  '/api/auth/me',
   '/',
 ]
 

@@ -31,14 +31,15 @@ app.get('/', (request, response) => {
   })
 })
 
+const prefix = '/api'
 routes.forEach(({ path, router }) => {
   const exceptAuthPaths = [
     '/auth',
   ]
   if (exceptAuthPaths.includes(path)) {
-    app.use(path, router)
+    app.use(prefix + path, router)
   } else {
-    app.use(path, checkLogin, router)
+    app.use(prefix + path, checkLogin, router)
   }
 })
 
