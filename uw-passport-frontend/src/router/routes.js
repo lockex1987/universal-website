@@ -9,18 +9,18 @@ export default [
     name: 'Login',
     component: () => import('@/pages/Login/LoginIndex.vue'),
   },
-  /*
 
   {
-    path: '/backend',
-    name: 'backend',
-    component: () => import('@/pages/Backend.vue'),
+    path: '/Backend',
+    name: 'Backend',
+    component: () => import('@/pages/Backend/BackendIndex.vue'),
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: () => import('@/pages/Dashboard.vue'),
+        path: 'Profile',
+        name: 'Profile',
+        component: () => import('@/pages/Profile/ProfileIndex.vue'),
       },
+      /*
       {
         path: 'change-password',
         name: 'changePassword',
@@ -51,9 +51,9 @@ export default [
         name: 'order',
         component: () => import('@/pages/Order.vue'),
       },
+      */
     ],
   },
-  */
 
   {
     path: '/:pathMatch(.*)*',

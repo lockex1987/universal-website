@@ -1,9 +1,13 @@
-import { reactive, ref } from 'vue'
+import { defineStore } from 'pinia'
 
-export const user = reactive({
-  id: null,
-  username: '',
+// Dùng Pinia mới thiết lập được từ API (axios)
+// ref của Vue không được
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    user: {
+      id: null,
+      username: '',
+    },
+    beforeLoginPath: '',
+  }),
 })
-
-// TODO: Không cần ref, chỉ cần một biến bình thường
-export const beforeLoginPath = ref('')

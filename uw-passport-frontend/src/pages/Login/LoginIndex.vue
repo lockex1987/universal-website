@@ -77,10 +77,10 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { user, beforeLoginPath } from '@/stores/auth.js'
+import { useAuthStore } from '@/stores/auth.js'
 // import { setToken } from '@/helpers/sso'
 
-// const authStore = useAuthStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
 const username = ref('')
@@ -106,10 +106,10 @@ const processLogin = async () => {
   if (data.code == 0) {
     errorMessage.value = ''
     // setToken(data.token)
-    user.value = data.user
-    const defaultPagePath = '/backend/dashboard'
-    router.push(beforeLoginPath.value || defaultPagePath)
-    beforeLoginPath.value = ''
+    authStore.user = data.user
+    const defaultPagePath = '/Backend/Profile'
+    router.push(authStore.beforeLoginPath || defaultPagePath)
+    authStore.beforeLoginPath = ''
   } else if (data.code == 1) {
     errorMessage.value = data.message
   }
