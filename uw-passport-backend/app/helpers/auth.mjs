@@ -53,22 +53,51 @@ const getUser = async request => {
   return user
 }
 
-const saveUser = async (user, request, sessionId) => {
-  // Đơn vị giây (10 ngày)
-  const expiredTime = 10 * 24 * 60 * 60
+const saveUser = async (user, request, sessionId, expiredTimeSeconds) => {
   const redisKey = getRedisKeyFromSessionId(sessionId, request)
   const redisValue = JSON.stringify({
-    id: user.id,
-    username: user.username,
-    expiredTime,
+    ...user,
+    expiredTime: expiredTimeSeconds,
   })
-  await redis.set(redisKey, redisValue, 'EX', expiredTime)
+  await redis.set(redisKey, redisValue, 'EX', expiredTimeSeconds)
+}
+
+const updateExpiredTime = async (sessionId, expiredTimeSeconds) => {
+  const redisKey = getRedisKeyFromSessionId(sessionId)
+  await redis.expire(redisKey, expiredTimeSeconds)
+}
+
+const setCookie = (response, sessionId, expiredTimeSeconds) => {
+  response.cookie('sessionId', sessionId, {
+    // Theo milli giây
+    maxAge: expiredTimeSeconds * 1000,
+    // expires works the same as the maxAge
+    // expires: new Date('01 12 2023'),
+    secure: false,
+    // secure: true,
+    // Dùng JS document.cookie sẽ không ra
+    httpOnly: true,
+    sameSite: 'lax',
+    // sameSite: 'none', // cần secure
+    // signed: false,
+    // domain: 'http://localhost:3000'
+    // domain: 'localhost',
+  })
+}
+
+const clearCookie = response => {
+  response.clearCookie('sessionId')
 }
 
 export {
   generateRandomSessionId,
+  getSessionId,
 
   saveUser,
   getUser,
   removeUser,
+  updateExpiredTime,
+
+  setCookie,
+  clearCookie,
 }

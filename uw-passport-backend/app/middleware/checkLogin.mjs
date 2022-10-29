@@ -1,4 +1,11 @@
-import { getUser } from '#app/helpers/auth.mjs'
+
+import {
+  getSessionId,
+  getUser,
+  updateExpiredTime,
+  setCookie,
+  clearCookie,
+} from '#app/helpers/auth.mjs'
 
 /**
  * Danh sách các đường dẫn không kiểm tra.
@@ -20,15 +27,15 @@ export default async (request, response, next) => {
 
   const redisUser = await getUser(request)
   if (! redisUser) {
-    console.log(path)
-
-    response.clearCookie('sessionId')
-
+    clearCookie(response)
     return response.status(401)
       .json({ error: 'Must be logged in' })
   }
 
-  // TODO: Tăng TTL của token, dựa vào trường expiredTime trong Redis
+  const sessionId = getSessionId(request)
+  const expiredTimeInSeconds = redisUser.expiredTime
+  updateExpiredTime(sessionId, expiredTimeInSeconds)
+  setCookie(response, sessionId, expiredTimeInSeconds)
 
   next()
 }

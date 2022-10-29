@@ -6,6 +6,8 @@ import {
   getUser,
   removeUser,
   saveUser,
+  setCookie,
+  clearCookie,
 } from '#app/helpers/auth.mjs'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
@@ -44,23 +46,11 @@ router.post('/login', async (request, response, next) => {
     username: user.username,
   }
   const sessionId = generateRandomSessionId()
-  await saveUser(redisUser, request, sessionId)
+  // 10 ngày
+  const expiredTimeSeconds = 10 * 24 * 60 * 60
+  await saveUser(redisUser, request, sessionId, expiredTimeSeconds)
 
-  response.cookie('sessionId', sessionId, {
-    // Theo milli giây
-    maxAge: 120 * 60 * 1000,
-    // expires works the same as the maxAge
-    // expires: new Date('01 12 2023'),
-    secure: false,
-    // secure: true,
-    // Dùng JS document.cookie sẽ không ra
-    httpOnly: true,
-    sameSite: 'lax',
-    // sameSite: 'none', // cần secure
-    // signed: false,
-    // domain: 'http://localhost:3000'
-    // domain: 'localhost',
-  })
+  setCookie(response, sessionId, expiredTimeSeconds)
 
   response.json({
     code: 0,
@@ -71,9 +61,7 @@ router.post('/login', async (request, response, next) => {
 
 router.post('/logout', async (request, response) => {
   await removeUser(request)
-
-  response.clearCookie('sessionId')
-
+  clearCookie(response)
   response.json({
     code: 0,
     message: 'Logout',
@@ -83,8 +71,7 @@ router.post('/logout', async (request, response) => {
 router.get('/me', async (request, response) => {
   const redisUser = await getUser(request)
   if (! redisUser) {
-    response.clearCookie('sessionId')
-
+    clearCookie(response)
     return response.json({
       code: 1,
       message: 'Not in Redis',
@@ -96,9 +83,7 @@ router.get('/me', async (request, response) => {
   const dbUser = await db.collection('users').findOne({ _id: ObjectId(id) })
   if (! dbUser) {
     await removeUser(request)
-
-    response.clearCookie('sessionId')
-
+    clearCookie(response)
     return response.json({
       code: 1,
       message: 'Not in DB',
