@@ -1,12 +1,12 @@
 <template>
-  <!--Nav /-->
+  <Nav />
 
   <div class="p-3">
     <RouterView />
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { RouterView } from 'vue-router'
-// import Nav from './components/Nav.vue'
+import Nav from './components/Nav.vue'
 </script>

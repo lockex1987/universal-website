@@ -21,15 +21,15 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <RouterLink
-              :to="{ name: 'dashboard' }"
+              :to="{ name: 'Profile' }"
               class="nav-link"
               activeClass="active"
             >
-              Dashboard
+              Profile
             </RouterLink>
           </li>
 
-          <li class="nav-item">
+          <!--li class="nav-item">
             <RouterLink
               :to="{ name: 'user' }"
               class="nav-link"
@@ -57,7 +57,7 @@
             >
               Order
             </RouterLink>
-          </li>
+          </li-->
         </ul>
 
         <div class="dropdown text-end">
@@ -66,17 +66,17 @@
             type="button"
             data-bs-toggle="dropdown"
           >
-            {{ authStore.user.userName }}
+            {{ authStore.user.username }}
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li>
+            <!--li>
               <RouterLink
                 :to="{ name: 'changePassword' }"
                 class="dropdown-item"
               >
                 Change password
               </RouterLink>
-            </li>
+            </li-->
 
             <li>
               <a
@@ -94,24 +94,21 @@
   </nav>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import axios from 'axios'
 import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { deleteToken } from '@/helpers/sso'
-import axios from 'axios'
+import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
-
 const router = useRouter()
 
 const processLogout = async () => {
   await axios.post('/logout')
-  deleteToken()
   authStore.user = {
     id: null,
-    userName: '',
+    username: '',
   }
-  router.push('/login')
+  router.push('/Login')
 }
 </script>
