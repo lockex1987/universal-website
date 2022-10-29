@@ -111,11 +111,11 @@ const handleCapsLockWarning = evt => {
 }
 
 const toggleOldPassword = () => {
-  showOldPassword.value = !showOldPassword.value
+  showOldPassword.value = ! showOldPassword.value
 }
 
 const toggleNewPassword = () => {
-  showNewPassword.value = !showNewPassword.value
+  showNewPassword.value = ! showNewPassword.value
 }
 
 const changePassword = async () => {
