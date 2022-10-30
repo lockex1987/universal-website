@@ -103,7 +103,9 @@ const processLogin = async () => {
   // Reset form => frmRef.value.resetFields()
   //
   // Unhandled error during execution of native event handler
-  const isValid = await frmRef.value.validate((valid, fields) => {})
+  // (valid, fields) => {}
+  // Phải bắt buộc có hàm callback hoặc sử dụng try catch
+  const isValid = await frmRef.value.validate(() => {})
   if (! isValid) {
     return
   }
