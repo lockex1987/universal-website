@@ -10,7 +10,8 @@
   <link rel="icon" href="/images/logo.svg" />
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300;1,400;1,500&display=block" />
-  <link rel="stylesheet" href="{{ mix('/css/style.css') }}" />
+
+  {{{ scss('frontend/scss/style.scss') }}}
 
   @!section('header_assets')
 </head>
@@ -39,12 +40,12 @@
 
   <script src="/libs/vue/js/vue.global.prod.js"></script>
 
-  <script src="{{ mix('/js/base.js') }}"></script>
+  {{{ vite('frontend/js/base.js') }}}
 
   <script>
     // Thông tin SSO
-    const SSO_CONSUMER_DOMAIN = "{{ config('app.services.sso.consumerDomain') }}";
-    const SSO_PASSPORT_URL = "{{ config('app.services.sso.passportUrl') }}";
+    const SSO_CONSUMER_DOMAIN = "{{ config('app.services.sso.consumerDomain') }}"
+    const SSO_PASSPORT_URL = "{{ config('app.services.sso.passportUrl') }}"
   </script>
 
   @!section('footer_assets')

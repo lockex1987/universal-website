@@ -5,7 +5,7 @@
 @set('pageClass', 'landing-page')
 
 @section('header_assets')
-  <link rel="stylesheet" href="{{ mix('/css/landing.css') }}" />
+  {{{ scss('frontend/scss/pages/landing.scss') }}}
 
   <!-- Sử dụng với clay -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,5 +35,5 @@
 
   <script src="https://unpkg.com/jparticles@3.4.0/browser/jparticles.all.js"></script>
 
-  <script src="{{ mix('/js/landing.js') }}"></script>
+  {{{ vite('frontend/js/pages/landing.js', false) }}}
 @endsection

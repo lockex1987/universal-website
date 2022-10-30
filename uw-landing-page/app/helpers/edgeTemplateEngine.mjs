@@ -7,13 +7,14 @@ let manifest = null
 const caches = {}
 const shouldCache = environment === 'prod'
 const edge = new Edge({ cache: shouldCache })
+const rootUrl = 'http://localhost:5173/'
 
 // Làm thế này mới extends layout được
 edge.mount(getBasePath() + 'views')
 
 const vite = (path, includeViteClient = true) => {
   if (environment == 'dev') {
-    const rootUrl = 'http://localhost:5173/'
+
     return (includeViteClient ? `<script type="module" src="${rootUrl}@vite/client"></script>` : '')
       + `<script type="module" src="${rootUrl}${path}"></script>`
   }
@@ -41,9 +42,13 @@ const vite = (path, includeViteClient = true) => {
   return fragment
 }
 
+const scss = path => {
+  return `<link rel="stylesheet" href="${rootUrl}${path}" />`
+}
+
 edge.global('vite', vite)
 // TODO
-edge.global('mix', x => x)
+edge.global('scss', scss)
 edge.global('config', x => x)
 
 const edgeTemplateEngine = (filePath, options, callback) => {
