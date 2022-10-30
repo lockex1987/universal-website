@@ -3,89 +3,95 @@
     class="mx-auto mt-5"
     style="max-width: 500px"
   >
-    <form @submit.prevent="processLogin()">
-      <div
-        v-show="errorMessage"
-        class="mb-3 text-center text-danger"
+    <div
+      v-show="errorMessage"
+      class="mb-3 text-center text-danger"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <ElForm
+      ref="frmRef"
+      :model="frm"
+      :rules="rules"
+      label-position="top"
+      @submit.prevent="processLogin()"
+    >
+
+      <ElFormItem
+        label="Tên đăng nhập"
+        prop="username"
       >
-        {{ errorMessage }}
-      </div>
-
-      <div class="mb-3 validate-container">
-        <input
-          type="text"
-          class="form-control form-control-rounded"
-          placeholder="Tên đăng nhập"
-          v-model.trim="username"
-          data-validation="required"
-          autofocus
+        <ElInput
+          v-model.trim="frm.username"
           autocomplete="off"
-          spellcheck="false"
         />
+      </ElFormItem>
+
+      <ElFormItem
+        label="Mật khẩu"
+        prop="password"
+      >
+        <ElInput
+          v-model.trim="frm.password"
+          autocomplete="off"
+          @keydown="handleCapsLockWarning($event)"
+          type="password"
+          show-password
+        />
+      </ElFormItem>
+
+      <div
+        v-show="isCapsLockOn"
+        class="mb-3 mt-1 font-size-0.875 text-warning"
+      >
+        * Đang bật Caps Lock
       </div>
 
-      <div class="mb-3 validate-container">
-        <div class="input-group">
-          <input
-            :type="showPassword ? 'text' : 'password'"
-            class="form-control form-control-rounded"
-            placeholder="Mật khẩu"
-            v-model.trim="password"
-            data-validation="required"
-            autocomplete="off"
-            @keydown="handleCapsLockWarning($event)"
-          >
-
-          <span
-            class="input-group-text cursor-pointer input-group-text-rounded"
-            @click="togglePassword()"
-            :title="showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
-          >
-            <i
-              class="bi"
-              :class="[showPassword ? 'bi-eye-slash' : 'bi-eye']"
-            ></i>
-          </span>
-        </div>
-
-        <div
-          v-show="isCapsLockOn"
-          class="mt-1 font-size-0.875 text-warning"
-        >
-          * Đang bật Caps Lock
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <button
-          class="btn btn-primary w-100 btn-ripple btn-rounded"
-          type="submit"
+      <ElFormItem>
+        <ElButton
+          type="primary"
+          native-type="submit"
+          class="w-100"
         >
           Đăng nhập
           <span
             v-show="isProcessing"
             class="spinner-border spinner-border-sm"
           ></span>
-        </button>
-      </div>
-    </form>
+        </ElButton>
+      </ElFormItem>
+    </ElForm>
   </div>
 </template>
 
-
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-const username = ref('')
-const password = ref('')
+const frmRef = ref()
+const frm = reactive({
+  username: '',
+  password: '',
+})
+
+const rules = reactive({
+  username: [
+    // TODO: Vẫn thông báo tiếng Việt
+    { required: true, messagex: 'Vui lòng nhập tên đăng nhập', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, messagex: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+  ],
+})
+
 const errorMessage = ref('')
-const showPassword = ref(false)
 const isProcessing = ref(false)
 const isCapsLockOn = ref(false)
 
@@ -94,10 +100,17 @@ const processLogin = async () => {
     return
   }
 
+  // Reset form => frmRef.value.resetFields()
+  //
+  // Unhandled error during execution of native event handler
+  const isValid = await frmRef.value.validate((valid, fields) => {})
+  if (! isValid) {
+    return
+  }
+
   isProcessing.value = true
   const params = {
-    username: username.value,
-    password: password.value,
+    ...frm,
   }
   const { data } = await axios.post('/api/auth/login', params)
   isProcessing.value = false
@@ -118,9 +131,5 @@ const handleCapsLockWarning = evt => {
   if (evt.getModifierState) {
     isCapsLockOn.value = evt.getModifierState('CapsLock')
   }
-}
-
-const togglePassword = () => {
-  showPassword.value = !showPassword.value
 }
 </script>
