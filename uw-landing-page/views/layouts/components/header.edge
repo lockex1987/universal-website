@@ -28,14 +28,14 @@
 
           <div>
               <a href="/tin-tuc"
-                  class="d-inline-block auto-close animated-underline-x mx-3 header-text {{ (request.url().includes('tin-tuc')) ? 'active-underline-x' : '' }}">
+                  class="d-inline-block auto-close animated-underline-x mx-3 header-text {{ (request.path.includes('tin-tuc')) ? 'active-underline-x' : '' }}">
                   Tin tức
               </a>
           </div>
 
           <div>
               <a href="/san-pham"
-                  class="d-inline-block auto-close animated-underline-x mx-3 header-text {{ (request.url().includes('san-pham')) ? 'active-underline-x' : '' }}">
+                  class="d-inline-block auto-close animated-underline-x mx-3 header-text {{ (request.path.includes('san-pham')) ? 'active-underline-x' : '' }}">
                   Sản phẩm
               </a>
           </div>

@@ -237,7 +237,8 @@ app.get('/landing', (request, response) => {
     },
   ]
 
-  response.render('landing', {
+  response.render('pages/landing/landing', {
+    request,
     services,
     products,
     clients,

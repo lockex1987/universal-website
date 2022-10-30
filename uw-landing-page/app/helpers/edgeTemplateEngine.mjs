@@ -8,6 +8,9 @@ const caches = {}
 const shouldCache = environment === 'prod'
 const edge = new Edge({ cache: shouldCache })
 
+// Làm thế này mới extends layout được
+edge.mount(getBasePath() + 'views')
+
 const vite = (path, includeViteClient = true) => {
   if (environment == 'dev') {
     const rootUrl = 'http://localhost:5173/'
@@ -39,6 +42,9 @@ const vite = (path, includeViteClient = true) => {
 }
 
 edge.global('vite', vite)
+// TODO
+edge.global('mix', x => x)
+edge.global('config', x => x)
 
 const edgeTemplateEngine = (filePath, options, callback) => {
   let content = caches[filePath]
