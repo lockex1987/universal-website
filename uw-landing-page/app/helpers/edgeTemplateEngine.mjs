@@ -8,30 +8,32 @@ const caches = {}
 const shouldCache = environment === 'prod'
 const edge = new Edge({ cache: shouldCache })
 const rootUrl = 'http://localhost:5173/'
+const outDir = '/build'
 
 // Làm thế này mới extends layout được
 edge.mount(getBasePath() + 'views')
 
-const vite = (path, includeViteClient = true) => {
-  if (environment == 'dev') {
-
-    return (includeViteClient ? `<script type="module" src="${rootUrl}@vite/client"></script>` : '')
-      + `<script type="module" src="${rootUrl}${path}"></script>`
-  }
-
+const initManifest = () => {
   if (manifest == null) {
     const path = getBasePath() + 'public/build/manifest.json'
     const content = fs.readFileSync(path, 'utf-8')
     manifest = JSON.parse(content)
   }
+}
+
+const vite = (path, includeViteClient = true) => {
+  if (environment == 'dev') {
+    return (includeViteClient ? `<script type="module" src="${rootUrl}@vite/client"></script>` : '')
+      + `<script type="module" src="${rootUrl}${path}"></script>`
+  }
+
+  initManifest()
 
   const obj = manifest[path]
-
   if (! obj) {
     return 'Not found'
   }
 
-  const outDir = '/build'
   let fragment = ''
   if (obj.css && obj.css.length) {
     obj.css.forEach(cssLink => {
@@ -43,7 +45,18 @@ const vite = (path, includeViteClient = true) => {
 }
 
 const scss = path => {
-  return `<link rel="stylesheet" href="${rootUrl}${path}" />`
+  if (environment == 'dev') {
+    return `<link rel="stylesheet" href="${rootUrl}${path}" />`
+  }
+
+  initManifest()
+
+  const obj = manifest[path]
+  if (! obj) {
+    return 'Not found'
+  }
+
+  return `<link rel="stylesheet" href="${outDir}/${obj.file}" />`
 }
 
 edge.global('vite', vite)

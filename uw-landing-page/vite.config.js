@@ -21,10 +21,12 @@ export default defineConfig({
     manifest: true,
 
     rollupOptions: {
-      base: './frontend/js/base.js',
-      landing: './frontend/js/pages/landing.js',
-      style: './frontend/scss/style.scss',
-      landingStyle: './frontend/scss/pages/landing.scss',
+      input: {
+        base: './frontend/js/base.js',
+        landing: './frontend/js/pages/landing.js',
+        style: './frontend/scss/style.scss',
+        landingStyle: './frontend/scss/pages/landing.scss',
+      },
     },
 
     outDir: 'public/build',
