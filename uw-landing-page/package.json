@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_ENV=dev vite",
     "build": "vite build",
     "lint": "eslint . --ext .vue,.js --fix --ignore-path .gitignore",
     "lint-be": "eslint --fix --ext=.ts app & eslint --fix --ext=.ts providers & eslint --fix --ext=.ts contracts & eslint --fix --ext=.ts commands & eslint --fix --ext=.ts config",
