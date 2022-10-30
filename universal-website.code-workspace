@@ -10,5 +10,7 @@
       "path": "uw-landing-page"
     }
   ],
-  "settings": {}
+  "settings": {
+    "javascript.format.enable": false
+  }
 }

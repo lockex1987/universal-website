@@ -1,9 +1,36 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 
-import edgeTemplateEngine from '#base/../uw-frontend/app/helpers/edgeTemplateEngine.mjs'
+import { connect as connectMongodb } from '#app/helpers/mongodb.mjs'
+import redis from '#app/helpers/redis.mjs'
+import checkLogin from '#app/middleware/checkLogin.mjs'
+import handle404 from '#app/middleware/handle404.mjs'
+import handle500 from '#app/middleware/handle500.mjs'
+import edgeTemplateEngine from '#app/helpers/edgeTemplateEngine.mjs'
+import routes from '#app/routes/index.mjs'
+import { port } from '#config/app.mjs'
 
-// app.use(express.static('public'))
+import '#app/helpers/validator.mjs'
+
+await connectMongodb()
+await redis.connect()
+
+const app = express()
+app.use(express.json())
+app.use(cookieParser())
+app.use(express.static('public'))
+
+const prefix = '/api'
+routes.forEach(({ path, router }) => {
+  const exceptAuthPaths = [
+    '/auth',
+  ]
+  if (exceptAuthPaths.includes(path)) {
+    app.use(prefix + path, router)
+  } else {
+    app.use(prefix + path, checkLogin, router)
+  }
+})
 
 app.engine('edge', edgeTemplateEngine)
 app.set('view engine', 'edge')
@@ -11,4 +38,14 @@ app.get('/', (request, response) => {
   response.render('index', {
     greeting: 'Hello world 2',
   })
+})
+
+app.use(handle404)
+app.use(handle500)
+
+// Disable response header "X-Powered-By"
+app.disable('x-powered-by')
+
+app.listen(port, () => {
+  console.log('App running at port ' + port)
 })

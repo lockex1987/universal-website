@@ -1,18 +1,26 @@
 import fs from 'fs'
 import { Edge } from 'edge.js'
+import { environment } from '#config/app.mjs'
 
 let manifest = null
 const caches = {}
-const edge = new Edge({ cache: process.env.NODE_ENV === 'production' })
+const shouldCache = environment === 'prod'
+const edge = new Edge({ cache: shouldCache })
 
-edge.global('vite', x => {
+edge.global('vite', (path, includeViteClient = true) => {
+  if (environment == 'dev') {
+    const rootUrl = 'http://localhost:5173/'
+    return (includeViteClient ? `<script type="module" src="${rootUrl}@vite/client"></script>` : '')
+      + `<script type="module" src="${rootUrl}${path}"></script>`
+  }
+
   if (manifest == null) {
     const path = './public/build/manifest.json'
     const content = fs.readFileSync(path, 'utf-8')
     manifest = JSON.parse(content)
   }
 
-  const obj = manifest[x]
+  const obj = manifest[path]
 
   if (! obj) {
     return 'Not found'
@@ -33,7 +41,9 @@ const edgeTemplateEngine = (filePath, options, callback) => {
   let content = caches[filePath]
   if (! content) {
     content = fs.readFileSync(filePath, 'utf-8')
-    caches[filePath] = content
+    if (shouldCache) {
+      caches[filePath] = content
+    }
   }
   const rendered = edge.renderRawSync(content, options)
   return callback(null, rendered)

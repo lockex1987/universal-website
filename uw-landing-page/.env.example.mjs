@@ -5,8 +5,8 @@ export default {
 
   LOG_LEVEL: 'info',
 
-  // development, production, test
-  ENVIRONMENT: 'development',
+  // dev, prod, test
+  ENVIRONMENT: 'dev',
 
   // DRIVE_DISK=local
 
