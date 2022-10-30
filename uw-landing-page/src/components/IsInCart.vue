@@ -33,7 +33,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useCartStore } from '#/stores/cart.js'
+import { useCartStore } from '@/stores/cart.js'
 
 const props = defineProps({
   product: Object,

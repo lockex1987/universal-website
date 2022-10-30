@@ -52,11 +52,11 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import CartCardSkeleton from '#/components/CartCardSkeleton.vue'
-import IsInCart from '#/components/IsInCart.vue'
+import CartCardSkeleton from '@/components/CartCardSkeleton.vue'
+import IsInCart from '@/components/IsInCart.vue'
 
-import { useProductStore } from '#/stores/products.js'
-import { toCurrency } from '#/composables/common.js'
+import { useProductStore } from '@/stores/products.js'
+import { toCurrency } from '@/composables/common.js'
 
 const productStore = useProductStore()
 const route = useRoute()

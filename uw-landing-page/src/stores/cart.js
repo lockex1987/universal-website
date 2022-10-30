@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { CART_STORAGE } from '#/composables/usePersistCart.js'
+import { CART_STORAGE } from '@/composables/usePersistCart.js'
 import { useProductStore } from './products.js'
 
 export const useCartStore = defineStore({
@@ -26,7 +26,7 @@ export const useCartStore = defineStore({
     formattedCart() {
       const products = useProductStore()
 
-      if (! products.loaded) {
+      if (!products.loaded) {
         return []
       }
 
@@ -57,7 +57,7 @@ export const useCartStore = defineStore({
     },
 
     remove(productId) {
-      if (! this.contents[productId]) {
+      if (!this.contents[productId]) {
         return
       }
 

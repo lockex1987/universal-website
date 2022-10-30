@@ -1,8 +1,6 @@
 {
   "name": "uw-passport-backend",
   "version": "1.0.0",
-  "description": "Boilerplate, common use-cases",
-  "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon index.mjs"

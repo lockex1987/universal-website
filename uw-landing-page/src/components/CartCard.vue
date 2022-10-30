@@ -48,8 +48,8 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useCartStore } from '#/stores/cart.js'
-import { toCurrency } from '#/composables/common.js'
+import { useCartStore } from '@/stores/cart.js'
+import { toCurrency } from '@/composables/common.js'
 
 const cartStore = useCartStore()
 

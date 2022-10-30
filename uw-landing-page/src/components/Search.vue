@@ -35,7 +35,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useProductStore } from '#/stores/products.js'
+import { useProductStore } from '@/stores/products.js'
 
 const productStore = useProductStore()
 const router = useRouter()

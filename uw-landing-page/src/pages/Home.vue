@@ -23,9 +23,9 @@
 
 <script setup>
 import { computed } from 'vue'
-import ProductCard from '#/components/ProductCard.vue'
-import ProductCardSkeleton from '#/components/ProductCardSkeleton.vue'
-import { useProductStore } from '#/stores/products.js'
+import ProductCard from '@/components/ProductCard.vue'
+import ProductCardSkeleton from '@/components/ProductCardSkeleton.vue'
+import { useProductStore } from '@/stores/products.js'
 
 const productStore = useProductStore()
 

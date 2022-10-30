@@ -26,7 +26,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import Search from './Search.vue'
-import { useCartStore } from '#/stores/cart.js'
+import { useCartStore } from '@/stores/cart.js'
 // import { computed } from 'vue'
 
 const cartStore = useCartStore()
