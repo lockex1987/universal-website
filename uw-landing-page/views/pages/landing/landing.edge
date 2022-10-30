@@ -1,0 +1,39 @@
+@layout('layouts/app')
+
+@set('title', 'Trang chủ')
+@set('description', 'Landing page')
+@set('pageClass', 'landing-page')
+
+@section('header_assets')
+  <link rel="stylesheet" href="{{ mix('/css/landing.css') }}" />
+
+  <!-- Sử dụng với clay -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" />
+@end
+
+@section('content')
+  @include('pages/landing/components/jumbotron')
+  @include('pages/landing/components/services')
+  @include('pages/landing/components/portfolio')
+  @include('pages/landing/components/clients')
+  @include('pages/landing/components/testimonials')
+  @include('pages/landing/components/about')
+  @include('pages/landing/components/contact')
+@end
+
+@section('footer_assets')
+  <link rel="stylesheet" href="/libs/nat-carousel/css/nat-carousel.css" />
+  <script src="/libs/nat-carousel/js/nat-carousel.js"></script>
+
+  <link rel="stylesheet" href="/libs/aos/aos.css" />
+  <script src="/libs/aos/aos.js"></script>
+
+  <link rel="stylesheet" href="/libs/fancybox/jquery.fancybox.min.css" />
+  <script src="/libs/fancybox/jquery.fancybox.min.js"></script>
+
+  <script src="https://unpkg.com/jparticles@3.4.0/browser/jparticles.all.js"></script>
+
+  <script src="{{ mix('/js/landing.js') }}"></script>
+@endsection

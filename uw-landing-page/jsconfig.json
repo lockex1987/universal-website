@@ -3,7 +3,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
+        "src/*"
+      ],
+      "~/*": [
+        "frontend/js/*"
       ],
       "#app/*": [
         "app/*"

@@ -1,0 +1,170 @@
+@import "variables";
+
+@import "../../node_modules/@lockex1987/bootstrap-extended/scss/bootstrap-disable-focus-shadow-1";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/@lockex1987/bootstrap-extended/scss/bootstrap-extended";
+
+// Custom
+html {
+  font-size: 14px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Roboto, sans-serif;
+}
+
+.site-section {
+  padding: 2.5rem 0;
+
+  // @include media-breakpoint-up(md) {
+  @media (min-width: 768px) {
+    padding: 7rem 0;
+  }
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 20px;
+  font-size: 1.5rem;
+
+  // Màu sáng hơn màu nền (dark-theme)
+  // color: $gray-100;
+
+  // @include media-breakpoint-up(md) {
+  @media (min-width: 768px) {
+    font-size: 2rem;
+  }
+
+  // Thanh gạch phía dưới
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    // background: rgba($primary, 0.5);
+    background: $warning;
+    width: 50px;
+  }
+
+  &.text-center {
+    &:after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.site-footer {
+  /*
+    background-image: url(/images/footer2.svg);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-size: contain;
+	*/
+
+  background-image: url(/images/footer3.png);
+  background-repeat: repeat-x;
+  background-position: bottom;
+
+  height: 300px;
+
+  .separator_wrap {
+    text-align: center;
+    margin-bottom: 30px;
+
+    &:after,
+    &:before {
+      background-color: rgba($primary, 0.15);
+      display: inline-block;
+      vertical-align: middle;
+      content: "";
+      width: 10%;
+      height: 1px;
+      margin-top: 1px;
+    }
+
+    .separator_square {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border: 2px solid $primary;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+// Hiển thị gạch dưới animation khi hover
+// Thêm -x vào tên để tránh xung đột với bootstrap-extended
+.animated-underline-x {
+  position: relative;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  &:hover {
+    text-decoration: none;
+
+    // TODO: Đang bị hiện tượng nhòe chữ khi hover
+    // color: #fff !important;
+  }
+
+  &::before {
+    content: "";
+    background-color: #ffc107; // giống .text-warning, hoặc có thể sử dụng currentColor
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    transition: transform 0.3s ease-out 0s;
+    transform: scaleX(0);
+    visibility: hidden;
+  }
+
+  &:hover::before {
+    transform: scaleX(1);
+    visibility: visible;
+  }
+}
+
+.active-underline-x {
+  position: relative;
+
+  &::before {
+    content: "";
+    background-color: $warning; // giống .text-warning, hoặc có thể sử dụng currentColor
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    // transition: all 0.3s ease-out 0s;
+    // transform: scaleX(0);
+    // visibility: none;
+
+    transform: scaleX(1);
+    visibility: visible;
+  }
+}
+
+// TODO: Có ở bootstrap-extended
+@each $color, $value in $theme-colors {
+  // Các màu đều là màu đậm
+  // Nếu là nền màu thì cần chữ trắng
+  // Nếu muốn chữ màu thì màu chữ phải sáng hơn (pha trắng)
+  .text-light-#{$color} {
+    color: mix(white, $value, 60%) !important;
+  }
+}
+
+// Trong trường hợp các link phân trang (danh sách tin tức, danh sách sản phẩm)
+// mà dài quá thì bị xuống dòng
+// Cần tách ra cho dễ nhìn
+.page-item .page-link {
+  margin: 0 1rem 1rem 1rem;
+  border: none;
+}
+
+@import "components/site-navbar";
+@import "utils/clay";

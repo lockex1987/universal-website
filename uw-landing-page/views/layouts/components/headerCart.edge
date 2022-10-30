@@ -1,0 +1,64 @@
+<div class="ms-auto ps-3 dropdown py-2"
+    id="headerCart"
+    v-cloak>
+    <!-- Phải để ở ngay dưới dropdown, ngang hàng dropdown-menu -->
+    <span data-bs-toggle="dropdown"
+        class="cursor-pointer">
+        <span class="d-md-none header-text">
+            Giỏ hàng
+        </span>
+
+        <i class="la la-shopping-cart header-text font-size-md-2"
+            title="Giỏ hàng"></i>
+
+        <span v-show="totalQuantity"
+            class="badge bg-success header-text"
+            style="vertical-align: 8px">@{{ totalQuantity }}</span>
+    </span>
+
+    <div class="dropdown-menu dropdown-menu-end p-0"
+        style="width: 320px; margin-right-x: -35px;"
+        @click.stop="">
+
+        <span class="caret-up"
+            style="right: 10px; top: -7px;"></span>
+
+        <div class="overflow-auto custom-scrollbar p-3"
+            style="max-height: 400px;">
+            <div v-for="item in cartItems"
+                :key="item.id"
+                class="border-bottom mt-3 pb-3 position-relative">
+                <div class="d-flex">
+                    <img :src="item.poster ? '{{ config('app.services.sso.adminUrl') }}/storage/' + item.poster : '/images/product-placeholder.jpg'"
+                        onerror="this.src = '/images/product-placeholder.jpg'"
+                        class="object-fit-cover rounded me-3"
+                        style="width: 3rem; height: 3rem;" />
+
+                    <div>
+                        <div class="font-weight-500">
+                            @{{item.name}}
+                        </div>
+
+                        <div>
+                            <span>@{{item.quantity}}</span>
+                            <i class="la la-times font-size-0.75"></i>
+                            <span>@{{formatNumber(item.price)}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <i class="cursor-pointer fa fa-times text-danger position-absolute top-right"
+                    @click="removeItem(item)"></i>
+            </div>
+        </div>
+
+        <div class="mt-3 mb-3 text-center">
+            Tổng số: <span class="font-weight-500">@{{ formatNumber(total) }}</span> vnd
+        </div>
+
+        <div class="mb-3 text-center">
+            <a href="/dat-hang"
+                class="text-decoration-none">Đặt hàng <i class="fa fa-angle-right ms-1"></i></a>
+        </div>
+    </div>
+</div>

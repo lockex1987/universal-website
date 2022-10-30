@@ -1,0 +1,31 @@
+@import "../variables";
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
+// Ảnh to
+.site-jumbotron {
+  // background: linear-gradient(45deg, #ee76ad 0%, #efac78 100%);
+  // background: url('/images/banner-bg.svg');
+  // background-repeat: repeat no-repeat;
+
+  background: url("/images/hero-bg.jpg") no-repeat center;
+  // background-color: mix(#000, $primary, 20%);
+  background-color: $primary;
+  background-size: cover;
+  background-blend-mode: multiply; // nền sẫm, chữ sáng cho dễ đọc
+  background-attachment: fixed; // tạo hiệu ứng paralax
+}
+
+// Logo của client
+.client-logo {
+  height: 200px;
+}
+
+// Ảnh các thành viên
+.employee-avatar {
+  height: 444px;
+}
+
+@import "../components/site-gallery";
+@import "../components/site-carousel";
+@import "../components/alo-phone";

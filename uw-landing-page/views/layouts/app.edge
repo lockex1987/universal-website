@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="{{ description }}" />
+
+  <title>HDT - {{ title }}</title>
+
+  <link rel="icon" href="/images/logo.svg" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300;1,400;1,500&display=block" />
+  <link rel="stylesheet" href="{{ mix('/css/style.css') }}" />
+
+  @!section('header_assets')
+</head>
+
+<body class="custom-scrollbar-x overflow-x-hidden dark-theme {{ pageClass }}">
+  <div class="site-wrap">
+    @include('layouts/components/header')
+
+    @!section('content')
+
+    @include('layouts/components/footer')
+  </div>
+
+  <link rel="stylesheet" href="/libs/line-awesome/css/line-awesome.min.css" />
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="/libs/material-icons/css/material-icons.css" />
+  <script src="/libs/jquery/js/jquery.min.js"></script>
+  <script src="/libs/axios/js/axios.min.js"></script>
+  <script src="/libs/pubsub/pubsub.js"></script>
+
+  <link rel="stylesheet" href="/libs/noti/css/noti.css" />
+  <script src="/libs/noti/js/noti.js"></script>
+
+  <!-- Summernote, dropdown cần thư viện này -->
+  <script src="/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script src="/libs/vue/js/vue.global.prod.js"></script>
+
+  <script src="{{ mix('/js/base.js') }}"></script>
+
+  <script>
+    // Thông tin SSO
+    const SSO_CONSUMER_DOMAIN = "{{ config('app.services.sso.consumerDomain') }}";
+    const SSO_PASSPORT_URL = "{{ config('app.services.sso.passportUrl') }}";
+  </script>
+
+  @!section('footer_assets')
+</body>
+</html>

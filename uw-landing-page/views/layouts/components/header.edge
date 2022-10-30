@@ -1,0 +1,91 @@
+<header class="site-navbar w-100 position-fixed zindex-sticky">
+  <div class="bg-effect"></div>
+
+  <div class="container">
+    <div class="navbar navbar-expand-md navbar-dark">
+      <a href="/#"
+          class="navbar-brand">
+          <img src="/images/logo.svg"
+              class="site-logo" />
+      </a>
+
+      <!-- Toggle ở màn hình nhỏ -->
+      <span class="navbar-toggler cursor-pointer border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarsItems">
+          <span class="fa fa-bars font-size-1.5 header-text"></span>
+      </span>
+
+      <div class="collapse navbar-collapse mt-4 mt-md-0"
+          id="navbarsItems">
+          <div>
+              <a href="/#contact-section"
+                  class="d-inline-block auto-close animated-underline-x mx-3 header-text">
+                  Liên hệ
+              </a>
+          </div>
+
+          <div>
+              <a href="/tin-tuc"
+                  class="d-inline-block auto-close animated-underline-x mx-3 header-text {{ (request.url().includes('tin-tuc')) ? 'active-underline-x' : '' }}">
+                  Tin tức
+              </a>
+          </div>
+
+          <div>
+              <a href="/san-pham"
+                  class="d-inline-block auto-close animated-underline-x mx-3 header-text {{ (request.url().includes('san-pham')) ? 'active-underline-x' : '' }}">
+                  Sản phẩm
+              </a>
+          </div>
+
+          <!-- Giỏ hàng -->
+          @include('layouts/components/headerCart')
+
+          <!-- Thông tin đăng nhập -->
+          <div v-cloak
+              id="loginLink"
+              class="ms-3 ms-md-5 py-2">
+              <div v-show="checkLoginStatus == 2">
+                  <a href="{{ config('app.services.sso.passportUrl') }}/login?app={{ config('app.services.sso.consumerDomain') }}"
+                      class="header-text text-decoration-none">
+                      Đăng nhập
+                  </a>
+              </div>
+
+              <div v-show="checkLoginStatus == 1"
+                  class="dropdown">
+                  <div class="d-flex align-items-center cursor-pointer dropdown-toggle header-text"
+                      data-bs-toggle="dropdown">
+                      <img :src="avatar || '/images/user-avatar.png'"
+                          class="rounded-circle object-fit-cover me-2"
+                          style="width: 2rem; height: 2rem;"
+                          onerror="this.src = '/images/user-avatar.png'" />
+
+                      @{{ userFullName }}
+                  </div>
+
+                  <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item text-primary"
+                          href="{{ config('app.services.sso.passportUrl') }}">
+                          Trang cá nhân
+                      </a>
+
+                      <a class="dropdown-item text-primary"
+                          href="{{ config('app.services.sso.adminUrl') }}">
+                          Trang quản trị
+                      </a>
+
+                      <a class="dropdown-item text-primary"
+                          href="#"
+                          @click.prevent="processLogout()">
+                          Đăng xuất
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</header>

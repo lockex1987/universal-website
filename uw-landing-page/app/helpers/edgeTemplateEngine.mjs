@@ -1,13 +1,14 @@
 import fs from 'fs'
 import { Edge } from 'edge.js'
 import { environment } from '#config/app.mjs'
+import { getBasePath } from '#app/helpers/common.mjs'
 
 let manifest = null
 const caches = {}
 const shouldCache = environment === 'prod'
 const edge = new Edge({ cache: shouldCache })
 
-edge.global('vite', (path, includeViteClient = true) => {
+const vite = (path, includeViteClient = true) => {
   if (environment == 'dev') {
     const rootUrl = 'http://localhost:5173/'
     return (includeViteClient ? `<script type="module" src="${rootUrl}@vite/client"></script>` : '')
@@ -15,7 +16,7 @@ edge.global('vite', (path, includeViteClient = true) => {
   }
 
   if (manifest == null) {
-    const path = './public/build/manifest.json'
+    const path = getBasePath() + 'public/build/manifest.json'
     const content = fs.readFileSync(path, 'utf-8')
     manifest = JSON.parse(content)
   }
@@ -35,7 +36,9 @@ edge.global('vite', (path, includeViteClient = true) => {
   }
   fragment += `<script type="module" src="${outDir}/${obj.file}"></script>`
   return fragment
-})
+}
+
+edge.global('vite', vite)
 
 const edgeTemplateEngine = (filePath, options, callback) => {
   let content = caches[filePath]

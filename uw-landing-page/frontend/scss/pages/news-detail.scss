@@ -1,0 +1,36 @@
+// Nội dung tin tức
+// Sử dụng cho cả trang điều khoản sử dụng
+.news-content {
+  p {
+    text-align: justify;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  table {
+    margin-bottom: 1rem;
+  }
+}
+
+// Phần bình luận
+.comments {
+  .avatar {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  // Không có margin-bottm trong nội dung comment
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Tin tức liên quan
+// TODO: sticky
+.related-list {
+  @media (min-width: 992px) {
+    max-width: 400px;
+  }
+}

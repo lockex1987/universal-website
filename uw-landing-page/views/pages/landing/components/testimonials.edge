@@ -1,0 +1,40 @@
+<section class="site-section site-carousel">
+    <div class="container text-white">
+        <div class="nat-carousel">
+            <div class="nat-carousel-wrapper">
+                <div class="nat-carousel-inner">
+                    @each (e in testimonials)
+                        <div class="nat-carousel-item"
+							style="cursor: move;">
+                            <blockquote class="mx-auto text-center">
+                                <div>
+                                    <i class="fa fa-quote-left font-size-1.5 text-light-warning"></i>
+
+                                    <div class="font-size-1.25 text-neon">
+                                        {{ e.text }}
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 font-size-1.25">
+                                    <cite>
+                                        <img src="{{{ e.avatar }}}"
+                                            class="rounded-circle me-2"
+                                            style="width: 2rem; height: 2rem;" />
+
+                                        {{ e.author }}
+                                    </cite>
+                                </div>
+                            </blockquote>
+                        </div>
+                    @end
+                </div>
+            </div>
+
+            <div class="nat-carousel-indicators d-flex justify-content-center mt-3">
+                @each ((e, index) in testimonials)
+                    <i data-item-to="{{ index }}" class="rounded-circle {{ index == 0 ? 'active' : '' }}"></i>
+                @end
+            </div>
+        </div>
+    </div>
+</section>

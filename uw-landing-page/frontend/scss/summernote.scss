@@ -1,0 +1,36 @@
+// Chỉnh sửa summernote cho giống form-control
+// Phải để sau summernote-bs4.css
+
+@import "variables";
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+
+.note-popover .popover-content,
+.card-header.note-toolbar {
+  background: transparent;
+}
+
+.note-editor .note-toolbar .note-btn-group .btn-light {
+  background-color: transparent;
+  // Màu của các nút trên nền tối cần chỉnh cho sáng
+  color: $gray-300;
+}
+
+.note-editor.note-frame .note-statusbar {
+  background-color: transparent;
+  border-top: 1px solid transparent;
+}
+
+.note-editor .note-toolbar {
+  border-bottom: 1px solid transparent;
+}
+
+.note-editor.note-frame {
+  border: none;
+  background-color: $gray-900; // màu giống form-control
+}
+
+.note-editor.note-frame .note-editing-area .note-editable {
+  background-color: $gray-900; // màu giống form-control
+  color: $gray-300; // màu giống form-control
+}
