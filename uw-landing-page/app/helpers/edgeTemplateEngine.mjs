@@ -14,7 +14,7 @@ edge.global('vite', x => {
 
   const obj = manifest[x]
 
-  if (!obj) {
+  if (! obj) {
     return 'Not found'
   }
 
@@ -31,7 +31,7 @@ edge.global('vite', x => {
 
 const edgeTemplateEngine = (filePath, options, callback) => {
   let content = caches[filePath]
-  if (!content) {
+  if (! content) {
     content = fs.readFileSync(filePath, 'utf-8')
     caches[filePath] = content
   }

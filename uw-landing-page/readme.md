@@ -1,2 +1,2 @@
-    "edge.js": "^5.3.7",
+# uw-landing-page
 
