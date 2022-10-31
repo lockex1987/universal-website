@@ -11,6 +11,7 @@ import routes from '#app/routes/index.mjs'
 import { port } from '#config/app.mjs'
 
 import '#app/helpers/validator.mjs'
+import '#app/helpers/config.mjs'
 
 await connectMongodb()
 await redis.connect()

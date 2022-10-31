@@ -2,6 +2,7 @@ import fs from 'fs'
 import { Edge } from 'edge.js'
 import { environment } from '#config/app.mjs'
 import { getBasePath } from '#app/helpers/common.mjs'
+import { config } from '#app/helpers/config.mjs'
 
 let manifest = null
 const caches = {}
@@ -60,9 +61,8 @@ const scss = path => {
 }
 
 edge.global('vite', vite)
-// TODO
 edge.global('scss', scss)
-edge.global('config', x => x)
+edge.global('config', config)
 
 const edgeTemplateEngine = (filePath, options, callback) => {
   let content = caches[filePath]
