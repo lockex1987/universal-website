@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
       <span class="navbar-brand">
-        SeC
+        UW
       </span>
 
       <button
@@ -68,8 +68,7 @@
 
 <script setup>
 import axios from 'axios'
-import { RouterLink } from 'vue-router'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()

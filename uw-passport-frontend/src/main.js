@@ -15,7 +15,7 @@ import './libs/axios.js'
 
 // Tiếng Việt validator của Element Plus
 import AsyncValidator from 'async-validator'
-console.log(AsyncValidator.messages)
+// console.log(AsyncValidator.messages)
 // AsyncValidator.messages.required = '%s là bắt buộc'
 // Bỏ qua % là tên trường, thường là dạng mã tiếng Anh
 AsyncValidator.messages.required = 'Vui lòng nhập trường này'

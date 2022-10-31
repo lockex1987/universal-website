@@ -66,13 +66,13 @@
         Tìm thấy {{ total }} bản ghi
       </div>
 
-      <!--ElPagination
+      <ElPagination
         layout="prev, pager, next"
         :hideOnSinglePage="true"
         :pageSize="size"
         :total="total"
         v-model:currentPage="currentPage"
-      /-->
+      />
     </div>
   </div>
 </template>
@@ -80,6 +80,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { ElPagination } from 'element-plus'
 import { debounce } from '@/helpers/common.js'
 
 const size = 10
