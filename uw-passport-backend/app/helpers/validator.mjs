@@ -15,15 +15,14 @@ const addValidator = () => {
   // Thêm phương thức cho request
   // https://github.com/mikeerickson/validatorjs/issues/418
   request.validate = async (body, rules) => {
-    const validator = new Schema(rules)
-
     try {
+      const validator = new Schema(rules)
       await validator.validate(body)
     } catch ({ errors, fields }) {
       const error = new Error('validate')
-      // custom prop to specify handling behaviour
+      // Custom prop to specify handling behaviour
       error.type = 'validate'
-      error.errors = validator.errors.errors
+      error.errors = errors
       throw error
     }
   }

@@ -3,7 +3,6 @@ import axios from 'axios'
 // axios.defaults.baseURL = window.ROOT_API
 // axios.defaults.withCredentials = true
 
-
 // Response interceptor
 axios.interceptors.response.use(
   // Khi thành công thì trả về response luôn
@@ -36,14 +35,8 @@ axios.interceptors.response.use(
     // Xử lý lỗi validate do Laravel trả về
     if (status == 422) {
       const errors = error.response.data.errors
-      let message = ''
-      for (const key in errors) {
-        const arr = errors[key]
-        arr.forEach(s => {
-          message += s + '<br />'
-        })
-      }
-      noti.error(message.trim())
+      const message = errors.map(e => e.message).join('<br />')
+      noti.error(message)
     }
 
     // return Promise.reject(error)
