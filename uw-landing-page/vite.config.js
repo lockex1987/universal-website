@@ -8,7 +8,9 @@ console.log(env)
 const publicDir = (env == 'dev')
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+  ],
 
   resolve: {
     alias: {

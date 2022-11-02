@@ -92,8 +92,8 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref } from 'vue'
+// import axios from 'axios'
+// import { ref } from 'vue'
 
 const oldPassword = ref('')
 const showOldPassword = ref(false)
@@ -111,11 +111,11 @@ const handleCapsLockWarning = evt => {
 }
 
 const toggleOldPassword = () => {
-  showOldPassword.value = ! showOldPassword.value
+  showOldPassword.value = !showOldPassword.value
 }
 
 const toggleNewPassword = () => {
-  showNewPassword.value = ! showNewPassword.value
+  showNewPassword.value = !showNewPassword.value
 }
 
 const changePassword = async () => {

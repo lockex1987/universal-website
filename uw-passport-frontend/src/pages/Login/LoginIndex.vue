@@ -10,7 +10,7 @@
       {{ errorMessage }}
     </div>
 
-    <ElForm
+    <!--ElForm
       ref="frmRef"
       :model="frm"
       :rules="rules"
@@ -35,18 +35,10 @@
         <ElInput
           v-model.trim="frm.password"
           autocomplete="off"
-          @keydown="handleCapsLockWarning($event)"
           type="password"
           show-password
         />
       </ElFormItem>
-
-      <div
-        v-show="isCapsLockOn"
-        class="mb-3 mt-1 font-size-0.875 text-warning"
-      >
-        * Đang bật Caps Lock
-      </div>
 
       <ElFormItem>
         <ElButton
@@ -61,21 +53,55 @@
           ></span>
         </ElButton>
       </ElFormItem>
-    </ElForm>
+    </ElForm-->
+
+    <a-form
+      :model="frm"
+      name="basic"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      autocomplete="off"
+      @finish="processLogin"
+    >
+      <a-form-item
+        label="Username"
+        name="username"
+        :rules="[{ required: true, message: 'Please input your username!' }]"
+      >
+        <a-input v-model:value="frm.username" />
+      </a-form-item>
+
+      <a-form-item
+        label="Password"
+        name="password"
+        :rules="[{ required: true, message: 'Please input your password!' }]"
+      >
+        <a-input-password
+          v-model:value="frm.password"
+          autocomplete="off"
+        />
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button
+          type="primary"
+          html-type="submit"
+        >
+          Submit
+        </a-button>
+      </a-form-item>
+    </a-form>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-const frmRef = ref()
+// const frmRef = ref()
+
 const frm = reactive({
   username: '',
   password: '',
@@ -93,7 +119,6 @@ const rules = reactive({
 
 const errorMessage = ref('')
 const isProcessing = ref(false)
-const isCapsLockOn = ref(false)
 
 const processLogin = async () => {
   if (isProcessing.value) {
@@ -101,14 +126,6 @@ const processLogin = async () => {
   }
 
   // Reset form => frmRef.value.resetFields()
-  //
-  // Unhandled error during execution of native event handler
-  // (valid, fields) => {}
-  // Phải bắt buộc có hàm callback hoặc sử dụng try catch
-  const isValid = await frmRef.value.validate(() => {})
-  if (! isValid) {
-    return
-  }
 
   isProcessing.value = true
   const params = {
@@ -125,13 +142,6 @@ const processLogin = async () => {
     authStore.beforeLoginPath = ''
   } else if (data.code == 1) {
     errorMessage.value = data.message
-  }
-}
-
-const handleCapsLockWarning = evt => {
-  // Thêm đoạn kiểm tra getModifierState vì khi focus thì bị lỗi
-  if (evt.getModifierState) {
-    isCapsLockOn.value = evt.getModifierState('CapsLock')
   }
 }
 </script>

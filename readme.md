@@ -198,7 +198,7 @@ You need to use an additional plugin to import components you used.
 First you need to install unplugin-vue-components and unplugin-auto-import.
 
 ```bash
-npm install -D unplugin-vue-components unplugin-auto-import
+npm install unplugin-vue-components unplugin-auto-import --save-dev
 ```
 
 Then add the code below into your Vite config file (vite.config.ts).

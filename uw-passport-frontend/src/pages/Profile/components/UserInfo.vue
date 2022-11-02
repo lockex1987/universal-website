@@ -94,10 +94,9 @@
   </form>
 </template>
 
-
 <script setup>
-import axios from 'axios'
-import { ref, onMounted } from 'vue'
+// import axios from 'axios'
+// import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
@@ -162,7 +161,6 @@ onMounted(() => {
   initInfo()
 })
 </script>
-
 
 <style scoped>
 .avatar {

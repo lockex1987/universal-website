@@ -1,20 +1,21 @@
 module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
+    'eslint:recommended',
     'standard',
   ],
-  env: {
-    // 'vue/setup-compiler-macros': true,
-  },
   globals: {
+    computed: true,
+    reactive: true,
+    ref: true,
+    onMounted: true,
+    useRouter: true,
     axios: 'readonly',
     noti: 'readonly',
-
     Highcharts: 'readonly',
     $: 'readonly',
     ExcelJS: 'readonly',
     moment: 'readonly',
-    CV: 'readonly',
   },
   rules: {
     'semi': ['error', 'never'],
@@ -40,7 +41,7 @@ module.exports = {
       words: true,
       nonwords: false, // no space before ++, --
       overrides: {
-        '!': true, // space after !
+        // '!': true, // space after !
       },
     }],
   },

@@ -66,21 +66,18 @@
         Tìm thấy {{ total }} bản ghi
       </div>
 
-      <ElPagination
-        layout="prev, pager, next"
-        :hideOnSinglePage="true"
-        :pageSize="size"
+      <!-- :pageSize="size" -->
+
+      <a-pagination
+        v-model:current="currentPage"
         :total="total"
-        v-model:currentPage="currentPage"
+        show-less-items
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-import { ElPagination } from 'element-plus'
 import { debounce } from '@/helpers/common.js'
 
 const size = 10
