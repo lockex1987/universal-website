@@ -225,7 +225,11 @@ export default defineConfig({
 
 
 
+a-input, a-input-password tự động trim, không cần v-model:value.trim=""? Không phải.
 
+Nếu để v-model:value.trim thì không nhập được dấu cách ở cuối
+
+Không có rule required => Không bắt buộc, không có ký tự *
 
 
 

@@ -18,26 +18,22 @@
       <a-form-item
         label="Tên đăng nhập"
         name="username"
-        :rules="[{ required: true, messagex: 'Please input your username!' }]"
+        :rules="[{ required: true }]"
       >
         <!-- Tự động trim rồi? -->
-        <a-input v-model:value.trim="frm.username" />
+        <a-input v-model:value="frm.username" />
       </a-form-item>
 
       <a-form-item
         label="Mật khẩu"
         name="password"
-        :rules="[{ required: true, messagex: 'Please input your password!' }]"
+        :rules="[{ required: true }]"
       >
         <a-input-password
-          v-model:value.trim="frm.password"
+          v-model:value="frm.password"
           autocomplete="off"
         />
       </a-form-item>
-
-      <div>
-        |{{ frm.password }}|{{ frm.username }}|
-      </div>
 
       <a-form-item>
         <a-button
