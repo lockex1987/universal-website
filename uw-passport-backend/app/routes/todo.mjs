@@ -96,7 +96,10 @@ router.get('/get-all', async (request, response) => {
   const query = {}
   if (title) {
     // query.title = new RegExp(title, 'i')
-    query.title = { $regex: title, $options: 'i' }
+    query.title = {
+      $regex: title,
+      $options: 'i',
+    }
   }
 
   // 3 dòng

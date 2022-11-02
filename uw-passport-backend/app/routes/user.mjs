@@ -8,7 +8,10 @@ router.post('/search', async (request, response) => {
 
   const query = {}
   if (text) {
-    query.username = { $regex: text, $options: 'i' }
+    query.username = {
+      $regex: text,
+      $options: 'i',
+    }
   }
   const order = { _id: -1 }
   const db = getDb()

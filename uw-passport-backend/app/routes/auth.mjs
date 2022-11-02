@@ -16,15 +16,27 @@ const router = express.Router()
 
 router.post('/login', async (request, response, next) => {
   const rules = {
-    username: 'required|string',
-    password: 'required|string',
+    username: {
+      type: 'string',
+      required: true,
+    },
+    password: {
+      type: 'string',
+      required: true,
+    },
   }
   await request.validate(request.body, rules)
 
   const { username, password } = request.body
   const db = getDb()
+  const query = {
+    username: {
+      $regex: '^' + username + '$',
+      $options: 'i',
+    },
+  }
   const user = await db.collection('users')
-    .findOne({ username: { $regex: '^' + username + '$', $options: 'i' } })
+    .findOne(query)
 
   if (! user) {
     return response.json({

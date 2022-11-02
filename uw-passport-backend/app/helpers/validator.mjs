@@ -1,29 +1,25 @@
 import { request } from 'express'
-import Validator from 'validatorjs'
+import asyncValidator from 'async-validator'
 import { getDb } from '#app/helpers/mongodb.mjs'
+import vietnameseValidatorMessages from './vietnameseValidatorMessages.mjs'
 
 const addValidator = () => {
+  const Schema = asyncValidator.default
+
   // Tiếng Việt
-  Validator.useLang('vi')
+  Schema.messages = vietnameseValidatorMessages
 
   // TODO: tên attribute chưa có tiếng Việt
+  // để message là chung chung
 
   // Thêm phương thức cho request
   // https://github.com/mikeerickson/validatorjs/issues/418
   request.validate = async (body, rules) => {
-    const validator = new Validator(body, rules)
+    const validator = new Schema(rules)
 
-    let passes = () => {}
-    let fails = () => {}
-
-    const promise = new Promise(resolve => {
-      passes = () => { resolve(true) }
-      fails = () => { resolve(false) }
-    })
-
-    validator.checkAsync(passes, fails)
-    const result = await promise
-    if (result === false) {
+    try {
+      await validator.validate(body)
+    } catch ({ errors, fields }) {
       const error = new Error('validate')
       // custom prop to specify handling behaviour
       error.type = 'validate'
@@ -32,53 +28,58 @@ const addValidator = () => {
     }
   }
 
-  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]/
-  Validator.register(
-    'strongPassword',
-    (value, requirement, attribute) => {
-      return strongPasswordRegex.test(value)
-    },
-    'Mật khẩu phải chứa chữ hoa, chữ thường, số',
-  )
+  const strongPassword = (rule, value, callback, source, options) => {
+    const errors = []
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]/
+    if (! strongPasswordRegex.test(value)) {
+      errors.push('Mật khẩu phải chứa chữ hoa, chữ thường, số')
+    }
+    callback(errors)
+  }
 
-  Validator.register(
-    'telephone',
-    (value, requirement, attribute) => {
-      return value.match(/^\d{3}-\d{3}-\d{4}$/)
-    },
-    'Trường :attribute không đúng định dạng số điện thoại XXX-XXX-XXXX',
-  )
+  const telephone = (rule, value, callback, source, options) => {
+    const errors = []
+    const telephoneRegex = /^\d{3}-\d{3}-\d{4}$/
+    if (! telephoneRegex.test(value)) {
+      errors.push('Không đúng định dạng số điện thoại XXX-XXX-XXXX')
+    }
+    callback(errors)
+  }
 
   // Checks if incoming value already exist for unique and non-unique fields in the database
   // e.g email: required|email|unique:users,email
-  Validator.registerAsync('unique', async (value, attribute, messageOrRequest, passes) => {
-    if (! attribute) {
-      throw new Error('Specify Requirements i.e fieldName: unique:collection,field')
-    }
-    const attArr = attribute.split(',')
-    if (attArr.length < 2) {
-      throw new Error(`Invalid format for validation rule on ${attribute}`)
-    }
-    const [col, field] = attArr
-    const id = attArr.length == 3 ? attArr[2] : null
+  const unique = async (rule, value, callback, source, options) => {
+    // console.log(rule)
+    // console.log(value)
+    // console.log(source)
+    // console.log(options)
 
+    const field = rule.dbField || rule.field
+    const col = rule.dbCol
+    const ignoredIdValue = rule.ignoredIdValue
+    const idField = rule.idField ?? '_id'
+
+    const errors = []
     const db = getDb()
     const query = {
-      [field]: value,
+      [field]: {
+        $regex: '^' + value + '$',
+        $options: 'i',
+      },
     }
-    if (id) {
-      // TODO: cập nhật
+    if (ignoredIdValue) {
+      query[idField] = { $ne: ignoredIdValue }
     }
     const count = await db.collection(col).count(query)
-    // console.log(count)
-
     if (count > 0) {
-      const errorMessage = `Trường :attribute ${field} đã tồn tại`
-      passes(false, errorMessage)
-      return
+      errors.push(rule.dbFieldName + options.messages.unique)
     }
-    passes()
-  })
+    callback(errors)
+  }
+
+  Schema.register('strongPassword', strongPassword)
+  Schema.register('telephone', telephone)
+  Schema.register('unique', unique)
 }
 
 addValidator()

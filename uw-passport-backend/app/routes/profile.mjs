@@ -8,8 +8,19 @@ const router = express.Router()
 
 router.post('/change-password', async (request, response) => {
   const rules = {
-    oldPassword: 'required|string',
-    newPassword: 'required|string|strongPassword',
+    oldPassword: {
+      type: 'string',
+      required: true,
+    },
+    newPassword: [
+      {
+        type: 'string',
+        required: true,
+      },
+      {
+        type: 'strongPassword',
+      },
+    ],
   }
   await request.validate(request.body, rules)
 
