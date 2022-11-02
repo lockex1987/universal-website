@@ -10,40 +10,39 @@
       {{ errorMessage }}
     </div>
 
-    <!--ElForm
-      ref="frmRef"
+    <a-form
       :model="frm"
-      :rules="rules"
-      label-position="top"
-      @submit.prevent="processLogin()"
+      @finish="processLogin"
+      layout="vertical"
     >
-
-      <ElFormItem
+      <a-form-item
         label="Tên đăng nhập"
-        prop="username"
+        name="username"
+        :rules="[{ required: true, messagex: 'Please input your username!' }]"
       >
-        <ElInput
-          v-model.trim="frm.username"
-          autocomplete="off"
-        />
-      </ElFormItem>
+        <!-- Tự động trim rồi? -->
+        <a-input v-model:value.trim="frm.username" />
+      </a-form-item>
 
-      <ElFormItem
+      <a-form-item
         label="Mật khẩu"
-        prop="password"
+        name="password"
+        :rules="[{ required: true, messagex: 'Please input your password!' }]"
       >
-        <ElInput
-          v-model.trim="frm.password"
+        <a-input-password
+          v-model:value.trim="frm.password"
           autocomplete="off"
-          type="password"
-          show-password
         />
-      </ElFormItem>
+      </a-form-item>
 
-      <ElFormItem>
-        <ElButton
+      <div>
+        |{{ frm.password }}|{{ frm.username }}|
+      </div>
+
+      <a-form-item>
+        <a-button
           type="primary"
-          native-type="submit"
+          html-type="submit"
           class="w-100"
         >
           Đăng nhập
@@ -51,43 +50,6 @@
             v-show="isProcessing"
             class="spinner-border spinner-border-sm"
           ></span>
-        </ElButton>
-      </ElFormItem>
-    </ElForm-->
-
-    <a-form
-      :model="frm"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
-      autocomplete="off"
-      @finish="processLogin"
-    >
-      <a-form-item
-        label="Username"
-        name="username"
-        :rules="[{ required: true, message: 'Please input your username!' }]"
-      >
-        <a-input v-model:value="frm.username" />
-      </a-form-item>
-
-      <a-form-item
-        label="Password"
-        name="password"
-        :rules="[{ required: true, message: 'Please input your password!' }]"
-      >
-        <a-input-password
-          v-model:value="frm.password"
-          autocomplete="off"
-        />
-      </a-form-item>
-
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button
-          type="primary"
-          html-type="submit"
-        >
-          Submit
         </a-button>
       </a-form-item>
     </a-form>
@@ -100,21 +62,9 @@ import { useAuthStore } from '@/stores/auth.js'
 const authStore = useAuthStore()
 const router = useRouter()
 
-// const frmRef = ref()
-
 const frm = reactive({
   username: '',
   password: '',
-})
-
-const rules = reactive({
-  username: [
-    // TODO: Vẫn thông báo tiếng Việt
-    { required: true, messagex: 'Vui lòng nhập tên đăng nhập', trigger: 'blur' },
-  ],
-  password: [
-    { required: true, messagex: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
-  ],
 })
 
 const errorMessage = ref('')
@@ -124,8 +74,6 @@ const processLogin = async () => {
   if (isProcessing.value) {
     return
   }
-
-  // Reset form => frmRef.value.resetFields()
 
   isProcessing.value = true
   const params = {
