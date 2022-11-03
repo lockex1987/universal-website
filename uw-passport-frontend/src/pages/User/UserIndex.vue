@@ -4,32 +4,40 @@
   </h4>
 
   <div class="d-flex flex-wrap align-items-center">
-    <input
-      type="text"
-      class="form-control form-control-inline-width mb-3"
+    <a-input
+      v-model:value="filter.text"
+      class="form-control-max-width mb-3"
       placeholder="Username"
-      v-model.trim="text"
       @input="debouncedSearch()"
     />
   </div>
 
   <div
-    v-show="total == 0"
+    v-show="pagi.total == 0"
     class="text-danger"
   >
-    No record
+    Không tìm thấy bản ghi
   </div>
 
-  <div v-show="total > 0">
+  <div v-show="pagi.total > 0">
     <div class="table-responsive-md">
       <table class="table table-borderless">
         <thead>
           <tr>
-            <th class="text-center">
+            <th class="text-right">
               #
             </th>
-            <th class="text-center">
+            <th>
               Username
+            </th>
+            <th>
+              Tên đầy đủ
+            </th>
+            <th>
+              Email
+            </th>
+            <th>
+              Số điện thoại
             </th>
             <th class="text-center">
               Actions
@@ -42,14 +50,21 @@
             v-for="(user, i) in userList"
             :key="user.id"
           >
-            <td class="text-center">
-              {{ (currentPage - 1) * size + i + 1 }}
+            <td class="text-right">
+              {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
             </td>
-
             <td>
               {{ user.username }}
             </td>
-
+            <td>
+              {{ user.fullName }}
+            </td>
+            <td>
+              {{ user.email }}
+            </td>
+            <td>
+              {{ user.phone }}
+            </td>
             <td class="text-center">
               <i
                 class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
@@ -61,16 +76,16 @@
       </table>
     </div>
 
-    <div>
+    <div class="d-md-flex justify-content-between">
       <div class="text-muted">
-        Tìm thấy {{ total }} bản ghi
+        Tìm thấy {{ pagi.total }} bản ghi
       </div>
 
       <!-- :pageSize="size" -->
 
       <a-pagination
-        v-model:current="currentPage"
-        :total="total"
+        v-model:current="pagi.currentPage"
+        :total="pagi.total"
         show-less-items
       />
     </div>
@@ -80,21 +95,31 @@
 <script setup>
 import { debounce } from '@/helpers/common.js'
 
-const size = 10
-const total = ref(-1)
-const currentPage = ref(1)
+const filter = reactive({
+  text: '',
+})
+
+const pagi = reactive({
+  size: 10,
+  total: -1,
+  currentPage: 1,
+})
+
 const userList = ref([])
-const text = ref('')
+
+const dropdowns = reactive({
+  // Danh sách ở các dropdown
+})
 
 const search = async page => {
   const params = {
-    text: text.value,
+    text: filter.text,
     page,
-    size,
+    size: pagi.size,
   }
   const { data } = await axios.post('/api/user/search', params)
-  total.value = data.total
-  currentPage.value = page
+  pagi.total = data.total
+  pagi.currentPage = page
   userList.value = data.list
 }
 
