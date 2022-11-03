@@ -2,7 +2,7 @@
 /package-lock.json
 /pnpm-lock.yaml
 
-/build
+/dist
 
 /public/static/js/.env.js
 /public/upload
