@@ -128,7 +128,7 @@ const updateInfo = async () => {
     params.append('avatar', avatarFile)
   }
 
-  const { data } = await axios.post('/api/profile/user', params)
+  const { data } = await axios.post('/api/profile/update-user-info', params)
   if (data.code == 0) {
     authStore.user = {
       ...authStore.user,

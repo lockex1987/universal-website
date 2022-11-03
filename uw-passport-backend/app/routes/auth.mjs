@@ -105,7 +105,7 @@ router.get('/me', async (request, response) => {
   response.json({
     code: 0,
     user: {
-      ...pick(dbUser, 'username'),
+      ...pick(dbUser, 'username', 'fullName', 'email', 'phone'),
       id,
     },
   })

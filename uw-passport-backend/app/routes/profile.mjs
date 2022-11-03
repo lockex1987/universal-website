@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
+import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
 
@@ -53,6 +54,34 @@ router.post('/change-password', async (request, response) => {
     code: 0,
     message: 'Đổi mật khẩu thành công',
     result,
+  })
+})
+
+router.post('/update-user-info', async (request, response) => {
+  const rules = {
+    fullName: [{ required: true }],
+    email: [{ type: 'email', required: true }],
+    phone: [{ required: false, min: 9, max: 12 }],
+  }
+  await request.validate(request.body, rules)
+
+  const redisUser = await getUser(request)
+  const db = getDb()
+  const query = { _id: ObjectId(redisUser.id) }
+  const dbUser = await db.collection('users').findOne(query)
+
+  if (! dbUser) {
+    return response.json({
+      code: 1,
+      message: 'Người dùng không tồn tại',
+    })
+  }
+
+  const data = pick(request.body, 'fullName', 'email', 'phone')
+  await db.collection('users').updateOne(query, { $set: data })
+  response.json({
+    code: 0,
+    message: 'Updated',
   })
 })
 
