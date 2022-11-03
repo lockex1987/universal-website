@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-lg-6">
       <div class="h-100 mb-5">
-        <div class="panel-header mb-3">
+        <div class="fw-bold mb-3">
           Thông tin tài khoản
         </div>
 
@@ -12,7 +12,7 @@
 
     <div class="col-lg-6">
       <div class="h-100 mb-5">
-        <div class="panel-header mb-3">
+        <div class="fw-bold mb-3">
           Đổi mật khẩu
         </div>
 

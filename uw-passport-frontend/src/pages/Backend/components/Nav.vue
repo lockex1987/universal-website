@@ -25,7 +25,7 @@
               class="nav-link"
               activeClass="active"
             >
-              User
+              Người dùng
             </RouterLink>
           </li>
         </ul>
@@ -52,7 +52,7 @@
                 class="dropdown-item"
                 activeClass="active"
               >
-                Profile
+                Tài khoản
               </RouterLink>
             </li>
 
@@ -62,7 +62,7 @@
                 href="#"
                 @click.prevent="processLogout()"
               >
-                Logout
+                Đăng xuất
               </a>
             </li>
           </ul>
