@@ -6,14 +6,14 @@ export default async to => {
 
   const authStore = useAuthStore()
 
-  if (! authStore.user.id) {
+  if (! authStore.user._id) {
     const { data } = await axios.get('/api/auth/me')
     if (data.code == 0) {
       authStore.user = data.user
     }
   }
 
-  if (! authStore.user.id) {
+  if (! authStore.user._id) {
     const isLoginOnlyPage = path.startsWith('/Backend')
     if (path == '/' || isLoginOnlyPage) {
       authStore.beforeLoginPath = to.fullPath

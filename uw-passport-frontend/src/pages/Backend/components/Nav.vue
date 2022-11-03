@@ -81,7 +81,7 @@ const router = useRouter()
 const processLogout = async () => {
   await axios.post('/api/auth/logout')
   authStore.user = {
-    id: null,
+    _id: null,
     username: '',
   }
   router.push('/Login')

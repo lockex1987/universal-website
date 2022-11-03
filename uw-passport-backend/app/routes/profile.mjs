@@ -24,7 +24,7 @@ router.post('/change-password', async (request, response) => {
   const redisUser = await getUser(request)
 
   const db = getDb()
-  const dbUser = await db.collection('users').findOne({ _id: ObjectId(redisUser.id) })
+  const dbUser = await db.collection('users').findOne({ _id: ObjectId(redisUser._id) })
   if (! dbUser) {
     return response.json({
       code: 1,
@@ -41,7 +41,7 @@ router.post('/change-password', async (request, response) => {
 
   const rounds = 10
   const hashedPassword = bcrypt.hashSync(newPassword, rounds)
-  const query = { _id: ObjectId(redisUser.id) }
+  const query = { _id: ObjectId(redisUser._id) }
   const data = { password: hashedPassword }
   const result = await db.collection('users').updateOne(query, { $set: data })
 
@@ -64,7 +64,7 @@ router.post('/update-user-info', async (request, response) => {
 
   const redisUser = await getUser(request)
   const db = getDb()
-  const query = { _id: ObjectId(redisUser.id) }
+  const query = { _id: ObjectId(redisUser._id) }
   const dbUser = await db.collection('users').findOne(query)
 
   if (! dbUser) {

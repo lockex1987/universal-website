@@ -14,11 +14,6 @@ router.get('/search', async (request, response) => {
     .limit(100)
     .toArray()
 
-  // Ở frontend đang sử dụng trường "id", không phải "_id"
-  productList.forEach(product => {
-    product.id = product._id
-  })
-
   response.json({
     code: 0,
     data: productList,

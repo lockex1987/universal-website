@@ -27,7 +27,7 @@ router.post('/insert', async (request, response) => {
     response.json({
       code: 0,
       message: 'Inserted',
-      id: result.insertedId,
+      _id: result.insertedId,
     })
   }
 })
@@ -35,13 +35,13 @@ router.post('/insert', async (request, response) => {
 /*
 curl --header "Content-Type: application/json" \
   --request PUT \
-  --data '{ "id": "63564e7a6303cac34753d740", "title": "title 1 a", "description": "description 1 b" }' \
+  --data '{ "_id": "63564e7a6303cac34753d740", "title": "title 1 a", "description": "description 1 b" }' \
   http://localhost:3000/todo/update
 */
 router.put('/update', async (request, response) => {
   try {
-    const { id, title, description } = request.body
-    const query = { _id: ObjectId(id) }
+    const { _id, title, description } = request.body
+    const query = { _id: ObjectId(_id) }
     /*
     const data = {
       title,
@@ -49,7 +49,7 @@ router.put('/update', async (request, response) => {
     }
     */
     const data = pick(request.body, 'title', 'description')
-    // console.log(id)
+    // console.log(_id)
     const db = getDb()
     // Chú ý thêm $set
     const result = await db.collection('todos').updateOne(query, { $set: data })
@@ -69,10 +69,9 @@ router.put('/update', async (request, response) => {
 curl --request DELETE \
   http://localhost:3000/todo/delete/63564e7a6303cac34753d740
 */
-router.delete('/delete/:id', async (request, response) => {
-  const { id } = request.params
-  // console.log(id)
-  const query = { _id: ObjectId(id) }
+router.delete('/delete/:_id', async (request, response) => {
+  const { _id } = request.params
+  const query = { _id: ObjectId(_id) }
   const db = getDb()
   const result = await db.collection('todos').deleteOne(query)
   // console.log(result)
