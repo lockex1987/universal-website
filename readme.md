@@ -1,5 +1,15 @@
 ## universal website
 
+### TODO
+
+Tuning MongoDB performance (partition, index)
+
+Edge.js parse sẵn template (Edge, Renderer, Template, Compiler)
+
+Trim Ant Design input
+
+Trim Express middleware
+
 ### Introduction
 
 Dựa trên sso-admin, sso-passport, landing-page
