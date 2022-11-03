@@ -75,7 +75,7 @@ router.post('/update-user-info', async (request, response) => {
   }
 
   const avatarFile = request.files?.avatar
-  let avatarPath = null
+  let avatarPath = dbUser.avatar
   if (avatarFile) {
     const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
     if (avatarFile.size > MAX_FILE_SIZE) {
