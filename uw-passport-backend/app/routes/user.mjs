@@ -16,7 +16,15 @@ router.post('/search', async (request, response) => {
   const order = { _id: -1 }
   const db = getDb()
   // TODO: Không trả về các thông tin nhạy cảm như mật khẩu
-  const projection = { password: 0 }
+  const projection = {
+    _id: 1,
+    username: 1,
+    fullName: 1,
+    email: 1,
+    phone: 1,
+    avatar: 1,
+    // password: 0
+  }
 
   const col = db.collection('users')
   const total = await col.count(query)

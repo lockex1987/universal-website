@@ -9,7 +9,7 @@
     <div class="mb-3 form-control-max-width py-4 text-center">
       <label class="d-block mb-0 cursor-pointer">
         <img
-          class="rounded-circle avatar object-fit-cover image-box-shadow"
+          class="rounded-circle avatar object-fit-cover"
           title="Đổi ảnh đại diện"
           onerror="this.src = '/static/images/user_avatar.png'"
           ref="avatarImgTag"

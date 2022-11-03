@@ -48,12 +48,18 @@
         <tbody>
           <tr
             v-for="(user, i) in userList"
-            :key="user.id"
+            :key="user._id"
           >
             <td class="text-right">
               {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
             </td>
             <td>
+              <img
+                class="rounded-circle avatar object-fit-cover me-2"
+                title="Đổi ảnh đại diện"
+                :src="user.avatar ? ('/' + user.avatar) : '/static/images/user_avatar.png'"
+                onerror="this.src = '/static/images/user_avatar.png'"
+              />
               {{ user.username }}
             </td>
             <td>
@@ -129,3 +135,10 @@ onMounted(() => {
   search(1)
 })
 </script>
+
+<style scoped>
+.avatar {
+  width: 1rem;
+  height: 1rem;
+}
+</style>
