@@ -2,6 +2,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import path from 'node:path'
 import crypto from 'node:crypto'
+import fs from 'node:fs/promises'
 import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
@@ -61,6 +62,18 @@ router.post('/update-user-info', async (request, response) => {
   }
   await request.validate(request.body, rules)
 
+  const redisUser = await getUser(request)
+  const db = getDb()
+  const query = { _id: ObjectId(redisUser.id) }
+  const dbUser = await db.collection('users').findOne(query)
+
+  if (! dbUser) {
+    return response.json({
+      code: 1,
+      message: 'Người dùng không tồn tại',
+    })
+  }
+
   const avatarFile = request.files?.avatar
   let avatarPath = null
   if (avatarFile) {
@@ -85,8 +98,9 @@ router.post('/update-user-info', async (request, response) => {
 
     // Trường name đã được xử lý qua SAFE_FILE_NAME_REGEX = /[^\w-]/g nên không sợ các ký tự đặc biệt như .. và null
     const uuid = crypto.randomUUID()
+    const basePath = getBasePath()
     avatarPath = 'upload/' + uuid + '-' + avatarFile.name
-    const uploadPath = getBasePath() + avatarPath
+    const uploadPath = basePath + avatarPath
 
     const err = await avatarFile.mv(uploadPath)
     if (err) {
@@ -96,18 +110,11 @@ router.post('/update-user-info', async (request, response) => {
         message: 'Lỗi lưu file',
       })
     }
-  }
 
-  const redisUser = await getUser(request)
-  const db = getDb()
-  const query = { _id: ObjectId(redisUser.id) }
-  const dbUser = await db.collection('users').findOne(query)
-
-  if (! dbUser) {
-    return response.json({
-      code: 1,
-      message: 'Người dùng không tồn tại',
-    })
+    // Xóa ảnh cũ
+    if (dbUser.avatar) {
+      fs.unlink(basePath + dbUser.avatar)
+    }
   }
 
   const data = pick(request.body, 'fullName', 'email', 'phone')
