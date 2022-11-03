@@ -34,7 +34,7 @@ axios.interceptors.response.use(
 
     // Xử lý lỗi validate do Laravel trả về
     if (status == 422) {
-      const errors = error.response.data.errors
+      const errors = error.response.data.errors ?? []
       const message = errors.map(e => e.message).join('<br />')
       noti.error(message)
     }

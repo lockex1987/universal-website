@@ -18,7 +18,11 @@ const addValidator = () => {
     try {
       const validator = new Schema(rules)
       await validator.validate(body)
-    } catch ({ errors, fields }) {
+    } catch (ex) {
+      console.error(ex)
+      const { errors, fields } = ex
+      console.log(errors)
+      console.log(fields)
       const error = new Error('validate')
       // Custom prop to specify handling behaviour
       error.type = 'validate'
