@@ -8,7 +8,7 @@
         <img
           class="rounded-circle avatar object-fit-cover image-box-shadow"
           title="Đổi ảnh đại diện"
-          onerror="this.src = '/images/user_avatar.png'"
+          onerror="this.src = '/static/images/user_avatar.png'"
           ref="avatarImgTag"
         />
 
@@ -116,7 +116,7 @@ const initInfo = () => {
   phone.value = loginUser.phone
 
   avatarFileInputTag.value.value = ''
-  avatarImgTag.value.src = loginUser.avatar || '/images/user_avatar.png'
+  avatarImgTag.value.src = loginUser.avatar || '/static/images/user_avatar.png'
 }
 
 const updateInfo = async () => {
