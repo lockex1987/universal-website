@@ -114,7 +114,7 @@ const initInfo = () => {
   frm.phone = loginUser.phone
 
   avatarFileInputTag.value.value = ''
-  avatarImgTag.value.src = loginUser.avatar || '/static/images/user_avatar.png'
+  avatarImgTag.value.src = loginUser.avatar ? ('/' + loginUser.avatar) : '/static/images/user_avatar.png'
 }
 
 const updateInfo = async () => {
