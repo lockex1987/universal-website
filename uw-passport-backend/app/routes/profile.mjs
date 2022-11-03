@@ -96,10 +96,9 @@ router.post('/update-user-info', async (request, response) => {
       })
     }
 
-    // Trường name đã được xử lý qua SAFE_FILE_NAME_REGEX = /[^\w-]/g nên không sợ các ký tự đặc biệt như .. và null
     const uuid = crypto.randomUUID()
     const basePath = getBasePath()
-    avatarPath = 'upload/' + uuid + '-' + avatarFile.name
+    avatarPath = 'upload/' + uuid + '.' + extension
     const uploadPath = basePath + avatarPath
 
     const err = await avatarFile.mv(uploadPath)
