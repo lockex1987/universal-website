@@ -54,7 +54,7 @@ router.post('/login', async (request, response, next) => {
 
   // Save into Redis, cookie
   const redisUser = {
-    ...pick(dbUser, 'username', 'fullName', 'email', 'phone'),
+    ...pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar'),
     id: dbUser._id,
   }
   const sessionId = generateRandomSessionId()
@@ -105,7 +105,7 @@ router.get('/me', async (request, response) => {
   response.json({
     code: 0,
     user: {
-      ...pick(dbUser, 'username', 'fullName', 'email', 'phone'),
+      ...pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar'),
       id,
     },
   })

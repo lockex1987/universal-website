@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.mjs"
+    "dev": "nodemon index.mjs",
+    "upload-link": "ln -s /home/huyennv9/projects/universal-website/uw-passport-backend/upload public/upload"
   },
   "dependencies": {
     "async-validator": "^4.2.5",

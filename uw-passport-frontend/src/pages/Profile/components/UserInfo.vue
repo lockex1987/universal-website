@@ -118,7 +118,6 @@ const initInfo = () => {
 }
 
 const updateInfo = async () => {
-  /*
   const params = new FormData()
   params.append('fullName', frm.fullName)
   params.append('email', frm.email)
@@ -127,10 +126,6 @@ const updateInfo = async () => {
   const avatarFile = avatarFileInputTag.value.files[0]
   if (avatarFile) {
     params.append('avatar', avatarFile)
-  }
-  */
-  const params = {
-    ...frm,
   }
 
   const { data } = await axios.post('/api/profile/update-user-info', params)

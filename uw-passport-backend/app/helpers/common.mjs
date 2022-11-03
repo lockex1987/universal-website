@@ -12,6 +12,10 @@ export const pick = (obj, ...props) => {
   return picked
 }
 
+/**
+ * Có ký tự / ở cuối.
+ * @return {string}
+ */
 export const getBasePath = () => {
   return fileURLToPath(new URL('../..', import.meta.url))
 }
