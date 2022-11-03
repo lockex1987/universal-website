@@ -19,6 +19,7 @@ export default [
         name: 'User',
         component: () => import('@/pages/User/UserIndex.vue'),
       },
+      // Không mở popup
       /*
       {
         path: 'user/:userId',

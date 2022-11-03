@@ -4,7 +4,7 @@
     style="max-width: 500px"
   >
     <h4>
-      Not found
+      Không tìm thấy trang
     </h4>
 
     <div>
@@ -14,7 +14,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-// import { RouterLink } from 'vue-router'
-</script>

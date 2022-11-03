@@ -98,13 +98,17 @@ const frm = reactive({
   email: '',
   phone: '',
 })
+
 const rules = {
   fullName: [{ required: true }],
   email: [{ type: 'email', required: true }],
   phone: [{ required: false, min: 9, max: 12 }],
 }
+
 const frmRef = ref()
+
 const avatarImgTag = ref()
+
 const avatarFileInputTag = ref()
 
 const initInfo = () => {

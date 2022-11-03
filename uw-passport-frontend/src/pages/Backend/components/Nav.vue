@@ -21,16 +21,6 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <RouterLink
-              :to="{ name: 'Profile' }"
-              class="nav-link"
-              activeClass="active"
-            >
-              Profile
-            </RouterLink>
-          </li>
-
-          <li class="nav-item">
-            <RouterLink
               :to="{ name: 'User' }"
               class="nav-link"
               activeClass="active"
@@ -51,6 +41,16 @@
 
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
+              <RouterLink
+                :to="{ name: 'Profile' }"
+                class="dropdown-item"
+                activeClass="active"
+              >
+                Profile
+              </RouterLink>
+            </li>
+
+            <li>
               <a
                 class="dropdown-item"
                 href="#"
@@ -67,8 +67,6 @@
 </template>
 
 <script setup>
-// import axios from 'axios'
-// import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
