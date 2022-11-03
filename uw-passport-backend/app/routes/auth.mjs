@@ -35,17 +35,17 @@ router.post('/login', async (request, response, next) => {
       $options: 'i',
     },
   }
-  const user = await db.collection('users')
+  const dbUser = await db.collection('users')
     .findOne(query)
 
-  if (! user) {
+  if (! dbUser) {
     return response.json({
       code: 1,
       message: 'Login failed',
     })
   }
 
-  if (! bcrypt.compareSync(password, user.password)) {
+  if (! bcrypt.compareSync(password, dbUser.password)) {
     return response.json({
       code: 1,
       message: 'Login failed',
@@ -54,8 +54,8 @@ router.post('/login', async (request, response, next) => {
 
   // Save into Redis, cookie
   const redisUser = {
-    id: user._id,
-    username: user.username,
+    ...pick(dbUser, 'username', 'fullName', 'email', 'phone'),
+    id: dbUser._id,
   }
   const sessionId = generateRandomSessionId()
   // 10 ngày
