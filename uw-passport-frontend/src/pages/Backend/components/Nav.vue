@@ -36,6 +36,12 @@
             type="button"
             data-bs-toggle="dropdown"
           >
+            <img
+              class="rounded-circle avatar object-fit-cover me-2"
+              title="Đổi ảnh đại diện"
+              :src="authStore.user.avatar ? ('/' + authStore.user.avatar) : '/static/images/user_avatar.png'"
+              onerror="this.src = '/static/images/user_avatar.png'"
+            />
             {{ authStore.user.username }}
           </button>
 
@@ -81,3 +87,10 @@ const processLogout = async () => {
   router.push('/Login')
 }
 </script>
+
+<style scoped>
+.avatar {
+  width: 1rem;
+  height: 1rem;
+}
+</style>
