@@ -1,7 +1,10 @@
 <template>
-  <form
-    ref="root"
-    @submit.prevent="updateInfo()"
+  <a-form
+    :model="frm"
+    ref="frmRef"
+    :rules="rules"
+    @finish="updateInfo()"
+    layout="vertical"
   >
     <div class="mb-3 form-control-max-width py-4 text-center">
       <label class="d-block mb-0 cursor-pointer">
@@ -36,100 +39,89 @@
       </div>
     </div>
 
-    <div class="mb-3 validate-container">
-      <label class="form-label required">
-        Tên hiển thị
-      </label>
-
-      <input
-        type="text"
-        v-model.trim="fullName"
-        class="form-control form-control-max-width"
-        data-validation="required"
+    <a-form-item
+      label="Tên hiển thị"
+      name="fullName"
+    >
+      <a-input
+        v-model:value="frm.fullName"
+        class="form-control-max-width"
       />
-    </div>
+    </a-form-item>
 
-    <div class="mb-3 validate-container">
-      <label class="form-label required">
-        Email
-      </label>
-
-      <input
-        type="text"
-        v-model.trim="email"
-        class="form-control form-control-max-width"
-        data-validation="required|email"
+    <a-form-item
+      label="Email"
+      name="email"
+    >
+      <a-input
+        v-model:value="frm.email"
+        class="form-control-max-width"
       />
-    </div>
+    </a-form-item>
 
-    <div class="mb-3 validate-container">
-      <label class="form-label form-label">
-        Số điện thoại
-      </label>
-
-      <input
-        type="text"
-        v-model.trim="phone"
-        class="form-control form-control-max-width"
-        data-validation="phone|maxLength:20"
+    <a-form-item
+      label="Số điện thoại"
+      name="phone"
+    >
+      <a-input
+        v-model:value="frm.phone"
+        class="form-control-max-width"
       />
-    </div>
+    </a-form-item>
 
-    <div>
-      <button
-        class="btn btn-primary"
-        type="submit"
+    <a-form-item>
+      <a-button
+        type="primary"
+        html-type="submit"
       >
         Lưu thông tin
-      </button>
+      </a-button>
 
-      <button
-        class="btn btn-outline-primary ms-3"
-        type="button"
+      <a-button
+        type="secondary"
+        class="ms-3"
         @click="initInfo()"
       >
         Hủy
-      </button>
-    </div>
-  </form>
+      </a-button>
+    </a-form-item>
+  </a-form>
 </template>
 
 <script setup>
-// import axios from 'axios'
-// import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
 
-const fullName = ref('')
-const email = ref('')
-const phone = ref('')
-
-const root = ref(null)
-const avatarImgTag = ref(null)
-const avatarFileInputTag = ref(null)
+const frm = reactive({
+  fullName: '',
+  email: '',
+  phone: '',
+})
+const rules = {
+  fullName: [{ required: true }],
+  email: [{ type: 'email', required: true }],
+  phone: [{ required: false, min: 9, max: 12 }],
+}
+const frmRef = ref()
+const avatarImgTag = ref()
+const avatarFileInputTag = ref()
 
 const initInfo = () => {
   const loginUser = authStore.user
-  fullName.value = loginUser.full_name
-  email.value = loginUser.email
-  phone.value = loginUser.phone
+  frm.fullName = loginUser.fullName
+  frm.email = loginUser.email
+  frm.phone = loginUser.phone
 
   avatarFileInputTag.value.value = ''
   avatarImgTag.value.src = loginUser.avatar || '/static/images/user_avatar.png'
 }
 
 const updateInfo = async () => {
-  /*
-  if (CV.invalidForm(root.value)) {
-    return
-  }
-  */
-
   const params = new FormData()
-  params.append('fullName', fullName.value)
-  params.append('email', email.value)
-  params.append('phone', phone.value)
+  params.append('fullName', frm.fullName)
+  params.append('email', frm.email)
+  params.append('phone', frm.phone)
 
   const avatarFile = avatarFileInputTag.value.files[0]
   if (avatarFile) {
@@ -140,9 +132,9 @@ const updateInfo = async () => {
   if (data.code == 0) {
     authStore.user = {
       ...authStore.user,
-      full_name: fullName.value,
-      email: email.value,
-      phone: phone.value,
+      fullName: frm.fullName,
+      email: frm.email,
+      phone: frm.phone,
       avatar: data.avatar,
     }
     initInfo()

@@ -61,7 +61,7 @@ const frm = reactive({
 })
 const frmRef = ref()
 const rules = {
-  // oldPassword: [{ required: true }],
+  oldPassword: [{ required: true }],
   newPassword: [{ required: true }],
 }
 const isProcessing = ref(false)
