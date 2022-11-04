@@ -18,7 +18,8 @@
         class="collapse navbar-collapse"
         id="navbarSupportedContent"
       >
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- Mobile -->
+        <!--ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li
             v-for="lv1 in menuList"
             class="nav-item"
@@ -31,9 +32,9 @@
               {{ lv1.name }}
             </RouterLink>
           </li>
-        </ul>
+        </ul-->
 
-        <div class="dropdown text-end">
+        <div class="ms-auto dropdown text-end">
           <button
             class="btn btn-link text-decoration-none text-body dropdown-toggle"
             type="button"
