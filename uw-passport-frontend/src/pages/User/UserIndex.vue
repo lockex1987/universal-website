@@ -100,7 +100,7 @@
     <a-pagination
       v-model:current="pagi.currentPage"
       :total="pagi.total"
-      hideOnSinglePage
+      :hideOnSinglePage="true"
       :showSizeChanger="false"
       :showTotal="total => `Tìm thấy ${total} bản ghi`"
       @change="search"

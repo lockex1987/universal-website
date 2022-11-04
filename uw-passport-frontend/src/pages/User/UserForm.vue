@@ -122,13 +122,14 @@ const actionName = computed(() => {
 
 const bindOldInfo = async () => {
   const { data } = await axios.get('/api/user/get/' + frm._id)
-  const user = data
-  frm.username = user.username
-  frm.fullName = user.fullName
-  frm.email = user.email
-  frm.phone = user.phone
+  frm.username = data.username
+  frm.fullName = data.fullName
+  frm.email = data.email
+  frm.phone = data.phone
   frm.avatar = []
-  imageUrl.value = user.avatar ? ('/' + user.avatar) : '/static/images/user_avatar.png'
+  imageUrl.value = data.avatar
+    ? (data.avatar.startsWith('http') ? data.avatar : '/' + data.avatar)
+    : '/static/images/user_avatar.png'
 }
 
 const beforeUpload = file => {
