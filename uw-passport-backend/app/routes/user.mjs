@@ -13,7 +13,7 @@ router.post('/search', async (request, response) => {
 
   const order = { _id: -1 }
   const db = getDb()
-  // TODO: Không trả về các thông tin nhạy cảm như mật khẩu
+  // Không trả về các thông tin nhạy cảm như mật khẩu
   const projection = {
     _id: 1,
     username: 1,
@@ -29,8 +29,8 @@ router.post('/search', async (request, response) => {
   const total = await col.count(query)
 
   const list = await col
-    .find(query, projection)
-    // .projection(projection)
+    .find(query)
+    .project(projection)
     .sort(order)
     .skip((page - 1) * size)
     .limit(size)
@@ -52,7 +52,18 @@ router.get('/get/:_id', async (request, response) => {
   const { _id } = request.params
   const db = getDb()
   const query = { _id: ObjectId(_id) }
-  const row = await db.collection('users').findOne(query)
+  // Không trả về các thông tin nhạy cảm như mật khẩu
+  const projection = {
+    _id: 1,
+    username: 1,
+    fullName: 1,
+    email: 1,
+    phone: 1,
+    avatar: 1,
+    thumbnail: 1,
+    // password: 0
+  }
+  const row = await db.collection('users').findOne(query, projection)
   response.json(row)
 })
 

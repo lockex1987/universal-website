@@ -85,6 +85,12 @@
                 title="Cập nhật"
                 @click="openUpdateForm(user)"
               />
+
+              <i
+                class="cursor-pointer font-size-1.5 text-danger bi bi-trash ms-3"
+                title="Xóa"
+                @click="deleteRow(user)"
+              />
             </td>
           </tr>
         </tbody>
@@ -153,6 +159,16 @@ const openUpdateForm = user => {
   router.push({
     name: 'UserForm',
     params: { _id: user._id },
+  })
+}
+
+const deleteRow = user => {
+  noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
+    const { data } = await axios.delete('/api/user/delete/' + user._id)
+    if (data.code == 0) {
+      noti.success('Xóa bản ghi thành công')
+      search(1)
+    }
   })
 }
 
