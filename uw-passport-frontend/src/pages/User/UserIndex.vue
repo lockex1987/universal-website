@@ -97,20 +97,14 @@
       </table>
     </div>
 
-    <div class="d-md-flex justify-content-between">
-      <div class="text-muted">
-        Tìm thấy {{ pagi.total }} bản ghi
-      </div>
-
-      <!-- :pageSize="size" -->
-
-      <a-pagination
-        v-model:current="pagi.currentPage"
-        :total="pagi.total"
-        showLessItems
-        hideOnSinglePage
-      />
-    </div>
+    <a-pagination
+      v-model:current="pagi.currentPage"
+      :total="pagi.total"
+      hideOnSinglePage
+      :showSizeChanger="false"
+      :showTotal="total => `Tìm thấy ${total} bản ghi`"
+      @change="search"
+    />
   </div>
 </template>
 
