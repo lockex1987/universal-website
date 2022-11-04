@@ -23,6 +23,6 @@
 </template>
 
 <script setup>
-import UserInfo from './components/UserInfo.vue'
-import ChangePassword from './components/ChangePassword.vue'
+import UserInfo from './UserInfo.vue'
+import ChangePassword from './ChangePassword.vue'
 </script>

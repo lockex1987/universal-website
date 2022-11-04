@@ -56,11 +56,14 @@ const frm = reactive({
   oldPassword: '',
   newPassword: '',
 })
+
 const frmRef = ref()
+
 const rules = {
   oldPassword: [{ required: true }],
   newPassword: [{ required: true }],
 }
+
 const isProcessing = ref(false)
 
 const changePassword = async () => {
@@ -84,15 +87,7 @@ const changePassword = async () => {
 }
 
 const cancelForm = () => {
-  // TODO: Clear Error Messages
   frmRef.value.resetFields()
-
-  /*
-  frm.value = {
-    oldPassword: '',
-    newPassword: '',
-  }
-  */
 
   frm.oldPassword = ''
   frm.newPassword = ''
