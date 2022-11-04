@@ -89,7 +89,6 @@
 </template>
 
 <script setup>
-import { message } from 'ant-design-vue'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
@@ -105,6 +104,7 @@ const rules = {
   fullName: [{ required: true }],
   email: [{ type: 'email', required: true }],
   phone: [{ required: false, min: 9, max: 12 }],
+  avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
 }
 
 const frmRef = ref()
@@ -121,16 +121,6 @@ const initInfo = () => {
 }
 
 const beforeUpload = file => {
-  const isJpgOrPng = false // file.type === 'image/jpeg' || file.type === 'image/png'
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG file!')
-  }
-
-  const isLt2M = file.size / 1024 / 1024 < 5
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-
   // Preview
   imageUrl.value = URL.createObjectURL(file)
 
@@ -144,9 +134,11 @@ const updateInfo = async () => {
   params.append('email', frm.email)
   params.append('phone', frm.phone)
 
-  const avatarFile = frm.avatar[0]
-  if (avatarFile) {
-    params.append('avatar', avatarFile.originFileObj)
+  const fileList = frm.avatar
+  const temp = fileList.length ? fileList[fileList.length - 1] : null
+  if (temp) {
+    const avatarFile = temp.originFileObj
+    params.append('avatar', avatarFile)
   }
 
   const { data } = await axios.post('/api/profile/update-user-info', params)

@@ -60,7 +60,7 @@ const upload = (rule, value, callback, source, options) => {
 
   const errors = []
   const maxFileSize = rule.maxFileSize
-  const extensions = rule.extensions
+  const allowedExtensions = rule.extensions
 
   if (file.size > maxFileSize * 1024 * 1024) {
     errors.push('Dung lượng file quá lớn, tối đa ' + maxFileSize + ' MB')
@@ -69,8 +69,8 @@ const upload = (rule, value, callback, source, options) => {
   const extension = path.extname(file.name)
     .substring(1)
     .toLowerCase()
-  if (! extensions.includes(extension)) {
-    errors.push('Chỉ được upload các file với định dạng ' + extensions.join(', '))
+  if (! allowedExtensions.includes(extension)) {
+    errors.push('Chỉ được upload các file với định dạng ' + allowedExtensions.join(', '))
   }
 
   callback(errors)
