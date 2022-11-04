@@ -65,7 +65,7 @@
               <img
                 class="rounded-circle avatar object-fit-cover me-2"
                 title="Đổi ảnh đại diện"
-                :src="user.thumbnail ? ('/' + user.thumbnail) : '/static/images/user_avatar.png'"
+                :src="user.thumbnail ? (user.thumbnail.startsWith('http') ? user.thumbnail : '/' + user.thumbnail) : '/static/images/user_avatar.png'"
                 onerror="this.src = '/static/images/user_avatar.png'"
               />
               {{ user.username }}
