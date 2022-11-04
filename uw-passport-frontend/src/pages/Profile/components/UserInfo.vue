@@ -69,7 +69,7 @@
       />
     </a-form-item>
 
-    <a-form-item>
+    <a-space>
       <a-button
         type="primary"
         html-type="submit"
@@ -77,14 +77,10 @@
         Lưu thông tin
       </a-button>
 
-      <a-button
-        type="secondary"
-        class="ms-3"
-        @click="initInfo()"
-      >
+      <a-button @click="initInfo()">
         Hủy
       </a-button>
-    </a-form-item>
+    </a-space>
   </a-form>
 </template>
 

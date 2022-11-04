@@ -32,7 +32,7 @@
       />
     </a-form-item>
 
-    <a-form-item>
+    <a-space>
       <a-button
         type="primary"
         html-type="submit"
@@ -44,13 +44,10 @@
         ></span>
       </a-button>
 
-      <a-button
-        type="secondary ms-3"
-        @click="cancelForm()"
-      >
+      <a-button @click="cancelForm()">
         Hủy
       </a-button>
-    </a-form-item>
+    </a-space>
   </a-form>
 </template>
 

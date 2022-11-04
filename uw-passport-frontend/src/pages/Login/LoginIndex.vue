@@ -39,7 +39,7 @@
         <a-button
           type="primary"
           html-type="submit"
-          class="w-100"
+          block
         >
           Đăng nhập
           <span

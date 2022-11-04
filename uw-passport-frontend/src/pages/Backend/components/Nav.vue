@@ -19,13 +19,16 @@
         id="navbarSupportedContent"
       >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
+          <li
+            v-for="lv1 in menuList"
+            class="nav-item"
+          >
             <RouterLink
-              :to="{ name: 'User' }"
+              :to="{ name: lv1.code }"
               class="nav-link"
               activeClass="active"
             >
-              Người dùng
+              {{ lv1.name }}
             </RouterLink>
           </li>
         </ul>
@@ -74,6 +77,11 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/auth.js'
+
+const menuList = [
+  { code: 'User', name: 'Người dùng' },
+  { code: 'DemoButton', name: 'Demo Button' },
+]
 
 const authStore = useAuthStore()
 const router = useRouter()

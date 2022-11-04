@@ -27,6 +27,11 @@ export default [
         component: () => import('@/pages/UserForm.vue'),
       },
       */
+      {
+        path: 'DemoButton',
+        name: 'DemoButton',
+        component: () => import('@/pages/DemoComponents/DemoButton.vue'),
+      },
     ],
   },
   {
