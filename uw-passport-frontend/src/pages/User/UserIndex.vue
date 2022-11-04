@@ -36,7 +36,7 @@
               #
             </th>
             <th>
-              Username
+              Tài khoản
             </th>
             <th>
               Tên đầy đủ

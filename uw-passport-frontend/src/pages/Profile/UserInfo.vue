@@ -3,7 +3,7 @@
     :model="frm"
     ref="frmRef"
     :rules="rules"
-    @finish="updateInfo()"
+    @finish="saveForm()"
     layout="vertical"
   >
     <div class="mb-3 mt-3 form-control-max-width py-4 text-center">
@@ -40,7 +40,7 @@
     </div>
 
     <a-form-item
-      label="Tên hiển thị"
+      label="Tên đầy đủ"
       name="fullName"
     >
       <a-input
@@ -124,7 +124,7 @@ const beforeUpload = file => {
   return false
 }
 
-const updateInfo = async () => {
+const saveForm = async () => {
   const params = new FormData()
   params.append('fullName', frm.fullName)
   params.append('email', frm.email)

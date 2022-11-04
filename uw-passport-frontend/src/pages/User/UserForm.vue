@@ -2,180 +2,180 @@
   <a-breadcrumb class="mb-3">
     <a-breadcrumb-item>Người dùng</a-breadcrumb-item>
     <a-breadcrumb-item>
-      {{ frm.id == '0' ? 'Thêm mới' : 'Cập nhật' }}
+      {{ actionName }}
     </a-breadcrumb-item>
   </a-breadcrumb>
 
-  <div class="d-flex flex-wrap align-items-center">
-    <a-input
-      v-model:value="filter.text"
-      class="form-control-max-width mb-3"
-      placeholder="Username"
-      @input="debouncedSearch()"
-    />
-
-    <a-button
-      type="primary"
-      @click="openCreateForm()"
-    >
-      {{ frm.id == '0' ? 'Thêm mới' : 'Cập nhật' }}
-    </a-button>
-
-    <a-button
-      @click="closeForm()"
-      class="ms-3"
-    >
-      Quay lại
-    </a-button>
-  </div>
-
-  <div
-    v-show="pagi.total == 0"
-    class="text-danger"
+  <a-form
+    :model="frm"
+    ref="frmRef"
+    :rules="rules"
+    @finish="saveForm()"
+    layout="vertical"
   >
-    Không tìm thấy bản ghi
-  </div>
+    <div class="mb-3 mt-3 form-control-max-width py-4 text-center">
+      <a-form-item name="avatar">
+        <a-upload
+          v-model:file-list="frm.avatar"
+          name="avatar"
+          list-type="picture-card"
+          :show-upload-list="false"
+          :before-upload="beforeUpload"
+          accept=".png, .jpg, .jpeg, .gif; capture=camera"
+        >
+          <img
+            :src="imageUrl"
+            class="rounded avatar object-fit-cover"
+            onerror="this.src = '/static/images/user_avatar.png'"
+          />
+        </a-upload>
+      </a-form-item>
 
-  <div v-show="pagi.total > 0">
-    <div class="table-responsive-md">
-      <table class="table table-borderless">
-        <thead>
-          <tr>
-            <th class="text-right">
-              #
-            </th>
-            <th>
-              Username
-            </th>
-            <th>
-              Tên đầy đủ
-            </th>
-            <th>
-              Email
-            </th>
-            <th>
-              Số điện thoại
-            </th>
-            <th class="text-center">
-              Actions
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr
-            v-for="(user, i) in userList"
-            :key="user._id"
-          >
-            <td class="text-right">
-              {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
-            </td>
-            <td>
-              <img
-                class="rounded-circle avatar object-fit-cover me-2"
-                title="Đổi ảnh đại diện"
-                :src="user.thumbnail ? ('/' + user.thumbnail) : '/static/images/user_avatar.png'"
-                onerror="this.src = '/static/images/user_avatar.png'"
-              />
-              {{ user.username }}
-            </td>
-            <td>
-              {{ user.fullName }}
-            </td>
-            <td>
-              {{ user.email }}
-            </td>
-            <td>
-              {{ user.phone }}
-            </td>
-            <td class="text-center">
-              <i
-                class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
-                title="Update"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="d-md-flex justify-content-between">
-      <div class="text-muted">
-        Tìm thấy {{ pagi.total }} bản ghi
+      <div class="text-muted font-size-0.75 mt-3">
+        * Click vào ảnh đại diện để đổi ảnh
       </div>
-
-      <!-- :pageSize="size" -->
-
-      <a-pagination
-        v-model:current="pagi.currentPage"
-        :total="pagi.total"
-        show-less-items
-      />
     </div>
-  </div>
+
+    <a-form-item
+      label="Tài khoản"
+      name="username"
+    >
+      <a-input
+        v-model:value="frm.username"
+        class="form-control-max-width"
+      />
+    </a-form-item>
+
+    <a-form-item
+      label="Tên đầy đủ"
+      name="fullName"
+    >
+      <a-input
+        v-model:value="frm.fullName"
+        class="form-control-max-width"
+      />
+    </a-form-item>
+
+    <a-form-item
+      label="Email"
+      name="email"
+    >
+      <a-input
+        v-model:value="frm.email"
+        class="form-control-max-width"
+      />
+    </a-form-item>
+
+    <a-form-item
+      label="Số điện thoại"
+      name="phone"
+    >
+      <a-input
+        v-model:value="frm.phone"
+        class="form-control-max-width"
+      />
+    </a-form-item>
+
+    <a-space>
+      <a-button
+        type="primary"
+        html-type="submit"
+      >
+        {{ actionName }}
+      </a-button>
+
+      <a-button @click="closeForm()">
+        Quay lại
+      </a-button>
+    </a-space>
+  </a-form>
 </template>
 
 <script setup>
-import { debounce } from '@/helpers/common.js'
-
 const router = useRouter()
 const route = useRoute()
 
 const frm = reactive({
   id: '',
+  username: '',
+  fullName: '',
+  email: '',
+  phone: '',
+  avatar: [],
 })
 
-onMounted(() => {
-  frm.id = route.params.id
-})
-
-const filter = reactive({
-  text: '',
-})
-
-const pagi = reactive({
-  size: 10,
-  total: -1,
-  currentPage: 1,
-})
-
-const userList = ref([])
-
-const dropdowns = reactive({
-  // Danh sách ở các dropdown
-})
-
-const search = async page => {
-  const params = {
-    text: filter.text,
-    page,
-    size: pagi.size,
-  }
-  const { data } = await axios.post('/api/user/search', params)
-  pagi.total = data.total
-  pagi.currentPage = page
-  userList.value = data.list
+const rules = {
+  username: [{ required: true }],
+  fullName: [{ required: true }],
+  email: [{ type: 'email', required: true }],
+  phone: [{ required: false, min: 9, max: 12 }],
+  avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
 }
 
-const debouncedSearch = debounce(() => search(1), 500)
+const frmRef = ref()
+
+const imageUrl = ref('')
+
+const actionName = computed(() => {
+  return frm.id == '0' ? 'Thêm mới' : 'Cập nhật'
+})
+
+const bindOldInfo = async () => {
+  const authStore = {}
+  const loginUser = authStore.user
+  frm.fullName = loginUser.fullName
+  frm.email = loginUser.email
+  frm.phone = loginUser.phone
+  frm.avatar = []
+  imageUrl.value = loginUser.avatar ? ('/' + loginUser.avatar) : '/static/images/user_avatar.png'
+}
+
+const beforeUpload = file => {
+  // Preview
+  imageUrl.value = URL.createObjectURL(file)
+
+  // Không upload AJAX
+  return false
+}
+
+const saveForm = async () => {
+  const params = new FormData()
+  params.append('fullName', frm.fullName)
+  params.append('email', frm.email)
+  params.append('phone', frm.phone)
+
+  // Lấy phần tử file cuối cùng
+  const fileList = frm.avatar
+  const temp = fileList.length ? fileList[fileList.length - 1] : null
+  if (temp) {
+    const avatarFile = temp.originFileObj
+    params.append('avatar', avatarFile)
+  }
+
+  const { data } = await axios.post('/api/profile/update-user-info', params)
+  if (data.code == 0) {
+    closeForm()
+    noti.success(actionName + ' thành công')
+  } else if (data.code == 1) {
+    noti.error(data.message)
+  }
+}
 
 const closeForm = () => {
   router.push({ name: 'User' })
 }
 
-const openCreateForm = () => {
-  const router = useRouter()
-  // router.push({ })
-}
-
 onMounted(() => {
-  search(1)
+  frm.id = route.params.id
+  if (frm.id != '0') {
+    bindOldInfo()
+  }
 })
 </script>
 
 <style scoped>
 .avatar {
-  width: 1rem;
-  height: 1rem;
+  width: 104px;
+  height: 104px;
 }
 </style>

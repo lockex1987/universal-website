@@ -1,4 +1,8 @@
 <template>
+  <a-breadcrumb class="mb-3">
+    <a-breadcrumb-item>Tài khoản</a-breadcrumb-item>
+  </a-breadcrumb>
+
   <div class="row">
     <div class="col-lg-6">
       <div class="h-100 mb-5">
