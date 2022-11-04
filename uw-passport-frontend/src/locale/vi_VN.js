@@ -58,7 +58,7 @@ const localeValues = {
       default: 'Lỗi validation cho ${label}',
       required: 'Vui lòng nhập ${label}',
       enum: '${label} must be one of [${enum}]',
-      whitespace: '${label} cannot be a blank character',
+      whitespace: '${label} không thể chỉ gồm ký tự trắng',
       date: {
         format: '${label} date format is invalid',
         parse: '${label} cannot be converted to a date',

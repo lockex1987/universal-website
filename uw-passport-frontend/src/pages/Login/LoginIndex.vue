@@ -18,7 +18,7 @@
       <a-form-item
         label="Tên đăng nhập"
         name="username"
-        :rules="[{ required: true }]"
+        :rules="[{ required: true, whitespace: false, transform: value => value.trim() }]"
       >
         <!-- Tự động trim rồi? -->
         <a-input v-model:value="frm.username" />
@@ -66,7 +66,8 @@ const frm = reactive({
 const errorMessage = ref('')
 const isProcessing = ref(false)
 
-const processLogin = async () => {
+const processLogin = async values => {
+  console.log(values)
   if (isProcessing.value) {
     return
   }
