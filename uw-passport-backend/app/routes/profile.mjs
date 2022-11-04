@@ -54,12 +54,14 @@ router.post('/change-password', async (request, response) => {
 
 router.post('/update-user-info', async (request, response) => {
   // Đang bị lỗi source.hasOwnProperty is not a function
+  // do express-fileupload xung đột với async-validator
   request.body.hasOwnProperty = Object.prototype.hasOwnProperty
+
   const rules = {
     fullName: [{ type: 'string', required: true }],
     email: [{ type: 'email', required: true }],
     phone: [{ type: 'string', required: false, min: 9, max: 12 }],
-    avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
+    avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5, request }],
   }
   await request.validate(request.body, rules)
 
@@ -78,23 +80,22 @@ router.post('/update-user-info', async (request, response) => {
   const avatarFile = request.files?.avatar
   let avatarPath = dbUser.avatar
   if (avatarFile) {
-    const extension = path.extname(avatarFile.name)
-      .substring(1)
-      .toLowerCase()
-    const uuid = crypto.randomUUID()
     const basePath = getBasePath()
-    avatarPath = 'upload/' + uuid + '.' + extension
-
-    await avatarFile.mv(basePath + avatarPath)
 
     // Xóa ảnh cũ
-    if (dbUser.avatar) {
-      fs.unlink(basePath + dbUser.avatar)
+    if (avatarPath) {
+      fs.unlink(basePath + avatarPath)
     }
+
+    // Thêm ảnh mới
+    const randomName = crypto.randomUUID()
+    const extension = path.extname(avatarFile.name).toLowerCase()
+    avatarPath = 'upload/' + randomName + extension
+    await avatarFile.mv(basePath + avatarPath)
   }
 
   const data = pick(request.body, 'fullName', 'email', 'phone')
-  if (avatarPath) {
+  if (avatarFile) {
     data.avatar = avatarPath
   }
   await db.collection('users').updateOne(query, { $set: data })

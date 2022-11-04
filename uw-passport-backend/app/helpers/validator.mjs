@@ -52,9 +52,10 @@ const unique = async (rule, value, callback, source, options) => {
 }
 
 const upload = (rule, value, callback, source, options) => {
+  const { request } = rule
   const file = request.files?.[rule.field]
   if (! file) {
-    return
+    return true
   }
 
   const errors = []
