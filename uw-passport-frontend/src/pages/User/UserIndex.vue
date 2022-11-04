@@ -7,7 +7,7 @@
     <a-input
       v-model:value="filter.text"
       class="form-control-max-width mb-3"
-      placeholder="Username"
+      placeholder="Tìm kiếm"
       @input="debouncedSearch()"
     />
 
@@ -107,7 +107,8 @@
       <a-pagination
         v-model:current="pagi.currentPage"
         :total="pagi.total"
-        show-less-items
+        showLessItems
+        hideOnSinglePage
       />
     </div>
   </div>
