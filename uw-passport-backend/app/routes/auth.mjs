@@ -41,14 +41,14 @@ router.post('/login', async (request, response, next) => {
   if (! dbUser) {
     return response.json({
       code: 1,
-      message: 'Login failed',
+      message: 'Đăng nhập thất bại',
     })
   }
 
   if (! bcrypt.compareSync(password, dbUser.password)) {
     return response.json({
       code: 1,
-      message: 'Login failed',
+      message: 'Đăng nhập thất bại',
     })
   }
 

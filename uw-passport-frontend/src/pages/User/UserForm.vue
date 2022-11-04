@@ -37,7 +37,7 @@
     </div>
 
     <a-form-item
-      label="Tài khoản"
+      label="Tên đăng nhập"
       name="username"
     >
       <a-input
