@@ -140,6 +140,7 @@ const updateInfo = async () => {
       email: frm.email,
       phone: frm.phone,
       avatar: data.avatar,
+      thumbnail: data.thumbnail,
     }
     initInfo()
     noti.success('Cập nhật thông tin thành công')

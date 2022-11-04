@@ -39,7 +39,7 @@
             <img
               class="rounded-circle avatar object-fit-cover me-2"
               title="Đổi ảnh đại diện"
-              :src="authStore.user.avatar ? ('/' + authStore.user.avatar) : '/static/images/user_avatar.png'"
+              :src="authStore.user.thumbnail ? ('/' + authStore.user.thumbnail) : '/static/images/user_avatar.png'"
               onerror="this.src = '/static/images/user_avatar.png'"
             />
             {{ authStore.user.username }}
