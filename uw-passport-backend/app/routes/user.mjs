@@ -21,6 +21,7 @@ router.post('/search', async (request, response) => {
     email: 1,
     phone: 1,
     avatar: 1,
+    thumbnail: 1,
     // password: 0
   }
 

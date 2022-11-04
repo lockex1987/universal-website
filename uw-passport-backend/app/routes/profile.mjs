@@ -4,9 +4,27 @@ import path from 'node:path'
 import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import { ObjectId } from 'mongodb'
+import Jimp from 'jimp'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
 import { pick, getBasePath } from '#app/helpers/common.mjs'
+
+/**
+ * Resize ảnh avatar upload sử dụng Jimp cover.
+ * Sử dụng jimp tiện hơn sharp.
+ * Resize, crop, maintain ratio (cover).
+ * Convert to JPG.
+ * Reduce quality -> reduce size.
+ * @param {string} inputPath
+ * @param {string} outputPath
+ * @param {number} width
+ * @param {number} height
+ */
+const resizeImage = async (inputPath, outputPath, width, height) => {
+  const image = await Jimp.read(inputPath)
+  image.cover(width, height)
+  await image.writeAsync(outputPath)
+}
 
 const router = express.Router()
 
@@ -79,30 +97,38 @@ router.post('/update-user-info', async (request, response) => {
 
   const avatarFile = request.files?.avatar
   let avatarPath = dbUser.avatar
+  let thumbnailPath = dbUser.thumbnail
   if (avatarFile) {
     const basePath = getBasePath()
 
     // Xóa ảnh cũ
-    if (avatarPath) {
-      fs.unlink(basePath + avatarPath)
-    }
+    dbUser.avatar && fs.unlink(basePath + dbUser.avatar)
+    dbUser.thumbnail && fs.unlink(basePath + dbUser.thumbnail)
 
     // Thêm ảnh mới
     const randomName = crypto.randomUUID()
     const extension = path.extname(avatarFile.name).toLowerCase()
     avatarPath = 'upload/' + randomName + extension
     await avatarFile.mv(basePath + avatarPath)
+
+    // Ảnh nhỏ
+    const width = 64
+    const height = 64
+    thumbnailPath = 'upload/' + randomName + `-${width}x${height}` + extension
+    resizeImage(basePath + avatarPath, thumbnailPath, width, height)
   }
 
   const data = pick(request.body, 'fullName', 'email', 'phone')
   if (avatarFile) {
     data.avatar = avatarPath
+    data.thumbnail = thumbnailPath
   }
   await db.collection('users').updateOne(query, { $set: data })
   response.json({
     code: 0,
     message: 'Updated',
     avatar: avatarPath,
+    thumbnail: thumbnailPath,
   })
 })
 
