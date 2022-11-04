@@ -134,6 +134,7 @@ const updateInfo = async () => {
   params.append('email', frm.email)
   params.append('phone', frm.phone)
 
+  // Lấy phần tử file cuối cùng
   const fileList = frm.avatar
   const temp = fileList.length ? fileList[fileList.length - 1] : null
   if (temp) {
