@@ -96,7 +96,7 @@ const router = useRouter()
 const route = useRoute()
 
 const frm = reactive({
-  id: '',
+  _id: '',
   username: '',
   fullName: '',
   email: '',
@@ -117,17 +117,18 @@ const frmRef = ref()
 const imageUrl = ref('')
 
 const actionName = computed(() => {
-  return frm.id == '0' ? 'Thêm mới' : 'Cập nhật'
+  return frm._id == '0' ? 'Thêm mới' : 'Cập nhật'
 })
 
 const bindOldInfo = async () => {
-  const authStore = {}
-  const loginUser = authStore.user
-  frm.fullName = loginUser.fullName
-  frm.email = loginUser.email
-  frm.phone = loginUser.phone
+  const { data } = await axios.get('/api/user/get/' + frm._id)
+  const user = data
+  frm.username = user.username
+  frm.fullName = user.fullName
+  frm.email = user.email
+  frm.phone = user.phone
   frm.avatar = []
-  imageUrl.value = loginUser.avatar ? ('/' + loginUser.avatar) : '/static/images/user_avatar.png'
+  imageUrl.value = user.avatar ? ('/' + user.avatar) : '/static/images/user_avatar.png'
 }
 
 const beforeUpload = file => {
@@ -140,6 +141,8 @@ const beforeUpload = file => {
 
 const saveForm = async () => {
   const params = new FormData()
+  params.append('_id', frm._id)
+  params.append('username', frm.username)
   params.append('fullName', frm.fullName)
   params.append('email', frm.email)
   params.append('phone', frm.phone)
@@ -152,10 +155,12 @@ const saveForm = async () => {
     params.append('avatar', avatarFile)
   }
 
-  const { data } = await axios.post('/api/profile/update-user-info', params)
+  const method = (frm._id == '0') ? 'post' : 'put'
+  const path = (frm._id == '0') ? 'insert' : 'update'
+  const { data } = await axios[method]('/api/user/' + path, params)
   if (data.code == 0) {
     closeForm()
-    noti.success(actionName + ' thành công')
+    noti.success(actionName.value + ' thành công')
   } else if (data.code == 1) {
     noti.error(data.message)
   }
@@ -166,8 +171,8 @@ const closeForm = () => {
 }
 
 onMounted(() => {
-  frm.id = route.params.id
-  if (frm.id != '0') {
+  frm._id = route.params._id
+  if (frm._id != '0') {
     bindOldInfo()
   }
 })

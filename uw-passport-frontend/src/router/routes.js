@@ -20,7 +20,7 @@ export default [
         component: () => import('@/pages/User/UserIndex.vue'),
       },
       {
-        path: 'UserForm/:id',
+        path: 'UserForm/:_id',
         name: 'UserForm',
         component: () => import('@/pages/User/UserForm.vue'),
       },

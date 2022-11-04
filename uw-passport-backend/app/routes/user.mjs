@@ -48,6 +48,14 @@ router.get('/get-all', async (request, response) => {
   response.json(list)
 })
 
+router.get('/get/:_id', async (request, response) => {
+  const { _id } = request.params
+  const db = getDb()
+  const query = { _id: ObjectId(_id) }
+  const row = await db.collection('users').findOne(query)
+  response.json(row)
+})
+
 router.post('/insert', async (request, response) => {
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
   const db = getDb()

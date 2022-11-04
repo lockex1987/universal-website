@@ -82,7 +82,8 @@
             <td class="text-center">
               <i
                 class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
-                title="Update"
+                title="Cập nhật"
+                @click="openUpdateForm(user)"
               />
             </td>
           </tr>
@@ -144,7 +145,14 @@ const router = useRouter()
 const openCreateForm = () => {
   router.push({
     name: 'UserForm',
-    params: { id: 0 },
+    params: { _id: 0 },
+  })
+}
+
+const openUpdateForm = user => {
+  router.push({
+    name: 'UserForm',
+    params: { _id: user._id },
   })
 }
 
