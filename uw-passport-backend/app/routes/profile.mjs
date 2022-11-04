@@ -59,6 +59,7 @@ router.post('/update-user-info', async (request, response) => {
     fullName: [{ type: 'string', required: true }],
     email: [{ type: 'email', required: true }],
     phone: [{ type: 'string', required: false, min: 9, max: 12 }],
+    avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
   }
   await request.validate(request.body, rules)
 
@@ -77,38 +78,14 @@ router.post('/update-user-info', async (request, response) => {
   const avatarFile = request.files?.avatar
   let avatarPath = dbUser.avatar
   if (avatarFile) {
-    const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
-    if (avatarFile.size > MAX_FILE_SIZE) {
-      return response.json({
-        code: 1,
-        message: 'File too big',
-      })
-    }
-
-    const ALLOW_EXTENSIONS = ['png', 'jpg', 'jpeg']
     const extension = path.extname(avatarFile.name)
       .substring(1)
       .toLowerCase()
-    if (! ALLOW_EXTENSIONS.includes(extension)) {
-      return response.json({
-        code: 1,
-        message: 'Extension not allowed',
-      })
-    }
-
     const uuid = crypto.randomUUID()
     const basePath = getBasePath()
     avatarPath = 'upload/' + uuid + '.' + extension
-    const uploadPath = basePath + avatarPath
 
-    const err = await avatarFile.mv(uploadPath)
-    if (err) {
-      console.error(err)
-      return response.jon({
-        code: 1,
-        message: 'Lỗi lưu file',
-      })
-    }
+    await avatarFile.mv(basePath + avatarPath)
 
     // Xóa ảnh cũ
     if (dbUser.avatar) {
