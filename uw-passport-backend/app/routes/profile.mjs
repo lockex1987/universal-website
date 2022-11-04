@@ -115,7 +115,7 @@ router.post('/update-user-info', async (request, response) => {
     const width = 24
     const height = 24
     thumbnailPath = 'upload/' + randomName + `-${width}x${height}` + extension
-    resizeImage(basePath + avatarPath, basePath + thumbnailPath, width, height)
+    await resizeImage(basePath + avatarPath, basePath + thumbnailPath, width, height)
   }
 
   const data = pick(request.body, 'fullName', 'email', 'phone')

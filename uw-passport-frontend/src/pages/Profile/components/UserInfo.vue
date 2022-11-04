@@ -6,23 +6,23 @@
     @finish="updateInfo()"
     layout="vertical"
   >
-    <div class="mb-3 form-control-max-width py-4 text-center">
-      <label class="d-block mb-0 cursor-pointer">
-        <img
-          class="rounded-circle avatar object-fit-cover"
-          title="Đổi ảnh đại diện"
-          onerror="this.src = '/static/images/user_avatar.png'"
-          ref="avatarImgTag"
-        />
-
-        <input
-          type="file"
-          ref="avatarFileInputTag"
-          @change="previewAvatar()"
+    <div class="mb-3 mt-3 form-control-max-width py-4 text-center">
+      <a-form-item name="avatar">
+        <a-upload
+          v-model:file-list="frm.avatar"
+          name="avatar"
+          list-type="picture-card"
+          :show-upload-list="false"
+          :before-upload="beforeUpload"
           accept=".png, .jpg, .jpeg, .gif; capture=camera"
-          class="d-none"
-        />
-      </label>
+        >
+          <img
+            :src="imageUrl"
+            class="rounded avatar object-fit-cover"
+            onerror="this.src = '/static/images/user_avatar.png'"
+          />
+        </a-upload>
+      </a-form-item>
 
       <div class="text-muted font-size-0.75 mt-3">
         * Click vào ảnh đại diện để đổi ảnh
@@ -89,6 +89,7 @@
 </template>
 
 <script setup>
+import { message } from 'ant-design-vue'
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
@@ -97,6 +98,7 @@ const frm = reactive({
   fullName: '',
   email: '',
   phone: '',
+  avatar: [],
 })
 
 const rules = {
@@ -107,18 +109,33 @@ const rules = {
 
 const frmRef = ref()
 
-const avatarImgTag = ref()
-
-const avatarFileInputTag = ref()
+const imageUrl = ref('')
 
 const initInfo = () => {
   const loginUser = authStore.user
   frm.fullName = loginUser.fullName
   frm.email = loginUser.email
   frm.phone = loginUser.phone
+  frm.avatar = []
+  imageUrl.value = loginUser.avatar ? ('/' + loginUser.avatar) : '/static/images/user_avatar.png'
+}
 
-  avatarFileInputTag.value.value = ''
-  avatarImgTag.value.src = loginUser.avatar ? ('/' + loginUser.avatar) : '/static/images/user_avatar.png'
+const beforeUpload = file => {
+  const isJpgOrPng = false // file.type === 'image/jpeg' || file.type === 'image/png'
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG file!')
+  }
+
+  const isLt2M = file.size / 1024 / 1024 < 5
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!')
+  }
+
+  // Preview
+  imageUrl.value = URL.createObjectURL(file)
+
+  // Không upload AJAX
+  return false
 }
 
 const updateInfo = async () => {
@@ -127,9 +144,9 @@ const updateInfo = async () => {
   params.append('email', frm.email)
   params.append('phone', frm.phone)
 
-  const avatarFile = avatarFileInputTag.value.files[0]
+  const avatarFile = frm.avatar[0]
   if (avatarFile) {
-    params.append('avatar', avatarFile)
+    params.append('avatar', avatarFile.originFileObj)
   }
 
   const { data } = await axios.post('/api/profile/update-user-info', params)
@@ -149,11 +166,6 @@ const updateInfo = async () => {
   }
 }
 
-const previewAvatar = () => {
-  const avatarFile = avatarFileInputTag.value.files[0]
-  avatarImgTag.value.src = URL.createObjectURL(avatarFile)
-}
-
 onMounted(() => {
   initInfo()
 })
@@ -161,7 +173,7 @@ onMounted(() => {
 
 <style scoped>
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: 104px;
+  height: 104px;
 }
 </style>
