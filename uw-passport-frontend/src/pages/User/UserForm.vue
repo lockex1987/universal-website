@@ -1,6 +1,9 @@
 <template>
   <a-breadcrumb class="mb-3">
     <a-breadcrumb-item>Người dùng</a-breadcrumb-item>
+    <a-breadcrumb-item>
+      {{ frm.id == '0' ? 'Thêm mới' : 'Cập nhật' }}
+    </a-breadcrumb-item>
   </a-breadcrumb>
 
   <div class="d-flex flex-wrap align-items-center">
@@ -14,9 +17,15 @@
     <a-button
       type="primary"
       @click="openCreateForm()"
-      class="mb-3 ms-auto"
     >
-      Thêm mới
+      {{ frm.id == '0' ? 'Thêm mới' : 'Cập nhật' }}
+    </a-button>
+
+    <a-button
+      @click="closeForm()"
+      class="ms-3"
+    >
+      Quay lại
     </a-button>
   </div>
 
@@ -109,6 +118,17 @@
 <script setup>
 import { debounce } from '@/helpers/common.js'
 
+const router = useRouter()
+const route = useRoute()
+
+const frm = reactive({
+  id: '',
+})
+
+onMounted(() => {
+  frm.id = route.params.id
+})
+
 const filter = reactive({
   text: '',
 })
@@ -139,13 +159,13 @@ const search = async page => {
 
 const debouncedSearch = debounce(() => search(1), 500)
 
-const router = useRouter()
+const closeForm = () => {
+  router.push({ name: 'User' })
+}
 
 const openCreateForm = () => {
-  router.push({
-    name: 'UserForm',
-    params: { id: 0 },
-  })
+  const router = useRouter()
+  // router.push({ })
 }
 
 onMounted(() => {

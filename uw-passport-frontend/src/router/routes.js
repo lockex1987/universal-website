@@ -19,14 +19,11 @@ export default [
         name: 'User',
         component: () => import('@/pages/User/UserIndex.vue'),
       },
-      // Không mở popup
-      /*
       {
-        path: 'user/:userId',
-        name: 'userForm',
-        component: () => import('@/pages/UserForm.vue'),
+        path: 'UserForm/:id',
+        name: 'UserForm',
+        component: () => import('@/pages/User/UserForm.vue'),
       },
-      */
       {
         path: 'DemoButton',
         name: 'DemoButton',

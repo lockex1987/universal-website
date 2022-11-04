@@ -84,6 +84,7 @@ const menuList = [
 ]
 
 const authStore = useAuthStore()
+
 const router = useRouter()
 
 const processLogout = async () => {

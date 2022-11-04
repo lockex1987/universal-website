@@ -10,6 +10,7 @@ module.exports = {
     ref: true,
     onMounted: true,
     useRouter: true,
+    useRoute: true,
     axios: 'readonly',
     noti: 'readonly',
     Highcharts: 'readonly',
