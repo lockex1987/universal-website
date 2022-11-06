@@ -7,6 +7,7 @@ import redis from '#app/helpers/redis.mjs'
 import checkLogin from '#app/middleware/checkLogin.mjs'
 import handle404 from '#app/middleware/handle404.mjs'
 import handle500 from '#app/middleware/handle500.mjs'
+import trimString from '#app/middleware/trimString.mjs'
 import routes from '#app/routes/index.mjs'
 import { port } from '#config/app.mjs'
 
@@ -40,6 +41,8 @@ app.use(fileUpload({
     },
   },
 }))
+
+app.use(trimString)
 
 const prefix = '/api'
 routes.forEach(({ path, router }) => {
