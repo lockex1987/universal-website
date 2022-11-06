@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload'
 import { connect as connectMongodb } from '#app/helpers/mongodb.mjs'
 import redis from '#app/helpers/redis.mjs'
 import checkLogin from '#app/middleware/checkLogin.mjs'
+import checkPermission from '#app/middleware/checkPermission.mjs'
 import handle404 from '#app/middleware/handle404.mjs'
 import handle500 from '#app/middleware/handle500.mjs'
 import trimString from '#app/middleware/trimString.mjs'
@@ -45,15 +46,15 @@ app.use(fileUpload({
 app.use(trimString)
 
 const prefix = '/api'
-routes.forEach(({ path, router }) => {
-  const exceptAuthPaths = [
-    '/auth',
-  ]
-  if (exceptAuthPaths.includes(path)) {
-    app.use(prefix + path, router)
-  } else {
-    app.use(prefix + path, checkLogin, router)
+routes.forEach(({ path, router, auth, permission }) => {
+  const middlewares = []
+  if (auth) {
+    middlewares.push(checkLogin)
   }
+  if (permission) {
+    middlewares.push(checkPermission(permission))
+  }
+  app.use(prefix + path, ...middlewares, router)
 })
 
 app.use(handle404)
