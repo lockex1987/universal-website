@@ -41,7 +41,7 @@
       name="username"
     >
       <a-input
-        v-model:value="frm.username"
+        v-model:value.lazy.trim="frm.username"
         class="form-control-max-width"
       />
     </a-form-item>
@@ -51,7 +51,7 @@
       name="fullName"
     >
       <a-input
-        v-model:value="frm.fullName"
+        v-model:value.lazy.trim="frm.fullName"
         class="form-control-max-width"
       />
     </a-form-item>
@@ -61,7 +61,7 @@
       name="email"
     >
       <a-input
-        v-model:value="frm.email"
+        v-model:value.lazy.trim="frm.email"
         class="form-control-max-width"
       />
     </a-form-item>
@@ -71,7 +71,7 @@
       name="phone"
     >
       <a-input
-        v-model:value="frm.phone"
+        v-model:value.lazy.trim="frm.phone"
         class="form-control-max-width"
       />
     </a-form-item>

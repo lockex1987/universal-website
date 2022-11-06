@@ -18,10 +18,9 @@
       <a-form-item
         label="Tên đăng nhập"
         name="username"
-        :rules="[{ required: true, whitespace: false, transform: value => value.trim() }]"
+        :rules="[{ required: true }]"
       >
-        <!-- Tự động trim rồi? -->
-        <a-input v-model:value="frm.username" />
+        <a-input v-model:value.lazy.trim="frm.username" />
       </a-form-item>
 
       <a-form-item
@@ -30,7 +29,7 @@
         :rules="[{ required: true }]"
       >
         <a-input-password
-          v-model:value="frm.password"
+          v-model:value.lazy.trim="frm.password"
           autocomplete="off"
         />
       </a-form-item>

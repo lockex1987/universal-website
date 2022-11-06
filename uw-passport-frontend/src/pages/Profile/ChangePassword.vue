@@ -14,7 +14,7 @@
       name="oldPassword"
     >
       <a-input-password
-        v-model:value="frm.oldPassword"
+        v-model:value.lazy.trim="frm.oldPassword"
         autocomplete="off"
         class="form-control-max-width"
       />
@@ -26,7 +26,7 @@
       name="newPassword"
     >
       <a-input-password
-        v-model:value="frm.newPassword"
+        v-model:value.lazy.trim="frm.newPassword"
         autocomplete="off"
         class="form-control-max-width"
       />

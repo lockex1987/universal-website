@@ -129,7 +129,7 @@ const dropdowns = reactive({
 
 const search = async page => {
   const params = {
-    text: filter.text,
+    text: filter.text.trim(),
     page,
     size: pagi.size,
   }
