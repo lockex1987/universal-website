@@ -1,6 +1,8 @@
 import './scss/style.scss'
 
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import 'bootstrap'
+
 import './libs/noti/scss/noti.scss'
 import './libs/noti/js/noti.js'
 import './libs/axios.js'
