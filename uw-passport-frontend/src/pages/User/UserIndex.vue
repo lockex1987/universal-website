@@ -24,7 +24,7 @@
     v-show="pagi.total == 0"
     class="text-danger"
   >
-    Không tìm thấy bản ghi
+    <a-empty />
   </div>
 
   <div v-show="pagi.total > 0">
