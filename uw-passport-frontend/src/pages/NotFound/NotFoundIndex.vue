@@ -1,16 +1,15 @@
 <template>
-  <div
-    class="mx-auto mt-5"
-    style="max-width: 500px"
+  <a-result
+    status="404"
+    title="404"
+    sub-title="Không tìm thấy trang"
   >
-    <h4>
-      Không tìm thấy trang
-    </h4>
-
-    <div>
-      <RouterLink to="/">
-        Quay lại
-      </RouterLink>
-    </div>
-  </div>
+    <template #extra>
+      <a-button type="primary">
+        <RouterLink to="/">
+          Quay lại
+        </RouterLink>
+      </a-button>
+    </template>
+  </a-result>
 </template>
