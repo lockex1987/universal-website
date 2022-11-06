@@ -61,6 +61,7 @@ router.get('/get/:_id', async (request, response) => {
   const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
+  // TODO: Vẫn trả về password
   const projection = {
     _id: 1,
     username: 1,
@@ -69,7 +70,7 @@ router.get('/get/:_id', async (request, response) => {
     phone: 1,
     avatar: 1,
     thumbnail: 1,
-    // password: 0
+    // password: 0,
   }
   const row = await db.collection('users').findOne(query, projection)
   response.json(row)

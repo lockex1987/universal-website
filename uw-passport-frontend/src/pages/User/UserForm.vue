@@ -122,10 +122,13 @@ const actionName = computed(() => {
 
 const bindOldInfo = async () => {
   const { data } = await axios.get('/api/user/get/' + frm._id)
+  /*
   frm.username = data.username
   frm.fullName = data.fullName
   frm.email = data.email
   frm.phone = data.phone
+  */
+  Object.assign(frm, data)
   frm.avatar = []
   imageUrl.value = data.avatar
     ? (data.avatar.startsWith('http') ? data.avatar : '/' + data.avatar)
