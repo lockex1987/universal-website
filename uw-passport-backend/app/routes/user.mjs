@@ -61,7 +61,6 @@ router.get('/get/:_id', async (request, response) => {
   const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  // TODO: Vẫn trả về password
   const projection = {
     _id: 1,
     username: 1,
@@ -72,7 +71,9 @@ router.get('/get/:_id', async (request, response) => {
     thumbnail: 1,
     // password: 0,
   }
-  const row = await db.collection('users').findOne(query, projection)
+  // Nếu làm giống mongosh như dưới thì vẫn trả về password
+  // const row = await db.collection('users').findOne(query, projection)
+  const row = await db.collection('users').findOne(query, { projection })
   response.json(row)
 })
 
