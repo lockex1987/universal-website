@@ -1,88 +1,64 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-      <span class="navbar-brand">
-        UW
-      </span>
+  <div class="bg-light p-3 d-flex align-items-center justify-content-between">
+    <button
+      class="btn btn-link d-lg-none text-body"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasLeftSidebar"
+      aria-controls="offcanvasLeftSidebar"
+    >
+      <span class="bi bi-list"></span>
+    </button>
 
+    <div class="fw-bold">
+      UW
+    </div>
+
+    <div class="dropdown">
       <button
-        class="navbar-toggler"
+        class="btn btn-link text-decoration-none text-body dropdown-toggle"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
+        data-bs-toggle="dropdown"
       >
-        <span class="navbar-toggler-icon"></span>
+        <img
+          class="rounded-circle avatar object-fit-cover me-2"
+          title="Đổi ảnh đại diện"
+          :src="authStore.user.thumbnail ? ('/' + authStore.user.thumbnail) : '/static/images/user_avatar.png'"
+          onerror="this.src = '/static/images/user_avatar.png'"
+        />
+        <span class="d-none d-lg-inline">
+          {{ authStore.user.username }}
+        </span>
       </button>
 
-      <div
-        class="collapse navbar-collapse"
-        id="navbarSupportedContent"
-      >
-        <!-- Mobile -->
-        <!--ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li
-            v-for="lv1 in menuList"
-            class="nav-item"
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <RouterLink
+            :to="{ name: 'Profile' }"
+            class="dropdown-item"
+            activeClass="active"
           >
-            <RouterLink
-              :to="{ name: lv1.code }"
-              class="nav-link"
-              activeClass="active"
-            >
-              {{ lv1.name }}
-            </RouterLink>
-          </li>
-        </ul-->
+            Tài khoản
+          </RouterLink>
+        </li>
 
-        <div class="ms-auto dropdown text-end">
-          <button
-            class="btn btn-link text-decoration-none text-body dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
+        <li>
+          <a
+            class="dropdown-item"
+            href="#"
+            @click.prevent="processLogout()"
           >
-            <img
-              class="rounded-circle avatar object-fit-cover me-2"
-              title="Đổi ảnh đại diện"
-              :src="authStore.user.thumbnail ? ('/' + authStore.user.thumbnail) : '/static/images/user_avatar.png'"
-              onerror="this.src = '/static/images/user_avatar.png'"
-            />
-            {{ authStore.user.username }}
-          </button>
-
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <RouterLink
-                :to="{ name: 'Profile' }"
-                class="dropdown-item"
-                activeClass="active"
-              >
-                Tài khoản
-              </RouterLink>
-            </li>
-
-            <li>
-              <a
-                class="dropdown-item"
-                href="#"
-                @click.prevent="processLogout()"
-              >
-                Đăng xuất
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+            Đăng xuất
+          </a>
+        </li>
+      </ul>
     </div>
-  </nav>
+
+  </div>
 </template>
 
 <script setup>
 import { useAuthStore } from '@/stores/auth.js'
-
-const menuList = [
-  { code: 'User', name: 'Người dùng' },
-  { code: 'DemoButton', name: 'Demo Button' },
-]
 
 const authStore = useAuthStore()
 

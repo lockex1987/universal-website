@@ -1,7 +1,7 @@
 import './scss/style.scss'
 
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import 'bootstrap'
+import * as bootstrap from 'bootstrap'
 
 import './libs/noti/scss/noti.scss'
 import './libs/noti/js/noti.js'
@@ -12,6 +12,8 @@ import { createPinia } from 'pinia'
 import asyncValidator from 'async-validator'
 import App from './App.vue'
 import router from './router/index.js'
+
+window.bootstrap = bootstrap
 
 const upload = (rule, fileList, callback, source, options) => {
   const temp = fileList.length ? fileList[fileList.length - 1] : null
