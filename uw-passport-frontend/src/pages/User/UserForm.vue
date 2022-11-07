@@ -1,10 +1,8 @@
 <template>
-  <a-breadcrumb class="mb-3">
-    <a-breadcrumb-item>Người dùng</a-breadcrumb-item>
-    <a-breadcrumb-item>
-      {{ actionName }}
-    </a-breadcrumb-item>
-  </a-breadcrumb>
+  <div class="mb-3 fw-bold">
+    {{ actionName }}
+    người dùng
+  </div>
 
   <a-form
     :model="frm"

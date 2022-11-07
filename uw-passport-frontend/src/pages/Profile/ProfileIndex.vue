@@ -1,7 +1,9 @@
 <template>
-  <a-breadcrumb class="mb-3">
-    <a-breadcrumb-item>Tài khoản</a-breadcrumb-item>
-  </a-breadcrumb>
+  <Teleport to="#appBreadcrumb">
+    <ol class="breadcrumb mb-0 ps-3">
+      <li class="breadcrumb-item active">Tài khoản</li>
+    </ol>
+  </Teleport>
 
   <div class="row">
     <div class="col-lg-6">
