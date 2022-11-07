@@ -140,6 +140,7 @@ const saveForm = async () => {
 
   const { data } = await axios.post('/api/profile/update-user-info', params)
   if (data.code == 0) {
+    // Object.assign(authStore.user, frm, data)
     authStore.user = {
       ...authStore.user,
       fullName: frm.fullName,

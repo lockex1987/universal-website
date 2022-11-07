@@ -90,17 +90,16 @@
 </template>
 
 <script setup>
-const router = useRouter()
-const route = useRoute()
-
-const frm = reactive({
-  _id: '',
+const defaultFrm = {
+  _id: null,
   username: '',
   fullName: '',
   email: '',
   phone: '',
   avatar: [],
-})
+}
+
+const frm = reactive(defaultFrm)
 
 const rules = {
   username: [{ required: true }],
@@ -114,18 +113,14 @@ const frmRef = ref()
 
 const imageUrl = ref('')
 
+const emit = defineEmits(['close'])
+
 const actionName = computed(() => {
-  return frm._id == '0' ? 'Thêm mới' : 'Cập nhật'
+  return frm._id ? 'Cập nhật' : 'Thêm mới'
 })
 
-const bindOldInfo = async () => {
-  const { data } = await axios.get('/api/user/get/' + frm._id)
-  /*
-  frm.username = data.username
-  frm.fullName = data.fullName
-  frm.email = data.email
-  frm.phone = data.phone
-  */
+const bindOldInfo = async _id => {
+  const { data } = await axios.get('/api/user/get/' + _id)
   Object.assign(frm, data)
   frm.avatar = []
   imageUrl.value = data.avatar
@@ -157,26 +152,35 @@ const saveForm = async () => {
     params.append('avatar', avatarFile)
   }
 
-  const method = (frm._id == '0') ? 'post' : 'put'
-  const path = (frm._id == '0') ? 'insert' : 'update'
+  const method = frm._id ? 'put' : 'post'
+  const path = frm._id ? 'update' : 'insert'
   const { data } = await axios[method]('/api/user/' + path, params)
   if (data.code == 0) {
     closeForm()
     noti.success(actionName.value + ' thành công')
+    emit('close')
   } else if (data.code == 1) {
     noti.error(data.message)
   }
 }
 
 const closeForm = () => {
-  router.push({ name: 'User' })
+  emit('close')
 }
 
-onMounted(() => {
-  frm._id = route.params._id
-  if (frm._id != '0') {
-    bindOldInfo()
+const openForm = (_id = null) => {
+  frmRef.value.resetFields()
+
+  if (_id) {
+    bindOldInfo(_id)
+  } else {
+    Object.assign(frm, defaultFrm)
+    imageUrl.value = '/static/images/user_avatar.png'
   }
+}
+
+defineExpose({
+  openForm,
 })
 </script>
 

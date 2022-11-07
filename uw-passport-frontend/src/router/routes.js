@@ -20,11 +20,6 @@ export default [
         component: () => import('@/pages/User/UserIndex.vue'),
       },
       {
-        path: 'UserForm/:_id',
-        name: 'UserForm',
-        component: () => import('@/pages/User/UserForm.vue'),
-      },
-      {
         path: 'DemoButton',
         name: 'DemoButton',
         component: () => import('@/pages/DemoComponents/DemoButton.vue'),
