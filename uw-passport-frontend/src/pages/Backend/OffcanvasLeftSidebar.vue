@@ -98,7 +98,7 @@ const state = reactive({
 })
 
 /**
- * Accordion.
+ * TODO: Accordion.
  * @param {Array} openKeys
  */
 const onOpenChange = openKeys => {
@@ -127,7 +127,7 @@ const onOpenChange = openKeys => {
     &:hover,
     &.router-link-active {
       color: #7386D5;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.5);
     }
   }
 

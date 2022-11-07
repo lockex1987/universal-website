@@ -1,5 +1,15 @@
 <template>
-  <div class="bg-light p-3 d-flex align-items-center justify-content-between">
+  <div class="bg-light py-3 d-flex align-items-center">
+    <div
+      class="d-none d-lg-block ps-3"
+      style="width: 300px"
+    >
+      <img src="/static/images/logo.svg" />
+      <span class="fw-bold ms-2">
+        Universal Website
+      </span>
+    </div>
+
     <button
       class="btn btn-link d-lg-none text-body"
       type="button"
@@ -10,11 +20,12 @@
       <span class="bi bi-list"></span>
     </button>
 
-    <div class="fw-bold">
-      UW
-    </div>
+    <ol class="breadcrumb mb-0 ps-3">
+      <li class="breadcrumb-item">Home</li>
+      <li class="breadcrumb-item active">Library</li>
+    </ol>
 
-    <div class="dropdown">
+    <div class="dropdown ms-auto">
       <button
         class="btn btn-link text-decoration-none text-body dropdown-toggle"
         type="button"
