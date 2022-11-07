@@ -110,6 +110,8 @@ const onOpenChange = openKeys => {
     state.openKeys = latestOpenKey ? [latestOpenKey] : []
   }
 }
+
+// TODO: Mở sẵn menu đang highlight
 </script>
 
 <style lang="scss">
