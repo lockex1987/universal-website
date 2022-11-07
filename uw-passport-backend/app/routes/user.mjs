@@ -50,11 +50,27 @@ router.post('/search', async (request, response) => {
   })
 })
 
-router.get('/get-all', async (request, response) => {
+// Export cho các route khác sử dụng, chỗ chọn người dùng
+export const getAllUser = async (request, response) => {
   const db = getDb()
-  const list = await db.collection('users').find().toArray()
+  // Không trả về các thông tin nhạy cảm như mật khẩu
+  const projection = {
+    _id: 1,
+    username: 1,
+    fullName: 1,
+    email: 1,
+    phone: 1,
+    avatar: 1,
+    thumbnail: 1,
+    // password: 0
+  }
+  const list = await db.collection('users').find()
+    .project(projection)
+    .toArray()
   response.json(list)
-})
+}
+
+router.get('/get-all', getAllUser)
 
 router.get('/get/:_id', async (request, response) => {
   const { _id } = request.params
