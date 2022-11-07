@@ -1,7 +1,10 @@
 <template>
-  <a-breadcrumb class="mb-3">
-    <a-breadcrumb-item>Người dùng</a-breadcrumb-item>
-  </a-breadcrumb>
+  <Teleport to="#appBreadcrumb">
+    <ol class="breadcrumb mb-0 ps-3">
+      <li class="breadcrumb-item">Quản trị</li>
+      <li class="breadcrumb-item active">Người dùng</li>
+    </ol>
+  </Teleport>
 
   <div class="d-flex flex-wrap align-items-center">
     <a-input
@@ -87,7 +90,7 @@
               />
 
               <i
-                class="cursor-pointer font-size-1.5 text-danger bi bi-trash ms-3"
+                class="cursor-pointer font-size-1.5 text-primary bi bi-trash ms-3"
                 title="Xóa"
                 @click="deleteRow(user)"
               />

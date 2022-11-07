@@ -20,10 +20,7 @@
       <span class="bi bi-list"></span>
     </button>
 
-    <ol class="breadcrumb mb-0 ps-3">
-      <li class="breadcrumb-item">Home</li>
-      <li class="breadcrumb-item active">Library</li>
-    </ol>
+    <div id="appBreadcrumb"></div>
 
     <div class="dropdown ms-auto">
       <button
