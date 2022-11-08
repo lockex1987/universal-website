@@ -26,12 +26,13 @@ const generatePathOfChildren = (data, parent) => {
 
 export const convertToTreeData = flatData => {
   const treeData = []
-  flatData.forEach(rootOrg => {
-    if (! rootOrg.parentId) {
-      const children = getChildrenNode(flatData, rootOrg)
+  flatData.forEach(rootRow => {
+    if (! rootRow.parentId) {
+      const children = getChildrenNode(flatData, rootRow)
       const rootNode = {
-        title: rootOrg.name,
-        value: rootOrg._id,
+        title: rootRow.name,
+        value: rootRow._id,
+        key: rootRow._id,
         children,
       }
       treeData.push(rootNode)
@@ -48,6 +49,7 @@ const getChildrenNode = (flatData, parentRow) => {
       const childNode = {
         title: childRow.name,
         value: childRow._id,
+        key: childRow._id,
         children: grandChildren,
       }
       children.push(childNode)

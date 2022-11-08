@@ -6,7 +6,7 @@ import { pick } from '#app/helpers/common.mjs'
 const router = express.Router()
 
 router.post('/search', async (request, response) => {
-  const { text, page, size } = request.body
+  const { text, page, size, selectedOrg } = request.body
 
   const query = {}
   if (text) {
@@ -16,6 +16,7 @@ router.post('/search', async (request, response) => {
       { description: temp },
     ]
   }
+  selectedOrg && (query.parentId = ObjectId(selectedOrg))
 
   const order = { _id: -1 }
   const db = getDb()
