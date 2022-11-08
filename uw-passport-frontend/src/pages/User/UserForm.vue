@@ -159,6 +159,7 @@ const saveForm = async () => {
     closeForm()
     noti.success(actionName.value + ' thành công')
     emit('close')
+    emit(frm._id ? 'updated' : 'inserted')
   } else if (data.code == 1) {
     noti.error(data.message)
   }
@@ -168,11 +169,11 @@ const closeForm = () => {
   emit('close')
 }
 
-const openForm = (_id = null) => {
+const openForm = row => {
   frmRef.value.resetFields()
 
-  if (_id) {
-    bindOldInfo(_id)
+  if (row) {
+    bindOldInfo(row._id)
   } else {
     Object.assign(frm, defaultFrm)
     imageUrl.value = '/static/images/user_avatar.png'

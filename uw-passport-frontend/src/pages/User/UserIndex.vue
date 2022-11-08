@@ -17,7 +17,7 @@
 
       <a-button
         type="primary"
-        @click="openCreateForm()"
+        @click="openForm()"
         class="mb-3 ms-auto"
       >
         Thêm mới
@@ -39,6 +39,9 @@
               <th class="text-right">
                 #
               </th>
+              <th class="text-center d-none d-md-table-cell">
+                Avatar
+              </th>
               <th>
                 Tên đăng nhập
               </th>
@@ -51,8 +54,17 @@
               <th>
                 Số điện thoại
               </th>
+              <th class="text-start d-none d-md-table-cell">
+                Tổ chức
+              </th>
+              <th class="text-start d-none d-md-table-cell">
+                Vai trò
+              </th>
+              <th class="text-start">
+                Trạng thái
+              </th>
               <th class="text-center">
-                Actions
+                Hành động
               </th>
             </tr>
           </thead>
@@ -62,16 +74,18 @@
               v-for="(user, i) in userList"
               :key="user._id"
             >
-              <td class="text-right">
+              <td class="text-end">
                 {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
               </td>
-              <td>
+              <td class="text-center d-none d-md-table-cell">
                 <img
-                  class="rounded-circle avatar object-fit-cover me-2"
+                  class="rounded-circle avatar object-fit-cover"
                   title="Đổi ảnh đại diện"
                   :src="user.thumbnail ? (user.thumbnail.startsWith('http') ? user.thumbnail : '/' + user.thumbnail) : '/static/images/user_avatar.png'"
                   onerror="this.src = '/static/images/user_avatar.png'"
                 />
+              </td>
+              <td>
                 {{ user.username }}
               </td>
               <td>
@@ -83,11 +97,31 @@
               <td>
                 {{ user.phone }}
               </td>
+              <td class="d-none d-md-table-cell">
+                Tổ chức
+              </td>
+              <td class="d-none d-md-table-cell">
+                Vai trò
+              </td>
+              <td>
+                <span
+                  v-if="user.isActive == 1"
+                  class="text-success"
+                >
+                  Đang hoạt động
+                </span>
+                <span
+                  v-else
+                  class="text-danger"
+                >
+                  Đã khóa
+                </span>
+              </td>
               <td class="text-center">
                 <i
                   class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
                   title="Cập nhật"
-                  @click="openUpdateForm(user)"
+                  @click="openForm(user)"
                 />
 
                 <i
@@ -116,6 +150,8 @@
     <UserForm
       ref="frmRef"
       @close="screen = 'list'"
+      @updated="search(pagi.currentPage)"
+      @inserted="search(1)"
     />
   </div>
 </template>
@@ -158,13 +194,8 @@ const search = async page => {
 
 const debouncedSearch = debounce(() => search(1), 500)
 
-const openCreateForm = () => {
-  frmRef.value.openForm()
-  screen.value = 'form'
-}
-
-const openUpdateForm = user => {
-  frmRef.value.openForm(user._id)
+const openForm = user => {
+  frmRef.value.openForm(user)
   screen.value = 'form'
 }
 
