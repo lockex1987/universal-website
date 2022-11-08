@@ -19,10 +19,10 @@ router.post('/search', async (request, response) => {
     ]
   }
 
-  const order = { _id: -1 }
+  const sort = { _id: -1 }
   const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  const projection = {
+  const project = {
     _id: 1,
     username: 1,
     fullName: 1,
@@ -40,12 +40,24 @@ router.post('/search', async (request, response) => {
   const list = await col
     /*
     .find(query)
-    .project(projection)
-    .sort(order)
+    .project(project)
+    .sort(sort)
     .skip((page - 1) * size)
     .limit(size)
     */
     .aggregate([
+      {
+        $match: query,
+      },
+      {
+        $sort: sort,
+      },
+      {
+        $skip: (page - 1) * size,
+      },
+      {
+        $limit: size,
+      },
       {
         $lookup:
           {
@@ -57,7 +69,7 @@ router.post('/search', async (request, response) => {
       },
       {
         $project: {
-          ...projection,
+          ...project,
           org: { $arrayElemAt: ['$org', 0] },
         },
       },
@@ -74,7 +86,7 @@ router.post('/search', async (request, response) => {
 export const getAllUser = async (request, response) => {
   const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  const projection = {
+  const project = {
     _id: 1,
     username: 1,
     fullName: 1,
@@ -86,7 +98,7 @@ export const getAllUser = async (request, response) => {
     // password: 0
   }
   const list = await db.collection('users').find()
-    .project(projection)
+    .project(project)
     .toArray()
   response.json(list)
 }
@@ -98,7 +110,7 @@ router.get('/get/:_id', async (request, response) => {
   const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  const projection = {
+  const project = {
     _id: 1,
     username: 1,
     fullName: 1,
@@ -111,7 +123,7 @@ router.get('/get/:_id', async (request, response) => {
   }
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
   // const row = await db.collection('users').findOne(query, projection)
-  const row = await db.collection('users').findOne(query, { projection })
+  const row = await db.collection('users').findOne(query, { projection: project })
   response.json(row)
 })
 
