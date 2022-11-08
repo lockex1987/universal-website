@@ -14,6 +14,7 @@ module.exports = {
     axios: 'readonly',
     noti: 'readonly',
     Highcharts: 'readonly',
+    bootstrap: 'readonly',
     $: 'readonly',
     ExcelJS: 'readonly',
     moment: 'readonly',

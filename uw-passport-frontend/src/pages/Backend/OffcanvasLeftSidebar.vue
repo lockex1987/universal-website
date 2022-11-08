@@ -18,7 +18,7 @@
 
     <div class="offcanvas-body p-0">
       <ul class="list-unstyled w-100">
-        <li>
+        <li class="sub-menu">
           <a
             href="#homeSubmenu"
             data-bs-toggle="collapse"
@@ -44,7 +44,7 @@
         </li>
 
         <li>
-          <a href="#">About</a>
+          <a href="#">Dashboard</a>
         </li>
 
         <li>
@@ -92,27 +92,21 @@ const menuList = [
   { code: 'DemoButton', name: 'Demo Button' },
 ]
 
-const state = reactive({
-  rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
-  openKeys: ['sub1'],
-  selectedKeys: ['User'],
-})
-
-/**
- * TODO: Accordion.
- * @param {Array} openKeys
- */
-const onOpenChange = openKeys => {
-  console.log(state.openKeys, openKeys)
-  const latestOpenKey = openKeys.find(key => state.openKeys.indexOf(key) === -1)
-  if (state.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-    state.openKeys = openKeys
-  } else {
-    state.openKeys = latestOpenKey ? [latestOpenKey] : []
+const openActiveMenu = () => {
+  const activeLink = document.querySelector('#offcanvasLeftSidebar .router-link-active')
+  if (activeLink) {
+    const parentLiTag = activeLink.closest('.sub-menu')
+    if (parentLiTag) {
+      const subUlTag = parentLiTag.querySelector('.collapse')
+      const bsCollapse = bootstrap.Collapse.getOrCreateInstance(subUlTag)
+      bsCollapse.show()
+    }
   }
 }
 
-// TODO: Mở sẵn menu đang highlight
+onMounted(() => {
+  openActiveMenu()
+})
 </script>
 
 <style lang="scss">
@@ -129,7 +123,6 @@ const onOpenChange = openKeys => {
     // .text-body
     color: rgba(0, 0, 0, 0.85);
     text-decoration: none;
-    transition: all 0.3s;
 
     &.router-link-active {
       // .text-primary
@@ -139,21 +132,15 @@ const onOpenChange = openKeys => {
 
   ul ul a {
     padding-left: 2.5rem !important;
-    // background: #6d7fcc;
   }
 
   .dropdown-toggle::after {
     display: block;
     position: absolute;
     top: 50%;
-    // right: 20px;
     left: 0.25rem;
     transition: all 0.3s;
     transform: translateY(-50%) rotate(-90deg);
-  }
-
-  a[aria-expanded="true"] {
-    // background: #6d7fcc;
   }
 
   [aria-expanded="true"].dropdown-toggle::after {
