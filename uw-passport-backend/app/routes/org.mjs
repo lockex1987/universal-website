@@ -16,7 +16,7 @@ router.post('/search', async (request, response) => {
       { description: temp },
     ]
   }
-  selectedOrg && (query.parentId = ObjectId(selectedOrg))
+  selectedOrg && (query.path = { $regex: '/' + selectedOrg + '/' })
 
   const order = { _id: -1 }
   const db = getDb()
@@ -132,13 +132,18 @@ router.put('/update', async (request, response) => {
 })
 
 router.delete('/delete/:_id', async (request, response) => {
-  // TODO: Chú ý cần xóa cả các bản ghi con
+  // Chú ý cần xóa cả các bản ghi con
   // Hoặc để các bản ghi con ra ngoài
 
   const { _id } = request.params
-  const query = { _id: ObjectId(_id) }
+  // const query = { _id: ObjectId(_id) }
+  const query = { path: { $regex: '/' + _id + '/' } }
+
   const db = getDb()
-  const result = await db.collection('orgs').deleteOne(query)
+  const result = await db.collection('orgs')
+    // .deleteOne(query)
+    .deleteMany(query)
+
   response.json({
     code: 0,
     message: 'Deleted ' + result.deletedCount,

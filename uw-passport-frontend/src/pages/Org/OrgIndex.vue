@@ -170,6 +170,7 @@ const deleteRow = org => {
     if (data.code == 0) {
       noti.success('Xóa bản ghi thành công')
       search(1)
+      getOrgTree()
     }
   })
 }
