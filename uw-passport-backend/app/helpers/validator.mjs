@@ -54,6 +54,10 @@ const unique = async (rule, value, callback, source, options) => {
 }
 
 const exist = async (rule, value, callback, source, options) => {
+  if (! value) {
+    return
+  }
+
   const col = rule.dbCol
   const errors = []
   const db = getDb()

@@ -53,7 +53,7 @@ router.post('/insert', async (request, response) => {
       { type: 'unique', dbCol: 'orgs' },
     ],
     description: [{ max: 500 }],
-    parentId: [{ type: 'exist', dbCol: 'orgs' }],
+    parentId: [{ type: 'exist', dbCol: 'orgs', dbFieldName: 'Tổ chức cha' }],
   }
   await request.validate(request.body, rules)
 
@@ -61,60 +61,55 @@ router.post('/insert', async (request, response) => {
   const data = pick(request.body, 'name', 'description')
   parentId && (data.parentId = ObjectId(parentId))
   const db = getDb()
-
-  if (parentId) {
-    // TODO: validate exist
-    const parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
-    if (! parentObj) {
-      return {
-        code: 1,
-        message: 'Đối tượng cha không tồn tại',
-      }
-    }
-  }
-
   const result = await db.collection('orgs').insertOne(data)
-  await updatePaths()
+
+  // await updatePaths()
+
+  const _id = result.insertedId
+  let ancestors
+  let path
+  if (parentId) {
+    const parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
+    ancestors = [...parentObj.ancestors, _id.toString()]
+    path = parentObj.path + _id.toString() + '/'
+  } else {
+    ancestors = [_id.toString()]
+    path = '/' + _id + '/'
+  }
+  const updateData = {
+    ancestors,
+    path,
+  }
+  await db.collection('orgs').updateOne({ _id }, { $set: updateData })
+
   response.json({
     code: 0,
     message: 'Inserted',
-    _id: result.insertedId,
+    _id,
   })
 })
 
 router.put('/update', async (request, response) => {
   const { _id, parentId } = request.body
-
   const rules = {
     name: [
       // TODO: Đang không thông báo được tiếng Việt
       { required: true, max: 100 },
       // { type: 'telephone' },
       // TODO: Đang không thông báo được gì luôn
-      { type: 'unique', dbCol: 'orgs', ignoredIdValue: ObjectId(_id) },
+      { type: 'unique', dbCol: 'orgs', ignoredIdValue: ObjectId(_id), dbFieldName: 'Tên' },
     ],
     description: [{ max: 500 }],
-    parentId: [{ type: 'exist', dbCol: 'orgs' }],
+    parentId: [{ type: 'exist', dbCol: 'orgs', dbFieldName: 'Tổ chức cha' }],
   }
   await request.validate(request.body, rules)
 
-  const query = { _id: ObjectId(_id) }
-  const data = pick(request.body, 'name', 'description')
-  parentId && (data.parentId = ObjectId(parentId))
-
   const db = getDb()
-
+  let parentObj
   if (parentId) {
-    // TODO: validate exist
-    const parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
-    if (! parentObj) {
-      return {
-        code: 1,
-        message: 'Đối tượng cha không tồn tại',
-      }
-    }
+    parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
 
-    // if ((parentObj.ancestors ?? []).includes(_id)) {
+    // (parentObj.ancestors ?? []).includes(_id)
     if ((parentObj.path ?? '').includes('/' + _id + '/')) {
       return {
         code: 1,
@@ -123,8 +118,30 @@ router.put('/update', async (request, response) => {
     }
   }
 
+  const query = { _id: ObjectId(_id) }
+  const row = await db.collection('orgs').findOne(query)
+  if (! row) {
+    return {
+      code: 1,
+      message: 'Bản ghi không tồn tại',
+    }
+  }
+
+  const shouldUpdatePaths = (parentId ?? '') != (row.parentId?.toString() ?? '')
+
+  const data = pick(request.body, 'name', 'description')
+  parentId && (data.parentId = ObjectId(parentId))
+
   const result = await db.collection('orgs').updateOne(query, { $set: data })
-  await updatePaths()
+
+  if (shouldUpdatePaths) {
+    await updatePaths()
+
+    // TODO: Chỉ cập nhật chính nó và con cháu
+    // let ancestors
+    // let path
+  }
+
   response.json({
     code: 0,
     message: 'Updated ' + result.modifiedCount,
@@ -152,6 +169,14 @@ router.delete('/delete/:_id', async (request, response) => {
   })
 })
 
+router.post('/update-paths', async (request, response) => {
+  updatePaths()
+  response.json({
+    code: 0,
+    message: 'Updated',
+  })
+})
+
 const updatePaths = async () => {
   const db = getDb()
   const data = await db.collection('orgs').find().toArray()
@@ -173,12 +198,12 @@ const generatePathOfRootNodes = data => {
   })
 }
 
-const generatePathOfChildren = (data, parent) => {
+const generatePathOfChildren = (data, parentObj) => {
   data.forEach(e => {
     // Vì là đối tượng ObjectId nên cần chuyển sang string
-    if (e.parentId && e.parentId.toString() == parent._id.toString()) {
-      e.ancestors = [...parent.ancestors, e._id.toString()]
-      e.path = parent.path + e._id + '/'
+    if (parentObj._id.equals(e.parentId)) {
+      e.ancestors = [...parentObj.ancestors, e._id.toString()]
+      e.path = parentObj.path + e._id.toString() + '/'
       generatePathOfChildren(data, e)
     }
   })
