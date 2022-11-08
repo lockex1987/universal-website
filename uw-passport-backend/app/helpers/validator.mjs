@@ -1,6 +1,7 @@
 import { request } from 'express'
 import path from 'node:path'
 import asyncValidator from 'async-validator'
+import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import vietnameseValidatorMessages from './vietnameseValidatorMessages.mjs'
 
@@ -46,7 +47,21 @@ const unique = async (rule, value, callback, source, options) => {
   }
   const count = await db.collection(col).count(query)
   if (count > 0) {
-    errors.push(rule.dbFieldName + options.messages.unique)
+    // console.log(options.messages)
+    errors.push((rule.dbFieldName ?? rule.field) + vietnameseValidatorMessages.unique) // options.messages.unique
+  }
+  callback(errors)
+}
+
+const exist = async (rule, value, callback, source, options) => {
+  const col = rule.dbCol
+  const errors = []
+  const db = getDb()
+  const query = { _id: ObjectId(value) }
+  const count = await db.collection(col).count(query)
+  if (count == 0) {
+    // console.log(options)
+    errors.push((rule.dbFieldName ?? rule.field) + vietnameseValidatorMessages.exist) // options.messages.exist
   }
   callback(errors)
 }
@@ -91,11 +106,7 @@ const setupValidator = () => {
     try {
       const validator = new Schema(rules)
       await validator.validate(body)
-    } catch (ex) {
-      console.error(ex)
-      const { errors, fields } = ex
-      console.log(errors)
-      console.log(fields)
+    } catch ({ errors, fields }) {
       const error = new Error('validate')
       // Custom prop to specify handling behaviour
       error.type = 'validate'
@@ -107,6 +118,7 @@ const setupValidator = () => {
   Schema.register('strongPassword', strongPassword)
   Schema.register('telephone', telephone)
   Schema.register('unique', unique)
+  Schema.register('exist', exist)
   Schema.register('upload', upload)
 }
 

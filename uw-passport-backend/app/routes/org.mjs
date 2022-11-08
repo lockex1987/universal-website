@@ -47,6 +47,16 @@ export const getAllOrg = async (request, response) => {
 router.get('/get-all', getAllOrg)
 
 router.post('/insert', async (request, response) => {
+  const rules = {
+    name: [
+      { required: true, max: 100 },
+      { type: 'unique', dbCol: 'orgs' },
+    ],
+    description: [{ max: 500 }],
+    parentId: [{ type: 'exist', dbCol: 'orgs' }],
+  }
+  await request.validate(request.body, rules)
+
   const { parentId } = request.body
   const data = pick(request.body, 'name', 'description')
   parentId && (data.parentId = ObjectId(parentId))
@@ -74,6 +84,20 @@ router.post('/insert', async (request, response) => {
 
 router.put('/update', async (request, response) => {
   const { _id, parentId } = request.body
+
+  const rules = {
+    name: [
+      // TODO: Đang không thông báo được tiếng Việt
+      { required: true, max: 100 },
+      // { type: 'telephone' },
+      // TODO: Đang không thông báo được gì luôn
+      { type: 'unique', dbCol: 'orgs', ignoredIdValue: ObjectId(_id) },
+    ],
+    description: [{ max: 500 }],
+    parentId: [{ type: 'exist', dbCol: 'orgs' }],
+  }
+  await request.validate(request.body, rules)
+
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'name', 'description')
   parentId && (data.parentId = ObjectId(parentId))

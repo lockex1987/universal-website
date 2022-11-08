@@ -24,10 +24,10 @@ export default {
     hex: '%s is not a valid %s',
   },
   string: {
-    len: '%s must be exactly %s characters',
-    min: '%s must be at least %s characters',
-    max: '%s cannot be longer than %s characters',
-    range: '%s must be between %s and %s characters',
+    len: '%s phải dài chính xác %s ký tự',
+    min: '%s phải dài ít nhất %s ký tự',
+    max: '%s phải dài nhiều nhất %s ký tự',
+    range: '%s phải dài từ %s đến %s ký tự',
   },
   number: {
     len: '%s must equal %s',
@@ -52,4 +52,6 @@ export default {
 
   // Thêm
   unique: ' đã tồn tại',
+
+  exist: ' không tồn tại',
 }
