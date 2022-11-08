@@ -97,9 +97,10 @@
   <div v-show="screen == 'form'">
     <OrgForm
       ref="frmRef"
+      :orgTree="orgTree"
       @close="screen = 'list'"
-      @updated="search(pagi.currentPage)"
-      @inserted="search(1)"
+      @updated="search(pagi.currentPage); getOrgTree();"
+      @inserted="search(1); getOrgTree();"
     />
   </div>
 </template>
@@ -107,6 +108,7 @@
 <script setup>
 import OrgForm from './OrgForm.vue'
 import { debounce } from '@/helpers/common.js'
+import { convertToTreeData } from '@/helpers/tree.js'
 
 const filter = reactive({
   text: '',
@@ -123,6 +125,8 @@ const orgList = ref([])
 const dropdowns = reactive({
   // Danh sách ở các dropdown
 })
+
+const orgTree = ref([])
 
 const frmRef = ref()
 
@@ -157,7 +161,13 @@ const deleteRow = org => {
   })
 }
 
+const getOrgTree = async () => {
+  const { data } = await axios.get('/api/org/get-all')
+  orgTree.value = convertToTreeData(data)
+}
+
 onMounted(() => {
   search(1)
+  getOrgTree()
 })
 </script>

@@ -21,6 +21,7 @@
       />
     </a-form-item>
 
+    <!-- TODO: Không search được -->
     <a-form-item
       label="Tổ chức cha"
       name="parentId"
@@ -62,6 +63,10 @@
 </template>
 
 <script setup>
+defineProps({
+  orgTree: Array,
+})
+
 const defaultFrm = {
   _id: null,
   name: '',
@@ -120,47 +125,6 @@ const openForm = row => {
     Object.assign(frm, defaultFrm)
   }
 }
-
-const getAllOrg = async () => {
-  const { data } = await axios.get('/api/org/get-all')
-
-  const treeData = []
-  data.forEach(rootOrg => {
-    if (! rootOrg.parentId) {
-      const children = getChildrenNode(data, rootOrg)
-      const rootNode = {
-        title: rootOrg.name,
-        value: rootOrg._id,
-        children,
-      }
-      treeData.push(rootNode)
-    }
-  })
-
-  orgTree.value = treeData
-}
-
-const getChildrenNode = (flatData, parentOrg) => {
-  const children = []
-  flatData.forEach(childOrg => {
-    if (childOrg.parentId == parentOrg._id) {
-      const grandChildren = getChildrenNode(flatData, childOrg)
-      const childNode = {
-        title: childOrg.name,
-        value: childOrg._id,
-        children: grandChildren,
-      }
-      children.push(childNode)
-    }
-  })
-  return children
-}
-
-const orgTree = ref([])
-
-onMounted(() => {
-  getAllOrg()
-})
 
 defineExpose({
   openForm,
