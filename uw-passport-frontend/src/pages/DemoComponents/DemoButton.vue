@@ -40,12 +40,19 @@
   </a-space>
 
   <div class="mb-3">
-    <a-button type="primary">No block</a-button>
+    <a-button
+      type="primary"
+      class="mb-3"
+    >
+      No block
+    </a-button>
 
     <a-button
       type="primary"
       block
-    >Block</a-button>
+    >
+      Block
+    </a-button>
   </div>
 
   <div class="mb-3">
