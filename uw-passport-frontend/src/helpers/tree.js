@@ -1,29 +1,3 @@
-/**
- * Sinh ra trường path cho các nút gốc.
- * TODO: Xóa đi.
- */
-const generatePathOfRoots = data => {
-  data.forEach(e => {
-    if (! e.parentId) {
-      e.path = '/' + e.id + '/'
-      generatePathOfChildren(data, e)
-    }
-  })
-}
-
-/**
- * Sinh ra trường path cho các nút con.
- * TODO: Xóa đi.
- */
-const generatePathOfChildren = (data, parent) => {
-  data.forEach(e => {
-    if (e.parentId == parent.id) {
-      e.path = parent.path + e.id + '/'
-      generatePathOfChildren(data, e)
-    }
-  })
-}
-
 export const convertToTreeData = flatData => {
   const treeData = []
   flatData.forEach(rootRow => {

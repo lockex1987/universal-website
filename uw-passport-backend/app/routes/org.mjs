@@ -51,7 +51,20 @@ router.post('/insert', async (request, response) => {
   const data = pick(request.body, 'name', 'description')
   parentId && (data.parentId = ObjectId(parentId))
   const db = getDb()
+
+  if (parentId) {
+    // TODO: validate exist
+    const parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
+    if (! parentObj) {
+      return {
+        code: 1,
+        message: 'Đối tượng cha không tồn tại',
+      }
+    }
+  }
+
   const result = await db.collection('orgs').insertOne(data)
+  await updatePaths()
   response.json({
     code: 0,
     message: 'Inserted',
@@ -64,8 +77,30 @@ router.put('/update', async (request, response) => {
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'name', 'description')
   parentId && (data.parentId = ObjectId(parentId))
+
   const db = getDb()
+
+  if (parentId) {
+    // TODO: validate exist
+    const parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
+    if (! parentObj) {
+      return {
+        code: 1,
+        message: 'Đối tượng cha không tồn tại',
+      }
+    }
+
+    // if ((parentObj.ancestors ?? []).includes(_id)) {
+    if ((parentObj.path ?? '').includes('/' + _id + '/')) {
+      return {
+        code: 1,
+        message: 'Quan hệ vòng tròn',
+      }
+    }
+  }
+
   const result = await db.collection('orgs').updateOne(query, { $set: data })
+  await updatePaths()
   response.json({
     code: 0,
     message: 'Updated ' + result.modifiedCount,
@@ -73,6 +108,9 @@ router.put('/update', async (request, response) => {
 })
 
 router.delete('/delete/:_id', async (request, response) => {
+  // TODO: Chú ý cần xóa cả các bản ghi con
+  // Hoặc để các bản ghi con ra ngoài
+
   const { _id } = request.params
   const query = { _id: ObjectId(_id) }
   const db = getDb()
@@ -82,5 +120,37 @@ router.delete('/delete/:_id', async (request, response) => {
     message: 'Deleted ' + result.deletedCount,
   })
 })
+
+const updatePaths = async () => {
+  const db = getDb()
+  const data = await db.collection('orgs').find().toArray()
+  generatePathOfRootNodes(data)
+  for (const row of data) {
+    const query = { _id: row._id }
+    const data = { path: row.path, ancestors: row.ancestors }
+    await db.collection('orgs').updateOne(query, { $set: data })
+  }
+}
+
+const generatePathOfRootNodes = data => {
+  data.forEach(e => {
+    if (! e.parentId) {
+      e.ancestors = [e._id.toString()]
+      e.path = '/' + e._id + '/'
+      generatePathOfChildren(data, e)
+    }
+  })
+}
+
+const generatePathOfChildren = (data, parent) => {
+  data.forEach(e => {
+    // Vì là đối tượng ObjectId nên cần chuyển sang string
+    if (e.parentId && e.parentId.toString() == parent._id.toString()) {
+      e.ancestors = [...parent.ancestors, e._id.toString()]
+      e.path = parent.path + e._id + '/'
+      generatePathOfChildren(data, e)
+    }
+  })
+}
 
 export default router
