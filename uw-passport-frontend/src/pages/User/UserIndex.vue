@@ -98,7 +98,7 @@
                 {{ user.phone }}
               </td>
               <td class="d-none d-md-table-cell">
-                Tổ chức
+                {{ user.orgId }}
               </td>
               <td class="d-none d-md-table-cell">
                 Vai trò

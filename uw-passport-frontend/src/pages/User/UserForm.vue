@@ -82,7 +82,7 @@
         v-model:value="frm.orgId"
         :treeData="orgTree"
         showSearch
-        allowClear
+        :allowClear="false"
         class="form-control-max-width"
         :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
       />
@@ -127,6 +127,7 @@ const rules = {
   email: [{ type: 'email', required: true }],
   phone: [{ required: false, min: 9, max: 12 }],
   avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
+  orgId: [{ required: true }],
 }
 
 const frmRef = ref()
