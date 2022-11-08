@@ -78,6 +78,7 @@
       <a-button
         type="primary"
         html-type="submit"
+        :loading="isSaving"
       >
         {{ actionName }}
       </a-button>
@@ -113,6 +114,8 @@ const frmRef = ref()
 
 const imageUrl = ref('')
 
+const isSaving = ref(false)
+
 const emit = defineEmits(['close'])
 
 const actionName = computed(() => {
@@ -137,6 +140,8 @@ const beforeUpload = file => {
 }
 
 const saveForm = async () => {
+  isSaving.value = true
+
   const params = new FormData()
   params.append('_id', frm._id)
   params.append('username', frm.username)
@@ -155,6 +160,9 @@ const saveForm = async () => {
   const method = frm._id ? 'put' : 'post'
   const path = frm._id ? 'update' : 'insert'
   const { data } = await axios[method]('/api/user/' + path, params)
+
+  isSaving.value = false
+
   if (data.code == 0) {
     closeForm()
     noti.success(actionName.value + ' thành công')
