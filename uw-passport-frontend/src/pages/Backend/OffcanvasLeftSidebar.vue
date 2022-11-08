@@ -18,70 +18,47 @@
 
     <div class="offcanvas-body p-0">
       <ul class="list-unstyled w-100">
-        <li class="sub-menu">
-          <a
-            href="#homeSubmenu"
-            data-bs-toggle="collapse"
-            aria-expanded="false"
-            class="position-relative dropdown-toggle"
-          >
-            Quản trị
-          </a>
+        <template
+          v-for="lv1 in menuList"
+          :key="lv1.code"
+        >
 
-          <ul
-            class="collapse list-unstyled"
-            id="homeSubmenu"
+          <li
+            v-if="lv1.children && lv1.children.length"
+            class="sub-menu"
           >
-            <li
-              v-for="lv1 in menuList"
-              :key="lv1.code"
-              data-bs-dismiss="offcanvas"
-              data-bs-target="#offcanvasLeftSidebar"
+            <a
+              :href="'#' + lv1.code + 'Submenu'"
+              data-bs-toggle="collapse"
+              aria-expanded="false"
+              class="position-relative dropdown-toggle"
             >
-              <RouterLink :to="{ name: lv1.code }">
-                {{ lv1.name }}
-              </RouterLink>
-            </li>
-          </ul>
-        </li>
+              {{ lv1.name }}
+            </a>
 
-        <li>
-          <a href="#">Dashboard</a>
-        </li>
+            <ul
+              class="collapse list-unstyled"
+              :id="lv1.code + 'Submenu'"
+            >
+              <li
+                v-for="lv2 in lv1.children"
+                :key="lv2.code"
+                data-bs-dismiss="offcanvas"
+                data-bs-target="#offcanvasLeftSidebar"
+              >
+                <RouterLink :to="{ name: lv2.code }">
+                  {{ lv2.name }}
+                </RouterLink>
+              </li>
+            </ul>
+          </li>
 
-        <li>
-          <a
-            href="#pageSubmenu"
-            data-bs-toggle="collapse"
-            aria-expanded="false"
-            class="position-relative dropdown-toggle"
-          >
-            Pages
-          </a>
-
-          <ul
-            class="collapse list-unstyled"
-            id="pageSubmenu"
-          >
-            <li>
-              <a href="#">Page 1</a>
-            </li>
-            <li>
-              <a href="#">Page 2</a>
-            </li>
-            <li>
-              <a href="#">Page 3</a>
-            </li>
-
-          </ul>
-        </li>
-
-        <li>
-          <a href="#">Portfolio</a>
-        </li>
-        <li>
-          <a href="#">Contact</a>
-        </li>
+          <li v-else>
+            <RouterLink :to="{ name: lv1.code }">
+              {{ lv1.name }}
+            </RouterLink>
+          </li>
+        </template>
       </ul>
     </div>
   </div>
@@ -89,10 +66,22 @@
 
 <script setup>
 const menuList = [
-  { code: 'User', name: 'Người dùng' },
   { code: 'Org', name: 'Tổ chức' },
-  { code: 'Permission', name: 'Quyền' },
-  { code: 'DemoButton', name: 'Demo Button' },
+  {
+    code: 'Admin',
+    name: 'Quản trị',
+    children: [
+      { code: 'User', name: 'Người dùng' },
+      { code: 'Permission', name: 'Quyền' },
+    ],
+  },
+  {
+    code: 'Demo',
+    name: 'Demo',
+    children: [
+      { code: 'DemoButton', name: 'Demo Button' },
+    ],
+  },
 ]
 
 const openActiveMenu = () => {
