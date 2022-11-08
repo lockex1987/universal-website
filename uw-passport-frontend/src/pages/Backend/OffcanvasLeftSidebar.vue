@@ -88,6 +88,7 @@
 <script setup>
 const menuList = [
   { code: 'User', name: 'Người dùng' },
+  { code: 'Org', name: 'Tổ chức' },
   { code: 'DemoButton', name: 'Demo Button' },
 ]
 

@@ -116,6 +116,7 @@ const imageUrl = ref('')
 
 const isSaving = ref(false)
 
+// Không khai báo sẽ có cảnh báo
 const emit = defineEmits(['close', 'inserted', 'updated'])
 
 const actionName = computed(() => {

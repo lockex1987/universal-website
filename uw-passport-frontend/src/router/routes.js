@@ -20,6 +20,11 @@ export default [
         component: () => import('@/pages/User/UserIndex.vue'),
       },
       {
+        path: 'Org',
+        name: 'Org',
+        component: () => import('@/pages/Org/OrgIndex.vue'),
+      },
+      {
         path: 'DemoButton',
         name: 'DemoButton',
         component: () => import('@/pages/DemoComponents/DemoButton.vue'),
