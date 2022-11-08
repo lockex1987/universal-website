@@ -12,6 +12,10 @@ export default {
 
   MONGO: {
     URI: 'mongodb://localhost:27017',
-    DATABASE: 'univeral-website', // TODO: universal-website
+
+    // db.copyDatabase('univeral-website', 'universal-website')
+    // use univeral-website
+    // db.dropDatabase()
+    DATABASE: 'univeral-website',
   },
 }
