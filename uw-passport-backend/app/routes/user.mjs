@@ -133,9 +133,11 @@ router.post('/insert', async (request, response) => {
       { required: true, max: 100 },
       { type: 'unique', dbCol: 'users', dbFieldName: 'Tên đăng nhập' },
     ],
-    fullName: [{ max: 100 }],
-    email: [{ max: 100 }],
-    phone: [{ max: 100 }],
+    fullName: [{ required: true, max: 100 }],
+    email: [{ type: 'email', required: true, max: 100 }],
+    phone: [{ min: 9, max: 12 }],
+    avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5, request }],
+    orgId: [{ required: true }],
   }
   await request.validate(request.body, rules)
 
@@ -159,9 +161,11 @@ router.put('/update', async (request, response) => {
       { required: true, max: 100 },
       { type: 'unique', dbCol: 'users', dbFieldName: 'Tên đăng nhập', ignoredIdValue: ObjectId(_id) },
     ],
-    fullName: [{ max: 100 }],
-    email: [{ max: 100 }],
-    phone: [{ max: 100 }],
+    fullName: [{ required: true, max: 100 }],
+    email: [{ type: 'email', required: true, max: 100 }],
+    phone: [{ min: 9, max: 12 }],
+    avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5, request }],
+    orgId: [{ required: true }],
   }
   await request.validate(request.body, rules)
 

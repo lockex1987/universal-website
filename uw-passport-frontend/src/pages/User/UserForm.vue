@@ -122,10 +122,10 @@ const defaultFrm = {
 const frm = reactive(defaultFrm)
 
 const rules = {
-  username: [{ required: true }],
-  fullName: [{ required: true }],
-  email: [{ type: 'email', required: true }],
-  phone: [{ required: false, min: 9, max: 12 }],
+  username: [{ required: true, max: 100 }],
+  fullName: [{ required: true, max: 100 }],
+  email: [{ type: 'email', required: true, max: 100 }],
+  phone: [{ min: 9, max: 12 }],
   avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
   orgId: [{ required: true }],
 }
