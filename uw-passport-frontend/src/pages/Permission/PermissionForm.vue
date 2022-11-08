@@ -58,7 +58,7 @@ const defaultFrm = {
   name: '',
 }
 
-const frm = reactive(defaultFrm)
+const frm = reactive({ ...defaultFrm })
 
 const rules = {
   code: [{ required: true, max: 100 }],

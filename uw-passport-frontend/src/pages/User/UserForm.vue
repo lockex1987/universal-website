@@ -119,7 +119,7 @@ const defaultFrm = {
   orgId: null,
 }
 
-const frm = reactive(defaultFrm)
+const frm = reactive({ ...defaultFrm })
 
 const rules = {
   username: [{ required: true, max: 100 }],

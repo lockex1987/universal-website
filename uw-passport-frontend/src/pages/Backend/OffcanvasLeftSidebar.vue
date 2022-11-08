@@ -35,6 +35,8 @@
             <li
               v-for="lv1 in menuList"
               :key="lv1.code"
+              data-bs-dismiss="offcanvas"
+              data-bs-target="#offcanvasLeftSidebar"
             >
               <RouterLink :to="{ name: lv1.code }">
                 {{ lv1.name }}
