@@ -71,10 +71,6 @@ router.post('/change-password', async (request, response) => {
 })
 
 router.post('/update-user-info', async (request, response) => {
-  // Đang bị lỗi source.hasOwnProperty is not a function
-  // do express-fileupload xung đột với async-validator
-  request.body.hasOwnProperty = Object.prototype.hasOwnProperty
-
   const rules = {
     fullName: [{ type: 'string', required: true }],
     email: [{ type: 'email', required: true }],

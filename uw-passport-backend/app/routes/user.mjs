@@ -128,11 +128,23 @@ router.get('/get/:_id', async (request, response) => {
 })
 
 router.post('/insert', async (request, response) => {
+  const rules = {
+    username: [
+      { required: true, max: 100 },
+      { type: 'unique', dbCol: 'users', dbFieldName: 'Tên đăng nhập' },
+    ],
+    fullName: [{ max: 100 }],
+    email: [{ max: 100 }],
+    phone: [{ max: 100 }],
+  }
+  await request.validate(request.body, rules)
+
   const { orgId } = request.body
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone', 'orgId')
   orgId && (data.orgId = ObjectId(orgId))
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
+
   response.json({
     code: 0,
     message: 'Inserted',
@@ -142,11 +154,23 @@ router.post('/insert', async (request, response) => {
 
 router.put('/update', async (request, response) => {
   const { _id, orgId } = request.body
+  const rules = {
+    username: [
+      { required: true, max: 100 },
+      { type: 'unique', dbCol: 'users', dbFieldName: 'Tên đăng nhập', ignoredIdValue: ObjectId(_id) },
+    ],
+    fullName: [{ max: 100 }],
+    email: [{ max: 100 }],
+    phone: [{ max: 100 }],
+  }
+  await request.validate(request.body, rules)
+
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
   orgId && (data.orgId = ObjectId(orgId))
   const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
+
   response.json({
     code: 0,
     message: 'Updated ' + result.modifiedCount,
