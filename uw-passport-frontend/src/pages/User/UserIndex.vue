@@ -149,6 +149,7 @@
   <div v-show="screen == 'form'">
     <UserForm
       ref="frmRef"
+      :orgTree="dropdowns.orgTree"
       @close="screen = 'list'"
       @updated="search(pagi.currentPage)"
       @inserted="search(1)"
@@ -157,6 +158,7 @@
 </template>
 
 <script setup>
+import { convertToTreeData } from '@/helpers/tree.js'
 import UserForm from './UserForm.vue'
 import { debounce } from '@/helpers/common.js'
 
@@ -173,7 +175,7 @@ const pagi = reactive({
 const userList = ref([])
 
 const dropdowns = reactive({
-  // Danh sách ở các dropdown
+  orgTree: [],
 })
 
 const frmRef = ref()
@@ -209,8 +211,14 @@ const deleteRow = user => {
   })
 }
 
+const getOrgTree = async () => {
+  const { data } = await axios.get('/api/org/get-all')
+  dropdowns.orgTree = convertToTreeData(data)
+}
+
 onMounted(() => {
   search(1)
+  getOrgTree()
 })
 </script>
 

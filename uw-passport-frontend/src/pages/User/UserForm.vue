@@ -74,6 +74,20 @@
       />
     </a-form-item>
 
+    <a-form-item
+      label="Tổ chức"
+      name="orgId"
+    >
+      <a-tree-select
+        v-model:value="frm.orgId"
+        :treeData="orgTree"
+        showSearch
+        allowClear
+        class="form-control-max-width"
+        :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+      />
+    </a-form-item>
+
     <a-space>
       <a-button
         type="primary"
@@ -91,6 +105,10 @@
 </template>
 
 <script setup>
+defineProps({
+  orgTree: Array,
+})
+
 const defaultFrm = {
   _id: null,
   username: '',
@@ -98,6 +116,7 @@ const defaultFrm = {
   email: '',
   phone: '',
   avatar: [],
+  orgId: null,
 }
 
 const frm = reactive(defaultFrm)
@@ -148,6 +167,7 @@ const saveForm = async () => {
   params.append('fullName', frm.fullName)
   params.append('email', frm.email)
   params.append('phone', frm.phone)
+  params.append('orgId', frm.orgId)
 
   // Lấy phần tử file cuối cùng
   const fileList = frm.avatar

@@ -135,6 +135,8 @@ router.delete('/delete/:_id', async (request, response) => {
   // Chú ý cần xóa cả các bản ghi con
   // Hoặc để các bản ghi con ra ngoài
 
+  // TODO: Cập nhật khóa ngoại chỗ người dùng
+
   const { _id } = request.params
   // const query = { _id: ObjectId(_id) }
   const query = { path: { $regex: '/' + _id + '/' } }

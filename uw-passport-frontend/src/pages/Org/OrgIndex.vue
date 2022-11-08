@@ -17,7 +17,7 @@
         />
 
         <a-tree
-          :tree-data="orgTree"
+          :tree-data="dropdowns.orgTree"
           @select="selectOrgTree"
         />
       </div>
@@ -108,7 +108,7 @@
   <div v-show="screen == 'form'">
     <OrgForm
       ref="frmRef"
-      :orgTree="orgTree"
+      :orgTree="dropdowns.orgTree"
       @close="screen = 'list'"
       @updated="search(pagi.currentPage); getOrgTree();"
       @inserted="search(1); getOrgTree();"
@@ -135,10 +135,8 @@ const pagi = reactive({
 const orgList = ref([])
 
 const dropdowns = reactive({
-  // Danh sách ở các dropdown
+  orgTree: [],
 })
-
-const orgTree = ref([])
 
 const frmRef = ref()
 
@@ -177,7 +175,7 @@ const deleteRow = org => {
 
 const getOrgTree = async () => {
   const { data } = await axios.get('/api/org/get-all')
-  orgTree.value = convertToTreeData(data)
+  dropdowns.orgTree = convertToTreeData(data)
 }
 
 const selectOrgTree = (selectedKeys, evt) => {

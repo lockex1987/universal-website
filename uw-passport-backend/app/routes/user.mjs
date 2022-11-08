@@ -30,6 +30,7 @@ router.post('/search', async (request, response) => {
     phone: 1,
     avatar: 1,
     thumbnail: 1,
+    orgId: 1,
     // password: 0
   }
 
@@ -62,6 +63,7 @@ export const getAllUser = async (request, response) => {
     phone: 1,
     avatar: 1,
     thumbnail: 1,
+    orgId: 1,
     // password: 0
   }
   const list = await db.collection('users').find()
@@ -85,6 +87,7 @@ router.get('/get/:_id', async (request, response) => {
     phone: 1,
     avatar: 1,
     thumbnail: 1,
+    orgId: 1,
     // password: 0,
   }
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
@@ -94,7 +97,7 @@ router.get('/get/:_id', async (request, response) => {
 })
 
 router.post('/insert', async (request, response) => {
-  const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
+  const data = pick(request.body, 'username', 'fullName', 'email', 'phone', 'orgId')
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
   response.json({
@@ -107,7 +110,7 @@ router.post('/insert', async (request, response) => {
 router.put('/update', async (request, response) => {
   const { _id } = request.body
   const query = { _id: ObjectId(_id) }
-  const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
+  const data = pick(request.body, 'username', 'fullName', 'email', 'phone', 'orgId')
   const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
   response.json({

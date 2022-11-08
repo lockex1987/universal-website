@@ -28,11 +28,11 @@
     >
       <a-tree-select
         v-model:value="frm.parentId"
-        :tree-data="orgTreeIgnoreUpdating"
-        show-search
-        allow-clear
+        :treeData="orgTreeIgnoreUpdating"
+        showSearch
+        allowClear
         class="form-control-max-width"
-        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+        :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
       />
     </a-form-item>
 
