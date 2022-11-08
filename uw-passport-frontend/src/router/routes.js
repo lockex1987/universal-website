@@ -25,6 +25,11 @@ export default [
         component: () => import('@/pages/Org/OrgIndex.vue'),
       },
       {
+        path: 'Permission',
+        name: 'Permission',
+        component: () => import('@/pages/Permission/PermissionIndex.vue'),
+      },
+      {
         path: 'DemoButton',
         name: 'DemoButton',
         component: () => import('@/pages/DemoComponents/DemoButton.vue'),

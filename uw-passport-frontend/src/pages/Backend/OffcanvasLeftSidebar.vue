@@ -89,6 +89,7 @@
 const menuList = [
   { code: 'User', name: 'Người dùng' },
   { code: 'Org', name: 'Tổ chức' },
+  { code: 'Permission', name: 'Quyền' },
   { code: 'DemoButton', name: 'Demo Button' },
 ]
 
