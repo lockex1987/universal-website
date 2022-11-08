@@ -4,7 +4,7 @@
     id="offcanvasLeftSidebar"
   >
     <div class="offcanvas-header">
-      <div class="offcanvas-title fw-bold text-white">
+      <div class="offcanvas-title fw-bold">
         Universal website
       </div>
 
@@ -117,40 +117,43 @@ const onOpenChange = openKeys => {
 
 <style lang="scss">
 #offcanvasLeftSidebar {
-  // @media (min-width: 992px) {}
-  background-color: #7386D5 !important;
+  @media (min-width: 992px) {
+    // Ngăn cách luôn
+    overflow-y: scroll;
+  }
 
   a {
     padding: 1rem;
+    padding-left: 1.5rem;
     display: block;
-    color: #fff;
+    // .text-body
+    color: rgba(0, 0, 0, 0.85);
     text-decoration: none;
     transition: all 0.3s;
 
-    &:hover,
     &.router-link-active {
+      // .text-primary
       color: #7386D5;
-      background: rgba(255, 255, 255, 0.5);
     }
   }
 
   ul ul a {
-    padding-left: 30px !important;
-    background: #6d7fcc;
+    padding-left: 2.5rem !important;
+    // background: #6d7fcc;
   }
 
   .dropdown-toggle::after {
     display: block;
     position: absolute;
     top: 50%;
-    right: 20px;
+    // right: 20px;
+    left: 0.25rem;
     transition: all 0.3s;
     transform: translateY(-50%) rotate(-90deg);
   }
 
   a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
+    // background: #6d7fcc;
   }
 
   [aria-expanded="true"].dropdown-toggle::after {

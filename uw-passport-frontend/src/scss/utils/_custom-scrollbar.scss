@@ -1,0 +1,58 @@
+// Chỉnh scrollbar
+@media (min-width: 768px) {
+  .custom-scrollbar {
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background: transparent;
+    }
+
+    // Khi hover mới hiển thị
+    &:hover::-webkit-scrollbar-track {
+      border-radius: 2px;
+      // Không để background thì sẽ không có
+      // background-color: $gray-400;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      // background-color: $gray-600;
+    }
+
+    // Khi hover mới hiển thị
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: $gray-600;
+    }
+
+    // Khi hover vào thì hiển thị đậm hơn
+    &::-webkit-scrollbar-thumb:hover {
+      // background-color: $gray-700;
+      // background-color: $primary;
+    }
+  }
+
+  .custom-slim-scrollbar {
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-track {
+      // Hiển thị một thanh có độ rộng 1px
+      // $gray-800 là màu body
+      // $gray-600 thì sáng hơn
+      // background: linear-gradient(to right, $gray-800 2px, $gray-600 3px 3px, $gray-800 3px);
+      background: linear-gradient(to right,
+          transparent 2px,
+          $gray-400 3px 3px,
+          transparent 3px);
+    }
+
+    // Luôn hiển thị
+    &::-webkit-scrollbar-thumb {
+      background-color: $gray-400; // sáng hơn body
+      border-radius: 2px;
+    }
+  }
+}
