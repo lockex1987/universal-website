@@ -178,6 +178,26 @@ router.post('/update-paths', async (request, response) => {
 })
 
 const updatePaths = async () => {
+  /*
+  db.orgs.aggregate([
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        parentId: 1,
+      },
+    },
+    {
+      $graphLookup: {
+        from: 'orgs',
+        startWith: '$parentId',
+        connectFromField: 'parentId',
+        connectToField: '_id',
+        as: 'parent',
+      },
+    },
+  ])
+  */
   const db = getDb()
   const data = await db.collection('orgs').find().toArray()
   generatePathOfRootNodes(data)
