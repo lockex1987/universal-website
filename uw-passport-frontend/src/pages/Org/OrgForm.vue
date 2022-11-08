@@ -28,7 +28,7 @@
     >
       <a-tree-select
         v-model:value="frm.parentId"
-        :tree-data="orgTree"
+        :tree-data="orgTreeIgnoreUpdating"
         show-search
         allow-clear
         class="form-control-max-width"
@@ -63,8 +63,17 @@
 </template>
 
 <script setup>
-defineProps({
+import { getTreeDataIgnoreId } from '@/helpers/tree.js'
+
+const props = defineProps({
   orgTree: Array,
+})
+
+const orgTreeIgnoreUpdating = computed(() => {
+  if (! frm._id) {
+    return props.orgTree
+  }
+  return getTreeDataIgnoreId(props.orgTree, frm._id)
 })
 
 const defaultFrm = {
