@@ -36,7 +36,7 @@
         <table class="table table-borderless">
           <thead>
             <tr>
-              <th class="text-right">
+              <th class="text-end">
                 #
               </th>
               <th class="text-center d-none d-md-table-cell">

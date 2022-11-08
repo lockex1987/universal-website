@@ -36,32 +36,14 @@
         <table class="table table-borderless">
           <thead>
             <tr>
-              <th class="text-right">
+              <th class="text-end">
                 #
               </th>
-              <th class="text-center d-none d-md-table-cell">
-                Avatar
+              <th>
+                Tên
               </th>
               <th>
-                Tên đăng nhập
-              </th>
-              <th>
-                Tên đầy đủ
-              </th>
-              <th>
-                Email
-              </th>
-              <th>
-                Số điện thoại
-              </th>
-              <th class="text-start d-none d-md-table-cell">
-                Tổ chức
-              </th>
-              <th class="text-start d-none d-md-table-cell">
-                Vai trò
-              </th>
-              <th class="text-start">
-                Trạng thái
+                Mô tả
               </th>
               <th class="text-center">
                 Hành động
@@ -71,63 +53,29 @@
 
           <tbody>
             <tr
-              v-for="(user, i) in orgList"
-              :key="user._id"
+              v-for="(org, i) in orgList"
+              :key="org._id"
             >
               <td class="text-end">
                 {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
               </td>
-              <td class="text-center d-none d-md-table-cell">
-                <img
-                  class="rounded-circle avatar object-fit-cover"
-                  title="Đổi ảnh đại diện"
-                  :src="user.thumbnail ? (user.thumbnail.startsWith('http') ? user.thumbnail : '/' + user.thumbnail) : '/static/images/user_avatar.png'"
-                  onerror="this.src = '/static/images/user_avatar.png'"
-                />
+              <td>
+                {{ org.name }}
               </td>
               <td>
-                {{ user.username }}
-              </td>
-              <td>
-                {{ user.fullName }}
-              </td>
-              <td>
-                {{ user.email }}
-              </td>
-              <td>
-                {{ user.phone }}
-              </td>
-              <td class="d-none d-md-table-cell">
-                Tổ chức
-              </td>
-              <td class="d-none d-md-table-cell">
-                Vai trò
-              </td>
-              <td>
-                <span
-                  v-if="user.isActive == 1"
-                  class="text-success"
-                >
-                  Đang hoạt động
-                </span>
-                <span
-                  v-else
-                  class="text-danger"
-                >
-                  Đã khóa
-                </span>
+                {{ org.description }}
               </td>
               <td class="text-center">
                 <i
                   class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
                   title="Cập nhật"
-                  @click="openForm(user)"
+                  @click="openForm(org)"
                 />
 
                 <i
                   class="cursor-pointer font-size-1.5 text-primary bi bi-trash ms-3"
                   title="Xóa"
-                  @click="deleteRow(user)"
+                  @click="deleteRow(org)"
                 />
               </td>
             </tr>
@@ -186,7 +134,7 @@ const search = async page => {
     page,
     size: pagi.size,
   }
-  const { data } = await axios.post('/api/user/search', params)
+  const { data } = await axios.post('/api/org/search', params)
   pagi.total = data.total
   pagi.currentPage = page
   orgList.value = data.list
@@ -194,14 +142,14 @@ const search = async page => {
 
 const debouncedSearch = debounce(() => search(1), 500)
 
-const openForm = user => {
-  frmRef.value.openForm(user)
+const openForm = org => {
+  frmRef.value.openForm(org)
   screen.value = 'form'
 }
 
-const deleteRow = user => {
+const deleteRow = org => {
   noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
-    const { data } = await axios.delete('/api/user/delete/' + user._id)
+    const { data } = await axios.delete('/api/org/delete/' + org._id)
     if (data.code == 0) {
       noti.success('Xóa bản ghi thành công')
       search(1)
@@ -213,10 +161,3 @@ onMounted(() => {
   search(1)
 })
 </script>
-
-<style scoped>
-.avatar {
-  width: 1rem;
-  height: 1rem;
-}
-</style>

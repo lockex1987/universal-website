@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3 fw-bold">
     {{ actionName }}
-    người dùng
+    tổ chức
   </div>
 
   <a-form
@@ -11,65 +11,22 @@
     @finish="saveForm()"
     layout="vertical"
   >
-    <div class="mb-3 mt-3 form-control-max-width py-4 text-center">
-      <a-form-item name="avatar">
-        <a-upload
-          v-model:file-list="frm.avatar"
-          name="avatar"
-          list-type="picture-card"
-          :show-upload-list="false"
-          :before-upload="beforeUpload"
-          accept=".png, .jpg, .jpeg, .gif; capture=camera"
-        >
-          <img
-            :src="imageUrl"
-            class="rounded avatar object-fit-cover"
-            onerror="this.src = '/static/images/user_avatar.png'"
-          />
-        </a-upload>
-      </a-form-item>
-
-      <div class="text-muted font-size-0.75 mt-3">
-        * Click vào ảnh đại diện để đổi ảnh
-      </div>
-    </div>
-
     <a-form-item
-      label="Tên đăng nhập"
-      name="username"
+      label="Tên"
+      name="name"
     >
       <a-input
-        v-model:value.lazy.trim="frm.username"
+        v-model:value.lazy.trim="frm.name"
         class="form-control-max-width"
       />
     </a-form-item>
 
     <a-form-item
-      label="Tên đầy đủ"
-      name="fullName"
+      label="Mô tả"
+      name="description"
     >
-      <a-input
-        v-model:value.lazy.trim="frm.fullName"
-        class="form-control-max-width"
-      />
-    </a-form-item>
-
-    <a-form-item
-      label="Email"
-      name="email"
-    >
-      <a-input
-        v-model:value.lazy.trim="frm.email"
-        class="form-control-max-width"
-      />
-    </a-form-item>
-
-    <a-form-item
-      label="Số điện thoại"
-      name="phone"
-    >
-      <a-input
-        v-model:value.lazy.trim="frm.phone"
+      <a-textarea
+        v-model:value.lazy.trim="frm.description"
         class="form-control-max-width"
       />
     </a-form-item>
@@ -93,26 +50,18 @@
 <script setup>
 const defaultFrm = {
   _id: null,
-  username: '',
-  fullName: '',
-  email: '',
-  phone: '',
-  avatar: [],
+  name: '',
+  description: '',
 }
 
 const frm = reactive(defaultFrm)
 
 const rules = {
-  username: [{ required: true }],
-  fullName: [{ required: true }],
-  email: [{ type: 'email', required: true }],
-  phone: [{ required: false, min: 9, max: 12 }],
-  avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
+  name: [{ required: true, max: 100 }],
+  description: [{ max: 500 }],
 }
 
 const frmRef = ref()
-
-const imageUrl = ref('')
 
 const isSaving = ref(false)
 
@@ -123,44 +72,13 @@ const actionName = computed(() => {
   return frm._id ? 'Cập nhật' : 'Thêm mới'
 })
 
-const bindOldInfo = async _id => {
-  const { data } = await axios.get('/api/user/get/' + _id)
-  Object.assign(frm, data)
-  frm.avatar = []
-  imageUrl.value = data.avatar
-    ? (data.avatar.startsWith('http') ? data.avatar : '/' + data.avatar)
-    : '/static/images/user_avatar.png'
-}
-
-const beforeUpload = file => {
-  // Preview
-  imageUrl.value = URL.createObjectURL(file)
-
-  // Không upload AJAX
-  return false
-}
-
 const saveForm = async () => {
   isSaving.value = true
 
-  const params = new FormData()
-  params.append('_id', frm._id)
-  params.append('username', frm.username)
-  params.append('fullName', frm.fullName)
-  params.append('email', frm.email)
-  params.append('phone', frm.phone)
-
-  // Lấy phần tử file cuối cùng
-  const fileList = frm.avatar
-  const temp = fileList.length ? fileList[fileList.length - 1] : null
-  if (temp) {
-    const avatarFile = temp.originFileObj
-    params.append('avatar', avatarFile)
-  }
-
+  const params = frm
   const method = frm._id ? 'put' : 'post'
   const path = frm._id ? 'update' : 'insert'
-  const { data } = await axios[method]('/api/user/' + path, params)
+  const { data } = await axios[method]('/api/org/' + path, params)
 
   isSaving.value = false
 
@@ -182,10 +100,9 @@ const openForm = row => {
   frmRef.value.resetFields()
 
   if (row) {
-    bindOldInfo(row._id)
+    Object.assign(frm, row)
   } else {
     Object.assign(frm, defaultFrm)
-    imageUrl.value = '/static/images/user_avatar.png'
   }
 }
 
@@ -193,10 +110,3 @@ defineExpose({
   openForm,
 })
 </script>
-
-<style scoped>
-.avatar {
-  width: 104px;
-  height: 104px;
-}
-</style>
