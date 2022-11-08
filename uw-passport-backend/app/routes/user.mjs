@@ -38,11 +38,30 @@ router.post('/search', async (request, response) => {
   const total = await col.count(query)
 
   const list = await col
+    /*
     .find(query)
     .project(projection)
     .sort(order)
     .skip((page - 1) * size)
     .limit(size)
+    */
+    .aggregate([
+      {
+        $lookup:
+          {
+            from: 'orgs',
+            localField: 'orgId',
+            foreignField: '_id',
+            as: 'org',
+          },
+      },
+      {
+        $project: {
+          ...projection,
+          org: { $arrayElemAt: ['$org', 0] },
+        },
+      },
+    ])
     .toArray()
 
   response.json({
@@ -97,7 +116,9 @@ router.get('/get/:_id', async (request, response) => {
 })
 
 router.post('/insert', async (request, response) => {
+  const { orgId } = request.body
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone', 'orgId')
+  orgId && (data.orgId = ObjectId(orgId))
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
   response.json({
@@ -108,9 +129,10 @@ router.post('/insert', async (request, response) => {
 })
 
 router.put('/update', async (request, response) => {
-  const { _id } = request.body
+  const { _id, orgId } = request.body
   const query = { _id: ObjectId(_id) }
-  const data = pick(request.body, 'username', 'fullName', 'email', 'phone', 'orgId')
+  const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
+  orgId && (data.orgId = ObjectId(orgId))
   const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
   response.json({
