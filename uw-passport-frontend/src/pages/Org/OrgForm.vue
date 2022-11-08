@@ -22,6 +22,20 @@
     </a-form-item>
 
     <a-form-item
+      label="Tổ chức cha"
+      name="parentId"
+    >
+      <a-tree-select
+        v-model:value="frm.parentId"
+        :tree-data="orgTree"
+        show-search
+        allow-clear
+        class="form-control-max-width"
+        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+      />
+    </a-form-item>
+
+    <a-form-item
       label="Mô tả"
       name="description"
     >
@@ -51,6 +65,7 @@
 const defaultFrm = {
   _id: null,
   name: '',
+  parentId: null,
   description: '',
 }
 
@@ -105,6 +120,47 @@ const openForm = row => {
     Object.assign(frm, defaultFrm)
   }
 }
+
+const getAllOrg = async () => {
+  const { data } = await axios.get('/api/org/get-all')
+
+  const treeData = []
+  data.forEach(rootOrg => {
+    if (! rootOrg.parentId) {
+      const children = getChildrenNode(data, rootOrg)
+      const rootNode = {
+        title: rootOrg.name,
+        value: rootOrg._id,
+        children,
+      }
+      treeData.push(rootNode)
+    }
+  })
+
+  orgTree.value = treeData
+}
+
+const getChildrenNode = (flatData, parentOrg) => {
+  const children = []
+  flatData.forEach(childOrg => {
+    if (childOrg.parentId == parentOrg._id) {
+      const grandChildren = getChildrenNode(flatData, childOrg)
+      const childNode = {
+        title: childOrg.name,
+        value: childOrg._id,
+        children: grandChildren,
+      }
+      children.push(childNode)
+    }
+  })
+  return children
+}
+
+const orgTree = ref([])
+
+onMounted(() => {
+  getAllOrg()
+})
 
 defineExpose({
   openForm,

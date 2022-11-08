@@ -46,7 +46,9 @@ export const getAllOrg = async (request, response) => {
 router.get('/get-all', getAllOrg)
 
 router.post('/insert', async (request, response) => {
+  const { parentId } = request.body
   const data = pick(request.body, 'name', 'description')
+  parentId && (data.parentId = ObjectId(parentId))
   const db = getDb()
   const result = await db.collection('orgs').insertOne(data)
   response.json({
@@ -57,9 +59,10 @@ router.post('/insert', async (request, response) => {
 })
 
 router.put('/update', async (request, response) => {
-  const { _id } = request.body
+  const { _id, parentId } = request.body
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'name', 'description')
+  parentId && (data.parentId = ObjectId(parentId))
   const db = getDb()
   const result = await db.collection('orgs').updateOne(query, { $set: data })
   response.json({
