@@ -5,7 +5,7 @@ export default {
 
   LOG_LEVEL: 'info',
 
-  // development, production, test
+  // dev, prod, test
   ENVIRONMENT: 'development',
 
   // DRIVE_DISK=local
@@ -16,6 +16,12 @@ export default {
     // db.copyDatabase('univeral-website', 'universal-website')
     // use univeral-website
     // db.dropDatabase()
-    DATABASE: 'univeral-website',
+
+    // `copyDatabase()` was removed because it was deprecated in MongoDB 4.0
+
+    // mongodump -d univeral-website
+
+    // mongorestore -d universal-website dump/univeral-website
+    DATABASE: 'universal-website',
   },
 }

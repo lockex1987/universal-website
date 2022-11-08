@@ -12,6 +12,6 @@ export default {
 
   MONGO: {
     URI: 'mongodb://localhost:27017',
-    DATABASE: 'univeral-website',
+    DATABASE: 'universal-website',
   },
 }
