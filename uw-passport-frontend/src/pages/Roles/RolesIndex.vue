@@ -2,7 +2,7 @@
   <Teleport to="#appBreadcrumb">
     <ol class="breadcrumb mb-0 ps-3">
       <li class="breadcrumb-item">Quản trị</li>
-      <li class="breadcrumb-item active">Quyền</li>
+      <li class="breadcrumb-item active">Vai trò</li>
     </ol>
   </Teleport>
 
@@ -53,29 +53,29 @@
 
           <tbody>
             <tr
-              v-for="(permission, i) in permissionList"
-              :key="permission._id"
+              v-for="(role, i) in roleList"
+              :key="role._id"
             >
               <td class="text-end">
                 {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
               </td>
               <td>
-                {{ permission.code }}
+                {{ role.code }}
               </td>
               <td>
-                {{ permission.name }}
+                {{ role.name }}
               </td>
               <td class="text-center">
                 <i
                   class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
                   title="Cập nhật"
-                  @click="openForm(permission)"
+                  @click="openForm(role)"
                 />
 
                 <i
                   class="cursor-pointer font-size-1.5 text-primary bi bi-trash ms-3"
                   title="Xóa"
-                  @click="deleteRow(permission)"
+                  @click="deleteRow(role)"
                 />
               </td>
             </tr>
@@ -119,7 +119,7 @@ const pagi = reactive({
   currentPage: 1,
 })
 
-const permissionList = ref([])
+const roleList = ref([])
 
 const frmRef = ref()
 
@@ -131,22 +131,22 @@ const search = async page => {
     page,
     size: pagi.size,
   }
-  const { data } = await axios.post('/api/permissions/search', params)
+  const { data } = await axios.post('/api/roles/search', params)
   pagi.total = data.total
   pagi.currentPage = page
-  permissionList.value = data.list
+  roleList.value = data.list
 }
 
 const debouncedSearch = debounce(() => search(1), 500)
 
-const openForm = permission => {
-  frmRef.value.openForm(permission)
+const openForm = role => {
+  frmRef.value.openForm(role)
   screen.value = 'form'
 }
 
-const deleteRow = permission => {
+const deleteRow = role => {
   noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
-    const { data } = await axios.delete('/api/permissions/delete/' + permission._id)
+    const { data } = await axios.delete('/api/roles/delete/' + role._id)
     if (data.code == 0) {
       noti.success('Xóa bản ghi thành công')
       search(1)

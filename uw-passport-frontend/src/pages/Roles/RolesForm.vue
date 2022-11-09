@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3 fw-bold">
     {{ action.actionName }}
-    quyền
+    vai trò
   </div>
 
   <a-form
@@ -91,7 +91,7 @@ const saveForm = async () => {
 
   const params = frm
   const { method, path, actionName, emitName } = action.value
-  const { data } = await axios[method]('/api/permissions/' + path, params)
+  const { data } = await axios[method]('/api/roles/' + path, params)
 
   isSaving.value = false
 
