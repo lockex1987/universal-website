@@ -11,7 +11,7 @@ const router = express.Router()
 router.post('/search', async (request, response) => {
   const { text, page, size } = request.body
 
-  const query = {}
+  const query = { deletedAt: null }
   if (text) {
     const temp = { $regex: text, $options: 'i' }
     query.$or = [
@@ -104,7 +104,8 @@ export const getAllUser = async (request, response) => {
     roles: 1,
     // password: 0
   }
-  const list = await db.collection('users').find()
+  const query = { deletedAt: null }
+  const list = await db.collection('users').find(query)
     .project(project)
     .toArray()
   response.json(list)
@@ -208,10 +209,13 @@ router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const query = { _id: ObjectId(_id) }
   const db = getDb()
-  const result = await db.collection('users').deleteOne(query)
+  // const result = await db.collection('users').deleteOne(query)
+  // Collection users được ánh xạ từ nhiều chỗ, không nên xóa thực sự
+  const data = { deletedAt: new Date() }
+  const result = await db.collection('users').updateOne(query, { $set: data })
   response.json({
     code: 0,
-    message: 'Deleted ' + result.deletedCount,
+    message: 'Deleted ' + result.modifiedCount, // deletedCount
   })
 })
 
