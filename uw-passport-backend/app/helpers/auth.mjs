@@ -47,9 +47,17 @@ const removeUser = async request => {
 }
 
 const getUser = async request => {
+  if (request._alreadyGetUser) {
+    return request._cachedUser
+  }
+
   const redisKey = getRedisKeyFromRequest(request)
   const redisValue = await redis.get(redisKey)
   const user = ! redisValue ? null : JSON.parse(redisValue)
+
+  request._alreadyGetUser = true
+  request._cachedUser = user
+
   return user
 }
 
