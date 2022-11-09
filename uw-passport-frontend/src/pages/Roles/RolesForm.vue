@@ -31,6 +31,33 @@
       />
     </a-form-item>
 
+    <div class="mb-3">
+      <div>
+        <label class="form-label">
+          Quyền của vai trò
+        </label>
+      </div>
+
+      <a-checkbox-group v-model:value="frm.permissions">
+        <div class="row">
+          <div
+            v-for="permission in dropdowns.permissionList"
+            :key="permission._id"
+            class="col-md-6 d-flex mb-2"
+          >
+            <div class="pt-1">
+              <a-checkbox :value="permission._id" />
+            </div>
+
+            <div class="ms-2">
+              <div>{{ permission.code }}</div>
+              <div class="text-muted">{{ permission.name }}</div>
+            </div>
+          </div>
+        </div>
+      </a-checkbox-group>
+    </div>
+
     <a-space>
       <a-button
         type="primary"
@@ -53,6 +80,7 @@ const defaultFrm = {
   _id: null,
   code: '',
   name: '',
+  permissions: [],
 }
 
 const frm = reactive({ ...defaultFrm })
@@ -65,6 +93,10 @@ const rules = {
 const frmRef = ref()
 
 const isSaving = ref(false)
+
+const dropdowns = reactive({
+  permissionList: [],
+})
 
 const emit = defineEmits(['close', 'inserted', 'updated'])
 
@@ -117,6 +149,15 @@ const openForm = row => {
     Object.assign(frm, defaultFrm)
   }
 }
+
+const getPermissionList = async () => {
+  const { data } = await axios.get('/api/roles/get-all-permissions')
+  dropdowns.permissionList = data
+}
+
+onMounted(() => {
+  getPermissionList()
+})
 
 defineExpose({
   openForm,
