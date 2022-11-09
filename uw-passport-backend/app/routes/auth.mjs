@@ -17,27 +17,15 @@ const router = express.Router()
 
 router.post('/login', async (request, response) => {
   const rules = {
-    username: {
-      type: 'string',
-      required: true,
-    },
-    password: {
-      type: 'string',
-      required: true,
-    },
+    username: { required: true },
+    password: { required: true },
   }
   await request.validate(request.body, rules)
 
   const { username, password } = request.body
   const db = getDb()
-  const query = {
-    username: {
-      $regex: '^' + username + '$',
-      $options: 'i',
-    },
-  }
-  const dbUser = await db.collection('users')
-    .findOne(query)
+  const query = { username: { $regex: '^' + username + '$', $options: 'i' } }
+  const dbUser = await db.collection('users').findOne(query)
 
   if (! dbUser) {
     return response.json({
@@ -53,15 +41,13 @@ router.post('/login', async (request, response) => {
     })
   }
 
-  // Save into Redis, cookie
-  const redisUser = {
-    ...pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar', 'thumbnail', '_id'),
-  }
+  const permissions = await getUserPermissions(dbUser._id)
+
+  const redisUser = pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar', 'thumbnail', '_id')
+  redisUser.permissions = permissions
   const sessionId = generateRandomSessionId()
-  // 10 ngày
   const expiredTimeSeconds = 10 * 24 * 60 * 60
   await saveUser(redisUser, request, sessionId, expiredTimeSeconds)
-
   setCookie(response, sessionId, expiredTimeSeconds)
 
   response.json({
@@ -94,23 +80,44 @@ router.get('/me', async (request, response) => {
 
   const db = getDb()
   const _id = redisUser._id
-  const dbUser = await db.collection('users').findOne({ _id: ObjectId(_id) })
+  const objId = ObjectId(_id)
+  const dbUser = await db.collection('users').findOne({ _id: objId })
   if (! dbUser) {
     await removeUser(request)
     clearCookie(response)
     return response.json({
       code: 1,
-      message: 'Not in DB',
+      message: 'Not in MongoDB',
     })
   }
 
+  const user = pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar', 'thumbnail', '_id')
   response.json({
     code: 0,
-    user: {
-      ...pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar', 'thumbnail', '_id'),
-    },
+    user,
   })
 })
+
+
+const getUserPermissions = async objId => {
+  const db = getDb()
+  const arr = await db.collection('users').aggregate([
+    { $match: { _id: objId } },
+    { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'rolesCol' } },
+    { $lookup: { from: 'permissions', localField: 'rolesCol.permissions', foreignField: '_id', as: 'permissionsCol' } },
+    { $unwind: '$permissionsCol' },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: ['$permissionsCol', '$$ROOT'],
+        },
+      },
+    },
+    { $project: { _id: 0, code: 1 } },
+  ])
+    .toArray()
+  return arr.map(e => e.code)
+}
 
 
 export default router
