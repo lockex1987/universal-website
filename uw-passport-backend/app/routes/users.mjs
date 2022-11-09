@@ -106,7 +106,7 @@ export const getAllUser = async (request, response) => {
   response.json(list)
 }
 
-router.get('/get-all', getAllUser)
+// router.get('/get-all', getAllUser)
 
 
 router.get('/get-all-orgs', getAllOrgs)

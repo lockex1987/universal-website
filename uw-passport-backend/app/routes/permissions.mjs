@@ -45,7 +45,7 @@ export const getAllPermissions = async (request, response) => {
   response.json(list)
 }
 
-router.get('/get-all', getAllPermissions)
+// router.get('/get-all', getAllPermissions)
 
 
 router.post('/insert', async (request, response) => {

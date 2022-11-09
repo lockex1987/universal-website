@@ -45,7 +45,7 @@ export const getAllRoles = async (request, response) => {
   response.json(list)
 }
 
-router.get('/get-all', getAllRoles)
+// router.get('/get-all', getAllRoles)
 
 
 router.post('/insert', async (request, response) => {
