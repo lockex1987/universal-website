@@ -3,6 +3,13 @@
     class="mx-auto mt-5"
     style="max-width: 500px"
   >
+    <div class="text-center mb-3">
+      <img
+        src="/static/images/logo.svg"
+        style="width: 5rem"
+      />
+    </div>
+
     <div
       v-show="errorMessage"
       class="mb-3 text-center text-danger"
