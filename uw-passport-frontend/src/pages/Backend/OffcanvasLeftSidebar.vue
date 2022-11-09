@@ -64,15 +64,17 @@
   </div>
 </template>
 
+
 <script setup>
 const menuList = [
-  { code: 'Org', name: 'Tổ chức' },
+  { code: 'Orgs', name: 'Tổ chức' },
   {
     code: 'Admin',
     name: 'Quản trị',
     children: [
-      { code: 'User', name: 'Người dùng' },
-      { code: 'Permission', name: 'Quyền' },
+      { code: 'Users', name: 'Người dùng' },
+      { code: 'Permissions', name: 'Quyền' },
+      { code: 'Roles', name: 'Vai trò' },
     ],
   },
   {
@@ -100,6 +102,7 @@ onMounted(() => {
   openActiveMenu()
 })
 </script>
+
 
 <style lang="scss">
 #offcanvasLeftSidebar {

@@ -106,7 +106,7 @@
   </div>
 
   <div v-show="screen == 'form'">
-    <OrgForm
+    <OrgsForm
       ref="frmRef"
       :orgTree="dropdowns.orgTree"
       @close="screen = 'list'"
@@ -117,7 +117,7 @@
 </template>
 
 <script setup>
-import OrgForm from './OrgForm.vue'
+import OrgsForm from './OrgsForm.vue'
 import { debounce } from '@/helpers/common.js'
 import { convertToTreeData } from '@/helpers/tree.js'
 

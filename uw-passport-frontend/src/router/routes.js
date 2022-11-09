@@ -15,19 +15,24 @@ export default [
         component: () => import('@/pages/Profile/ProfileIndex.vue'),
       },
       {
-        path: 'User',
-        name: 'User',
-        component: () => import('@/pages/User/UserIndex.vue'),
+        path: 'Users',
+        name: 'Users',
+        component: () => import('@/pages/Users/UsersIndex.vue'),
       },
       {
-        path: 'Org',
-        name: 'Org',
-        component: () => import('@/pages/Org/OrgIndex.vue'),
+        path: 'Orgs',
+        name: 'Orgs',
+        component: () => import('@/pages/Orgs/OrgsIndex.vue'),
       },
       {
-        path: 'Permission',
-        name: 'Permission',
-        component: () => import('@/pages/Permission/PermissionIndex.vue'),
+        path: 'Permissions',
+        name: 'Permissions',
+        component: () => import('@/pages/Permissions/PermissionsIndex.vue'),
+      },
+      {
+        path: 'Roles',
+        name: 'Roles',
+        component: () => import('@/pages/Roles/RolesIndex.vue'),
       },
       {
         path: 'DemoButton',

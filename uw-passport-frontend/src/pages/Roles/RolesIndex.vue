@@ -95,7 +95,7 @@
   </div>
 
   <div v-show="screen == 'form'">
-    <PermissionForm
+    <RolesForm
       ref="frmRef"
       @close="screen = 'list'"
       @updated="search(pagi.currentPage)"
@@ -106,7 +106,7 @@
 
 
 <script setup>
-import PermissionForm from './PermissionForm.vue'
+import RolesForm from './RolesForm.vue'
 import { debounce } from '@/helpers/common.js'
 
 const filter = reactive({

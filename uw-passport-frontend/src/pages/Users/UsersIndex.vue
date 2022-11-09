@@ -147,7 +147,7 @@
   </div>
 
   <div v-show="screen == 'form'">
-    <UserForm
+    <UsersForm
       ref="frmRef"
       :orgTree="dropdowns.orgTree"
       @close="screen = 'list'"
@@ -159,7 +159,7 @@
 
 <script setup>
 import { convertToTreeData } from '@/helpers/tree.js'
-import UserForm from './UserForm.vue'
+import UsersForm from './UsersForm.vue'
 import { debounce } from '@/helpers/common.js'
 
 const filter = reactive({
