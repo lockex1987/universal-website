@@ -61,7 +61,7 @@ router.post('/insert', async (request, response) => {
 
   const { parentId } = request.body
   const data = pick(request.body, 'name', 'description')
-  parentId && (data.parentId = ObjectId(parentId))
+  data.parentId = parentId ? ObjectId(parentId) : null
   const db = getDb()
   const result = await db.collection('orgs').insertOne(data)
 
@@ -133,7 +133,7 @@ router.put('/update', async (request, response) => {
   const shouldUpdatePaths = (parentId ?? '') != (row.parentId?.toString() ?? '')
 
   const data = pick(request.body, 'name', 'description')
-  parentId && (data.parentId = ObjectId(parentId))
+  data.parentId = parentId ? ObjectId(parentId) : null
 
   const result = await db.collection('orgs').updateOne(query, { $set: data })
 
@@ -159,13 +159,24 @@ router.delete('/delete/:_id', async (request, response) => {
   // TODO: Cập nhật khóa ngoại chỗ người dùng
 
   const { _id } = request.params
-  // const query = { _id: ObjectId(_id) }
-  const query = { path: { $regex: '/' + _id + '/' } }
-
+  const objId = ObjectId(_id)
   const db = getDb()
+  const row = await db.collection('orgs').findOne({ _id: objId })
+  await db.collection('orgs').updateMany(
+    { parentId: objId },
+    { $set: { parentId: row.parentId } },
+  )
+
   const result = await db.collection('orgs')
-    // .deleteOne(query)
-    .deleteMany(query)
+    .deleteOne({ _id: objId })
+    // .deleteMany({ path: { $regex: '/' + _id + '/' } })
+
+  await updatePaths()
+
+  db.collection('users').updateMany(
+    { orgId: objId },
+    { $set: { orgId: null } },
+  )
 
   response.json({
     code: 0,

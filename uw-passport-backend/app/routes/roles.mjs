@@ -100,9 +100,16 @@ router.put('/update', async (request, response) => {
 
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
-  const query = { _id: ObjectId(_id) }
+  const objId = ObjectId(_id)
+  const query = { _id: objId }
   const db = getDb()
   const result = await db.collection('roles').deleteOne(query)
+
+  db.collection('users').updateMany(
+    { roles: objId },
+    { $pull: { roles: objId } },
+  )
+
   response.json({
     code: 0,
     message: 'Deleted ' + result.deletedCount,
