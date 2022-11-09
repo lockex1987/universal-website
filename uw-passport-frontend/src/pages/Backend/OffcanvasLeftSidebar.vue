@@ -136,9 +136,14 @@ onMounted(() => {
     color: rgba(0, 0, 0, 0.85);
     text-decoration: none;
 
+    &:hover,
     &.router-link-active {
       // .text-primary
       color: #7386D5;
+
+      // .bg-light
+      --bs-bg-opacity: 0.5;
+      background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
     }
   }
 
