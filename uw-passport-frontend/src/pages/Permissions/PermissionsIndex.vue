@@ -67,13 +67,13 @@
               </td>
               <td class="text-center">
                 <i
-                  class="cursor-pointer font-size-1.5 text-primary bi bi-pencil-square"
+                  class="cursor-pointer text-primary bi bi-pencil-square"
                   title="Cập nhật"
                   @click="openForm(permission)"
                 />
 
                 <i
-                  class="cursor-pointer font-size-1.5 text-primary bi bi-trash ms-3"
+                  class="cursor-pointer text-primary bi bi-trash ms-3"
                   title="Xóa"
                   @click="deleteRow(permission)"
                 />
