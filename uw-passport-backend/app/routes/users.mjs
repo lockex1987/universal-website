@@ -1,5 +1,6 @@
 import express from 'express'
 import { ObjectId } from 'mongodb'
+import bcrypt from 'bcrypt'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 import { getAllOrgs } from './orgs.mjs'
@@ -101,14 +102,19 @@ router.post('/insert', async (request, response) => {
     phone: [{ min: 9, max: 12 }],
     avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5, request }],
     orgId: [{ required: true }],
+    newPassword: [
+      { required: true, max: 100 },
+      { type: 'strongPassword' },
+    ],
   }
   await request.validate(request.body, rules)
 
-  const { orgId, isActive, roles } = request.body
+  const { orgId, isActive, roles, newPassword } = request.body
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
+  data.password = bcrypt.hashSync(newPassword, 10)
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
 
@@ -121,7 +127,7 @@ router.post('/insert', async (request, response) => {
 
 
 router.put('/update', async (request, response) => {
-  const { _id, orgId, isActive, roles } = request.body
+  const { _id, orgId, isActive, roles, newPassword } = request.body
   const rules = {
     username: [
       { required: true, max: 100 },
@@ -132,6 +138,10 @@ router.put('/update', async (request, response) => {
     phone: [{ min: 9, max: 12 }],
     avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5, request }],
     orgId: [{ required: true }],
+    newPassword: [
+      { max: 100 },
+      { type: 'strongPassword' },
+    ],
   }
   await request.validate(request.body, rules)
 
@@ -140,6 +150,9 @@ router.put('/update', async (request, response) => {
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
+  if (newPassword) {
+    data.password = bcrypt.hashSync(newPassword, 10)
+  }
   const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
 

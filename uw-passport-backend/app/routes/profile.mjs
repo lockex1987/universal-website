@@ -14,9 +14,9 @@ const router = express.Router()
 
 router.post('/change-password', async (request, response) => {
   const rules = {
-    oldPassword: [{ type: 'string', required: true }],
+    oldPassword: [{ required: true }],
     newPassword: [
-      { type: 'string', required: true },
+      { required: true, max: 100 },
       { type: 'strongPassword' },
     ],
   }

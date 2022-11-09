@@ -107,7 +107,7 @@
       </a-radio-group>
     </a-form-item>
 
-    <div class="mb-3">
+    <div class="mb-4">
       <div>
         <label class="form-label">
           Vai trò
@@ -133,6 +133,17 @@
         </div>
       </a-checkbox-group>
     </div>
+
+    <a-form-item
+      label="Mật khẩu"
+      name="newPassword"
+    >
+      <a-input-password
+        v-model:value.lazy.trim="frm.newPassword"
+        autocomplete="off"
+        class="form-control-max-width"
+      />
+    </a-form-item>
 
     <a-space>
       <a-button
@@ -167,6 +178,7 @@ const defaultFrm = {
   orgId: null,
   isActive: true,
   roles: [],
+  newPassword: '',
 }
 
 const frm = reactive({ ...defaultFrm })
@@ -178,6 +190,7 @@ const rules = {
   phone: [{ min: 9, max: 12 }],
   avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
   orgId: [{ required: true }],
+  newPassword: [{ required: true, max: 100 }],
 }
 
 const frmRef = ref()
@@ -226,6 +239,7 @@ const saveForm = async () => {
   params.append('orgId', frm.orgId)
   params.append('isActive', frm.isActive)
   params.append('roles', JSON.stringify(frm.roles))
+  params.append('newPassword', frm.newPassword)
 
   // Lấy phần tử file cuối cùng
   const fileList = frm.avatar
@@ -265,6 +279,7 @@ const openForm = row => {
     Object.assign(frm, defaultFrm)
     imageUrl.value = '/static/images/user_avatar.png'
   }
+
   frm.avatar = []
 }
 

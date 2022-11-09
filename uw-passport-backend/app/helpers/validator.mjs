@@ -6,6 +6,10 @@ import { getDb } from '#app/helpers/mongodb.mjs'
 import vietnameseValidatorMessages from './vietnameseValidatorMessages.mjs'
 
 const strongPassword = (rule, value, callback, source, options) => {
+  if (! value) {
+    return
+  }
+
   const errors = []
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]/
   if (! strongPasswordRegex.test(value)) {
@@ -15,6 +19,10 @@ const strongPassword = (rule, value, callback, source, options) => {
 }
 
 const telephone = (rule, value, callback, source, options) => {
+  if (! value) {
+    return
+  }
+
   const errors = []
   const telephoneRegex = /^\d{3}-\d{3}-\d{4}$/
   if (! telephoneRegex.test(value)) {

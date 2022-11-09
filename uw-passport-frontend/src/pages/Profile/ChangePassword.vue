@@ -36,6 +36,7 @@
       <a-button
         type="primary"
         html-type="submit"
+        :loading="isProcessing"
       >
         Đổi mật khẩu
         <span
@@ -62,26 +63,20 @@ const frmRef = ref()
 
 const rules = {
   oldPassword: [{ required: true }],
-  newPassword: [{ required: true }],
+  newPassword: [{ required: true, max: 100 }],
 }
 
 const isProcessing = ref(false)
 
 const changePassword = async () => {
-  if (isProcessing.value) {
-    return
-  }
-
   isProcessing.value = true
-  const params = {
-    ...frm,
-  }
+  const params = frm
   const { data } = await axios.post('/api/profile/change-password', params)
   isProcessing.value = false
 
   if (data.code == 0) {
-    cancelForm()
     noti.success('Đổi mật khẩu thành công')
+    cancelForm()
   } else if (data.code == 1) {
     noti.error(data.message)
   }
@@ -89,8 +84,9 @@ const changePassword = async () => {
 
 const cancelForm = () => {
   frmRef.value.resetFields()
-
-  frm.oldPassword = ''
-  frm.newPassword = ''
+  Object.assign(frm, {
+    oldPassword: '',
+    newPassword: '',
+  })
 }
 </script>
