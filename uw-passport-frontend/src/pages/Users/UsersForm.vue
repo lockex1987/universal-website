@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3 fw-bold">
-    {{ actionName }}
+    {{ action.actionName }}
     người dùng
   </div>
 
@@ -88,13 +88,32 @@
       />
     </a-form-item>
 
+    <a-form-item
+      label="Trạng thái"
+      name="isActive"
+    >
+      <a-radio-group v-model:value="frm.isActive">
+        <a-radio :value="true">
+          <span class="text-success">
+            Hoạt động
+          </span>
+        </a-radio>
+
+        <a-radio :value="false">
+          <span class="text-danger">
+            Đã khóa
+          </span>
+        </a-radio>
+      </a-radio-group>
+    </a-form-item>
+
     <a-space>
       <a-button
         type="primary"
         html-type="submit"
         :loading="isSaving"
       >
-        {{ actionName }}
+        {{ action.actionName }}
       </a-button>
 
       <a-button @click="closeForm()">
@@ -103,6 +122,7 @@
     </a-space>
   </a-form>
 </template>
+
 
 <script setup>
 defineProps({
@@ -117,6 +137,7 @@ const defaultFrm = {
   phone: '',
   avatar: [],
   orgId: null,
+  isActive: true,
 }
 
 const frm = reactive({ ...defaultFrm })
@@ -138,8 +159,22 @@ const isSaving = ref(false)
 
 const emit = defineEmits(['close', 'inserted', 'updated'])
 
-const actionName = computed(() => {
-  return frm._id ? 'Cập nhật' : 'Thêm mới'
+const action = computed(() => {
+  if (frm._id) {
+    return {
+      actionName: 'Cập nhật',
+      method: 'put',
+      path: 'update',
+      emitName: 'updated',
+    }
+  }
+
+  return {
+    actionName: 'Thêm mới',
+    method: 'post',
+    path: 'insert',
+    emitName: 'inserted',
+  }
 })
 
 const bindOldInfo = async _id => {
@@ -169,6 +204,7 @@ const saveForm = async () => {
   params.append('email', frm.email)
   params.append('phone', frm.phone)
   params.append('orgId', frm.orgId)
+  params.append('isActive', frm.isActive)
 
   // Lấy phần tử file cuối cùng
   const fileList = frm.avatar
@@ -178,17 +214,15 @@ const saveForm = async () => {
     params.append('avatar', avatarFile)
   }
 
-  const method = frm._id ? 'put' : 'post'
-  const path = frm._id ? 'update' : 'insert'
+  const { method, path, actionName, emitName } = action.value
   const { data } = await axios[method]('/api/users/' + path, params)
 
   isSaving.value = false
 
   if (data.code == 0) {
-    closeForm()
     noti.success(actionName.value + ' thành công')
-    emit('close')
-    emit(frm._id ? 'updated' : 'inserted')
+    closeForm()
+    emit(emitName)
   } else if (data.code == 1) {
     noti.error(data.message)
   }
@@ -213,6 +247,7 @@ defineExpose({
   openForm,
 })
 </script>
+
 
 <style scoped>
 .avatar {

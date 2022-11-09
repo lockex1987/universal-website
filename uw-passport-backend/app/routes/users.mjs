@@ -33,6 +33,7 @@ router.post('/search', async (request, response) => {
     avatar: 1,
     thumbnail: 1,
     orgId: 1,
+    isActive: 1,
     // password: 0
   }
 
@@ -85,7 +86,6 @@ router.post('/search', async (request, response) => {
 })
 
 
-// Export cho các route khác sử dụng, chỗ chọn người dùng
 export const getAllUser = async (request, response) => {
   const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
@@ -98,6 +98,7 @@ export const getAllUser = async (request, response) => {
     avatar: 1,
     thumbnail: 1,
     orgId: 1,
+    isActive: 1,
     // password: 0
   }
   const list = await db.collection('users').find()
@@ -126,6 +127,7 @@ router.get('/get/:_id', async (request, response) => {
     avatar: 1,
     thumbnail: 1,
     orgId: 1,
+    isActive: 1,
     // password: 0,
   }
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
@@ -133,6 +135,7 @@ router.get('/get/:_id', async (request, response) => {
   const row = await db.collection('users').findOne(query, { projection: project })
   response.json(row)
 })
+
 
 router.post('/insert', async (request, response) => {
   const rules = {
@@ -148,9 +151,10 @@ router.post('/insert', async (request, response) => {
   }
   await request.validate(request.body, rules)
 
-  const { orgId } = request.body
-  const data = pick(request.body, 'username', 'fullName', 'email', 'phone', 'orgId')
-  orgId && (data.orgId = ObjectId(orgId))
+  const { orgId, isActive } = request.body
+  const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
+  data.orgId = orgId ? ObjectId(orgId) : null
+  data.isActive = (isActive == 'true')
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
 
@@ -163,7 +167,7 @@ router.post('/insert', async (request, response) => {
 
 
 router.put('/update', async (request, response) => {
-  const { _id, orgId } = request.body
+  const { _id, orgId, isActive } = request.body
   const rules = {
     username: [
       { required: true, max: 100 },
@@ -179,7 +183,8 @@ router.put('/update', async (request, response) => {
 
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
-  orgId && (data.orgId = ObjectId(orgId))
+  data.orgId = orgId ? ObjectId(orgId) : null
+  data.isActive = (isActive == 'true')
   const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
 

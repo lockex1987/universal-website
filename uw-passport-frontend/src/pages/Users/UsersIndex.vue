@@ -105,10 +105,10 @@
               </td>
               <td>
                 <span
-                  v-if="user.isActive == 1"
+                  v-if="user.isActive"
                   class="text-success"
                 >
-                  Đang hoạt động
+                  Hoạt động
                 </span>
                 <span
                   v-else
@@ -156,6 +156,7 @@
     />
   </div>
 </template>
+
 
 <script setup>
 import { convertToTreeData } from '@/helpers/tree.js'
@@ -221,6 +222,7 @@ onMounted(() => {
   getOrgTree()
 })
 </script>
+
 
 <style scoped>
 .avatar {
