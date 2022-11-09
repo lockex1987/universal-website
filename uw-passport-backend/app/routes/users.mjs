@@ -2,8 +2,10 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
+import { getAllOrgs } from './orgs.mjs'
 
 const router = express.Router()
+
 
 router.post('/search', async (request, response) => {
   const { text, page, size } = request.body
@@ -82,6 +84,7 @@ router.post('/search', async (request, response) => {
   })
 })
 
+
 // Export cho các route khác sử dụng, chỗ chọn người dùng
 export const getAllUser = async (request, response) => {
   const db = getDb()
@@ -104,6 +107,10 @@ export const getAllUser = async (request, response) => {
 }
 
 router.get('/get-all', getAllUser)
+
+
+router.get('/get-all-orgs', getAllOrgs)
+
 
 router.get('/get/:_id', async (request, response) => {
   const { _id } = request.params
@@ -154,6 +161,7 @@ router.post('/insert', async (request, response) => {
   })
 })
 
+
 router.put('/update', async (request, response) => {
   const { _id, orgId } = request.body
   const rules = {
@@ -181,6 +189,7 @@ router.put('/update', async (request, response) => {
   })
 })
 
+
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const query = { _id: ObjectId(_id) }
@@ -191,5 +200,6 @@ router.delete('/delete/:_id', async (request, response) => {
     message: 'Deleted ' + result.deletedCount,
   })
 })
+
 
 export default router

@@ -131,7 +131,7 @@ const search = async page => {
     page,
     size: pagi.size,
   }
-  const { data } = await axios.post('/api/permission/search', params)
+  const { data } = await axios.post('/api/permissions/search', params)
   pagi.total = data.total
   pagi.currentPage = page
   permissionList.value = data.list
@@ -146,7 +146,7 @@ const openForm = permission => {
 
 const deleteRow = permission => {
   noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
-    const { data } = await axios.delete('/api/permission/delete/' + permission._id)
+    const { data } = await axios.delete('/api/permissions/delete/' + permission._id)
     if (data.code == 0) {
       noti.success('Xóa bản ghi thành công')
       search(1)

@@ -107,7 +107,7 @@ const saveForm = async () => {
   const params = frm
   const method = frm._id ? 'put' : 'post'
   const path = frm._id ? 'update' : 'insert'
-  const { data } = await axios[method]('/api/org/' + path, params)
+  const { data } = await axios[method]('/api/orgs/' + path, params)
 
   isSaving.value = false
 

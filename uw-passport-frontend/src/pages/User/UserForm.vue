@@ -143,7 +143,7 @@ const actionName = computed(() => {
 })
 
 const bindOldInfo = async _id => {
-  const { data } = await axios.get('/api/user/get/' + _id)
+  const { data } = await axios.get('/api/users/get/' + _id)
   Object.assign(frm, data)
   frm.avatar = []
   imageUrl.value = data.avatar
@@ -180,7 +180,7 @@ const saveForm = async () => {
 
   const method = frm._id ? 'put' : 'post'
   const path = frm._id ? 'update' : 'insert'
-  const { data } = await axios[method]('/api/user/' + path, params)
+  const { data } = await axios[method]('/api/users/' + path, params)
 
   isSaving.value = false
 

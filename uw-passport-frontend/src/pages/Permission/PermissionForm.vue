@@ -91,7 +91,7 @@ const saveForm = async () => {
 
   const params = frm
   const { method, path, actionName, emitName } = action.value
-  const { data } = await axios[method]('/api/permission/' + path, params)
+  const { data } = await axios[method]('/api/permissions/' + path, params)
 
   isSaving.value = false
 

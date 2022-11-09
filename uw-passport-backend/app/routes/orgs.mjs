@@ -5,6 +5,7 @@ import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
 
+
 router.post('/search', async (request, response) => {
   const { text, page, size, selectedOrg } = request.body
 
@@ -36,15 +37,16 @@ router.post('/search', async (request, response) => {
   })
 })
 
-// Export cho các route khác sử dụng, chỗ chọn tổ chức
-export const getAllOrg = async (request, response) => {
+
+export const getAllOrgs = async (request, response) => {
   const db = getDb()
   const list = await db.collection('orgs').find()
     .toArray()
   response.json(list)
 }
 
-router.get('/get-all', getAllOrg)
+router.get('/get-all', getAllOrgs)
+
 
 router.post('/insert', async (request, response) => {
   const rules = {
@@ -88,6 +90,7 @@ router.post('/insert', async (request, response) => {
     _id,
   })
 })
+
 
 router.put('/update', async (request, response) => {
   const { _id, parentId } = request.body
@@ -148,6 +151,7 @@ router.put('/update', async (request, response) => {
   })
 })
 
+
 router.delete('/delete/:_id', async (request, response) => {
   // Chú ý cần xóa cả các bản ghi con
   // Hoặc để các bản ghi con ra ngoài
@@ -169,6 +173,7 @@ router.delete('/delete/:_id', async (request, response) => {
   })
 })
 
+
 router.post('/update-paths', async (request, response) => {
   updatePaths()
   response.json({
@@ -176,6 +181,7 @@ router.post('/update-paths', async (request, response) => {
     message: 'Updated',
   })
 })
+
 
 const updatePaths = async () => {
   /*
@@ -208,6 +214,7 @@ const updatePaths = async () => {
   }
 }
 
+
 const generatePathOfRootNodes = data => {
   data.forEach(e => {
     if (! e.parentId) {
@@ -217,6 +224,7 @@ const generatePathOfRootNodes = data => {
     }
   })
 }
+
 
 const generatePathOfChildren = (data, parentObj) => {
   data.forEach(e => {
@@ -228,5 +236,6 @@ const generatePathOfChildren = (data, parentObj) => {
     }
   })
 }
+
 
 export default router

@@ -149,7 +149,7 @@ const search = async page => {
     page,
     size: pagi.size,
   }
-  const { data } = await axios.post('/api/org/search', params)
+  const { data } = await axios.post('/api/orgs/search', params)
   pagi.total = data.total
   pagi.currentPage = page
   orgList.value = data.list
@@ -164,7 +164,7 @@ const openForm = org => {
 
 const deleteRow = org => {
   noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
-    const { data } = await axios.delete('/api/org/delete/' + org._id)
+    const { data } = await axios.delete('/api/orgs/delete/' + org._id)
     if (data.code == 0) {
       noti.success('Xóa bản ghi thành công')
       search(1)
@@ -174,7 +174,7 @@ const deleteRow = org => {
 }
 
 const getOrgTree = async () => {
-  const { data } = await axios.get('/api/org/get-all')
+  const { data } = await axios.get('/api/orgs/get-all')
   dropdowns.orgTree = convertToTreeData(data)
 }
 
