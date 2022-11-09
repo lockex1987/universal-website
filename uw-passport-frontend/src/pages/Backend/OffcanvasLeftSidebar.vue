@@ -22,7 +22,6 @@
           v-for="lv1 in menuList"
           :key="lv1.code"
         >
-
           <li
             v-if="lv1.children && lv1.children.length"
             class="sub-menu"
@@ -53,7 +52,11 @@
             </ul>
           </li>
 
-          <li v-else>
+          <li
+            v-else
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#offcanvasLeftSidebar"
+          >
             <RouterLink :to="{ name: lv1.code }">
               {{ lv1.name }}
             </RouterLink>
@@ -126,6 +129,7 @@ onMounted(() => {
   }
 
   ul ul a {
+    // Cấp 2 thì thụt vào sâu hơn
     padding-left: 2.5rem !important;
   }
 
