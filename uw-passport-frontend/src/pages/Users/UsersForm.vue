@@ -206,15 +206,6 @@ const action = computed(() => {
   }
 })
 
-const bindOldInfo = async _id => {
-  const { data } = await axios.get('/api/users/get/' + _id)
-  Object.assign(frm, data)
-  frm.avatar = []
-  imageUrl.value = data.avatar
-    ? (data.avatar.startsWith('http') ? data.avatar : '/' + data.avatar)
-    : '/static/images/user_avatar.png'
-}
-
 const beforeUpload = file => {
   // Preview
   imageUrl.value = URL.createObjectURL(file)
@@ -266,11 +257,15 @@ const openForm = row => {
   frmRef.value.resetFields()
 
   if (row) {
-    bindOldInfo(row._id)
+    Object.assign(frm, row)
+    imageUrl.value = row.avatar
+      ? (row.avatar.startsWith('http') ? row.avatar : '/' + row.avatar)
+      : '/static/images/user_avatar.png'
   } else {
     Object.assign(frm, defaultFrm)
     imageUrl.value = '/static/images/user_avatar.png'
   }
+  frm.avatar = []
 }
 
 defineExpose({

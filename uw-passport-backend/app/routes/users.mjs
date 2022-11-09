@@ -111,38 +111,11 @@ export const getAllUser = async (request, response) => {
   response.json(list)
 }
 
-// router.get('/get-all', getAllUser)
-
 
 router.get('/get-all-orgs', getAllOrgs)
 
 
 router.get('/get-all-roles', getAllRoles)
-
-
-router.get('/get/:_id', async (request, response) => {
-  const { _id } = request.params
-  const db = getDb()
-  const query = { _id: ObjectId(_id) }
-  // Không trả về các thông tin nhạy cảm như mật khẩu
-  const project = {
-    _id: 1,
-    username: 1,
-    fullName: 1,
-    email: 1,
-    phone: 1,
-    avatar: 1,
-    thumbnail: 1,
-    orgId: 1,
-    isActive: 1,
-    roles: 1,
-    // password: 0,
-  }
-  // Nếu làm giống mongosh như dưới thì vẫn trả về password
-  // const row = await db.collection('users').findOne(query, projection)
-  const row = await db.collection('users').findOne(query, { projection: project })
-  response.json(row)
-})
 
 
 router.post('/insert', async (request, response) => {

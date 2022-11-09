@@ -9,24 +9,8 @@ import { getDb } from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
 import { pick, getBasePath } from '#app/helpers/common.mjs'
 
-/**
- * Resize ảnh avatar upload sử dụng Jimp cover.
- * Sử dụng jimp tiện hơn sharp.
- * Resize, crop, maintain ratio (cover).
- * Convert to JPG.
- * Reduce quality -> reduce size.
- * @param {string} inputPath
- * @param {string} outputPath
- * @param {number} width
- * @param {number} height
- */
-const resizeImage = async (inputPath, outputPath, width, height) => {
-  const image = await Jimp.read(inputPath)
-  image.cover(width, height)
-  await image.writeAsync(outputPath)
-}
-
 const router = express.Router()
+
 
 router.post('/change-password', async (request, response) => {
   const rules = {
@@ -69,6 +53,36 @@ router.post('/change-password', async (request, response) => {
     result,
   })
 })
+
+
+router.get('/get/:_id', async (request, response) => {
+  const { _id } = request.params
+  const db = getDb()
+  const query = { _id: ObjectId(_id) }
+  // Không trả về các thông tin nhạy cảm như mật khẩu
+  const project = {
+    _id: 1,
+    username: 1,
+    fullName: 1,
+    email: 1,
+    phone: 1,
+    avatar: 1,
+    thumbnail: 1,
+    orgId: 1,
+    isActive: 1,
+    roles: 1,
+    // password: 0,
+  }
+  // Nếu làm giống mongosh như dưới thì vẫn trả về password
+  // const row = await db.collection('users').findOne(query, projection)
+  const row = await db.collection('users').findOne(query, { projection: project })
+
+  const redisUser = await getUser(request)
+  const dbUser = await db.collection('users').findOne({ _id: ObjectId(redisUser._id) })
+
+  response.json(row)
+})
+
 
 router.post('/update-user-info', async (request, response) => {
   const rules = {
@@ -127,5 +141,24 @@ router.post('/update-user-info', async (request, response) => {
     thumbnail: thumbnailPath,
   })
 })
+
+
+/**
+ * Resize ảnh avatar upload sử dụng Jimp cover.
+ * Sử dụng jimp tiện hơn sharp.
+ * Resize, crop, maintain ratio (cover).
+ * Convert to JPG.
+ * Reduce quality -> reduce size.
+ * @param {string} inputPath
+ * @param {string} outputPath
+ * @param {number} width
+ * @param {number} height
+ */
+const resizeImage = async (inputPath, outputPath, width, height) => {
+  const image = await Jimp.read(inputPath)
+  image.cover(width, height)
+  await image.writeAsync(outputPath)
+}
+
 
 export default router
