@@ -5,6 +5,7 @@ import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
 
+
 router.post('/search', async (request, response) => {
   const { text, page, size } = request.body
 
@@ -35,15 +36,17 @@ router.post('/search', async (request, response) => {
   })
 })
 
-// Export cho các route khác sử dụng, chỗ chọn quyền
+
 export const getAllPermissions = async (request, response) => {
   const db = getDb()
   const list = await db.collection('permissions').find()
+    .sort({ name: 1 })
     .toArray()
   response.json(list)
 }
 
 router.get('/get-all', getAllPermissions)
+
 
 router.post('/insert', async (request, response) => {
   const rules = {
@@ -57,13 +60,14 @@ router.post('/insert', async (request, response) => {
 
   const data = pick(request.body, 'code', 'name')
   const db = getDb()
-  await db.collection('permissions').insertOne(data)
+  const result = await db.collection('permissions').insertOne(data)
 
   response.json({
     code: 0,
-    message: 'Inserted',
+    message: 'Inserted ' + result.insertedId,
   })
 })
+
 
 router.put('/update', async (request, response) => {
   const { _id } = request.body
@@ -87,6 +91,7 @@ router.put('/update', async (request, response) => {
   })
 })
 
+
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const query = { _id: ObjectId(_id) }
@@ -97,5 +102,6 @@ router.delete('/delete/:_id', async (request, response) => {
     message: 'Deleted ' + result.deletedCount,
   })
 })
+
 
 export default router

@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3 fw-bold">
-    {{ actionName }}
+    {{ action.actionName }}
     quyền
   </div>
 
@@ -37,7 +37,7 @@
         html-type="submit"
         :loading="isSaving"
       >
-        {{ actionName }}
+        {{ action.actionName }}
       </a-button>
 
       <a-button @click="closeForm()">
@@ -47,11 +47,8 @@
   </a-form>
 </template>
 
-<script setup>
-defineProps({
-  orgTree: Array,
-})
 
+<script setup>
 const defaultFrm = {
   _id: null,
   code: '',
@@ -71,25 +68,37 @@ const isSaving = ref(false)
 
 const emit = defineEmits(['close', 'inserted', 'updated'])
 
-const actionName = computed(() => {
-  return frm._id ? 'Cập nhật' : 'Thêm mới'
+const action = computed(() => {
+  if (frm._id) {
+    return {
+      actionName: 'Cập nhật',
+      method: 'put',
+      path: 'update',
+      emitName: 'updated',
+    }
+  }
+
+  return {
+    actionName: 'Thêm mới',
+    method: 'post',
+    path: 'insert',
+    emitName: 'inserted',
+  }
 })
 
 const saveForm = async () => {
   isSaving.value = true
 
   const params = frm
-  const method = frm._id ? 'put' : 'post'
-  const path = frm._id ? 'update' : 'insert'
+  const { method, path, actionName, emitName } = action.value
   const { data } = await axios[method]('/api/permission/' + path, params)
 
   isSaving.value = false
 
   if (data.code == 0) {
+    noti.success(actionName + ' thành công')
     closeForm()
-    noti.success(actionName.value + ' thành công')
-    emit('close')
-    emit(frm._id ? 'updated' : 'inserted')
+    emit(emitName)
   } else if (data.code == 1) {
     noti.error(data.message)
   }
@@ -102,7 +111,6 @@ const closeForm = () => {
 const openForm = row => {
   frmRef.value.resetFields()
 
-  // TODO: đang luôn là cập nhật
   if (row) {
     Object.assign(frm, row)
   } else {

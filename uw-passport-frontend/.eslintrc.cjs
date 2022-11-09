@@ -46,5 +46,6 @@ module.exports = {
         '!': true, // space after !
       },
     }],
+    'no-multiple-empty-lines': 'off',
   },
 }

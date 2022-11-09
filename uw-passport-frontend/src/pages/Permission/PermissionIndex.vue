@@ -104,6 +104,7 @@
   </div>
 </template>
 
+
 <script setup>
 import PermissionForm from './PermissionForm.vue'
 import { debounce } from '@/helpers/common.js'
