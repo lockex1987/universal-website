@@ -136,10 +136,10 @@
 
     <a-form-item
       label="Mật khẩu"
-      name="newPassword"
+      name="password"
     >
       <a-input-password
-        v-model:value.lazy.trim="frm.newPassword"
+        v-model:value.lazy.trim="frm.password"
         autocomplete="off"
         class="form-control-max-width"
       />
@@ -178,20 +178,20 @@ const defaultFrm = {
   orgId: null,
   isActive: true,
   roles: [],
-  newPassword: '',
+  password: '',
 }
 
 const frm = reactive({ ...defaultFrm })
 
-const rules = {
+const rules = computed(() => ({
   username: [{ required: true, max: 100 }],
   fullName: [{ required: true, max: 100 }],
   email: [{ type: 'email', required: true, max: 100 }],
   phone: [{ min: 9, max: 12 }],
   avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
   orgId: [{ required: true }],
-  newPassword: [{ required: true, max: 100 }],
-}
+  password: [{ required: ! frm._id, max: 100 }],
+}))
 
 const frmRef = ref()
 
@@ -239,7 +239,7 @@ const saveForm = async () => {
   params.append('orgId', frm.orgId)
   params.append('isActive', frm.isActive)
   params.append('roles', JSON.stringify(frm.roles))
-  params.append('newPassword', frm.newPassword)
+  params.append('password', frm.password)
 
   // Lấy phần tử file cuối cùng
   const fileList = frm.avatar

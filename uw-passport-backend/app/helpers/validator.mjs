@@ -7,7 +7,7 @@ import vietnameseValidatorMessages from './vietnameseValidatorMessages.mjs'
 
 const strongPassword = (rule, value, callback, source, options) => {
   if (! value) {
-    return
+    return true
   }
 
   const errors = []
@@ -20,7 +20,7 @@ const strongPassword = (rule, value, callback, source, options) => {
 
 const telephone = (rule, value, callback, source, options) => {
   if (! value) {
-    return
+    return true
   }
 
   const errors = []
@@ -32,6 +32,10 @@ const telephone = (rule, value, callback, source, options) => {
 }
 
 const unique = async (rule, value, callback, source, options) => {
+  if (! value) {
+    return true
+  }
+
   // console.log(rule)
   // console.log(value)
   // console.log(source)
@@ -63,7 +67,7 @@ const unique = async (rule, value, callback, source, options) => {
 
 const exist = async (rule, value, callback, source, options) => {
   if (! value) {
-    return
+    return true
   }
 
   const col = rule.dbCol
