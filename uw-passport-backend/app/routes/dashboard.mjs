@@ -6,11 +6,16 @@ const router = express.Router()
 
 router.get('/stats', async (request, response) => {
   const db = getDb()
-
-  const permissions = db.collection('permissions').count({})
-  const roles = db.collection('roles').count({})
-  const users = db.collection('users').count({})
-
+  const promises = [
+    db.collection('permissions').count({}),
+    db.collection('roles').count({}),
+    db.collection('users').count({}),
+  ]
+  const [
+    permissions,
+    roles,
+    users,
+  ] = await Promise.all(promises)
   response.json({
     permissions,
     roles,
