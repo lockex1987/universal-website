@@ -101,7 +101,13 @@
                 {{ user.org?.name }}
               </td>
               <td class="d-none d-md-table-cell">
-                Vai trò
+                <span
+                  v-for="role in user.roleList"
+                  :key="role._id"
+                  class="badge bg-primary bg-opacity-10 text-primary fw-normal"
+                >
+                  {{ role.name }}
+                </span>
               </td>
               <td>
                 <span
@@ -150,6 +156,7 @@
     <UsersForm
       ref="frmRef"
       :orgTree="dropdowns.orgTree"
+      :roleList="dropdowns.roleList"
       @close="screen = 'list'"
       @updated="search(pagi.currentPage)"
       @inserted="search(1)"
@@ -177,6 +184,7 @@ const userList = ref([])
 
 const dropdowns = reactive({
   orgTree: [],
+  roleList: [],
 })
 
 const frmRef = ref()
@@ -217,9 +225,15 @@ const getOrgTree = async () => {
   dropdowns.orgTree = convertToTreeData(data)
 }
 
+const getRoleList = async () => {
+  const { data } = await axios.get('/api/users/get-all-roles')
+  dropdowns.roleList = data
+}
+
 onMounted(() => {
   search(1)
   getOrgTree()
+  getRoleList()
 })
 </script>
 

@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 import { getAllOrgs } from './orgs.mjs'
+import { getAllRoles } from './roles.mjs'
 
 const router = express.Router()
 
@@ -34,6 +35,7 @@ router.post('/search', async (request, response) => {
     thumbnail: 1,
     orgId: 1,
     isActive: 1,
+    roles: 1,
     // password: 0
   }
 
@@ -49,31 +51,31 @@ router.post('/search', async (request, response) => {
     .limit(size)
     */
     .aggregate([
+      { $match: query },
+      { $sort: sort },
+      { $skip: (page - 1) * size },
+      { $limit: size },
       {
-        $match: query,
+        $lookup: {
+          from: 'orgs',
+          localField: 'orgId',
+          foreignField: '_id',
+          as: 'org',
+        },
       },
       {
-        $sort: sort,
-      },
-      {
-        $skip: (page - 1) * size,
-      },
-      {
-        $limit: size,
-      },
-      {
-        $lookup:
-          {
-            from: 'orgs',
-            localField: 'orgId',
-            foreignField: '_id',
-            as: 'org',
-          },
+        $lookup: {
+          from: 'roles',
+          localField: 'roles',
+          foreignField: '_id',
+          as: 'roleList',
+        },
       },
       {
         $project: {
           ...project,
           org: { $arrayElemAt: ['$org', 0] },
+          roleList: 1,
         },
       },
     ])
@@ -99,6 +101,7 @@ export const getAllUser = async (request, response) => {
     thumbnail: 1,
     orgId: 1,
     isActive: 1,
+    roles: 1,
     // password: 0
   }
   const list = await db.collection('users').find()
@@ -111,6 +114,9 @@ export const getAllUser = async (request, response) => {
 
 
 router.get('/get-all-orgs', getAllOrgs)
+
+
+router.get('/get-all-roles', getAllRoles)
 
 
 router.get('/get/:_id', async (request, response) => {
@@ -128,6 +134,7 @@ router.get('/get/:_id', async (request, response) => {
     thumbnail: 1,
     orgId: 1,
     isActive: 1,
+    roles: 1,
     // password: 0,
   }
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
@@ -151,10 +158,11 @@ router.post('/insert', async (request, response) => {
   }
   await request.validate(request.body, rules)
 
-  const { orgId, isActive } = request.body
+  const { orgId, isActive, roles } = request.body
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
+  data.roles = JSON.parse(roles).map(r => ObjectId(r))
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
 
@@ -167,7 +175,7 @@ router.post('/insert', async (request, response) => {
 
 
 router.put('/update', async (request, response) => {
-  const { _id, orgId, isActive } = request.body
+  const { _id, orgId, isActive, roles } = request.body
   const rules = {
     username: [
       { required: true, max: 100 },
@@ -185,6 +193,7 @@ router.put('/update', async (request, response) => {
   const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
+  data.roles = JSON.parse(roles).map(r => ObjectId(r))
   const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
 

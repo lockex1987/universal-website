@@ -72,9 +72,9 @@ const menuList = [
     code: 'Admin',
     name: 'Quản trị',
     children: [
-      { code: 'Users', name: 'Người dùng' },
       { code: 'Permissions', name: 'Quyền' },
       { code: 'Roles', name: 'Vai trò' },
+      { code: 'Users', name: 'Người dùng' },
     ],
   },
   {

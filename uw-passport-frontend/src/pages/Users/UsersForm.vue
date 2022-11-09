@@ -107,6 +107,33 @@
       </a-radio-group>
     </a-form-item>
 
+    <div class="mb-3">
+      <div>
+        <label class="form-label">
+          Vai trò của người dùng
+        </label>
+      </div>
+
+      <a-checkbox-group v-model:value="frm.roles">
+        <div class="row">
+          <div
+            v-for="role in roleList"
+            :key="role._id"
+            class="col-md-12 d-flex mb-2"
+          >
+            <div class="pt-1">
+              <a-checkbox :value="role._id" />
+            </div>
+
+            <div class="ms-2">
+              <div>{{ role.code }}</div>
+              <div class="text-muted">{{ role.name }}</div>
+            </div>
+          </div>
+        </div>
+      </a-checkbox-group>
+    </div>
+
     <a-space>
       <a-button
         type="primary"
@@ -127,6 +154,7 @@
 <script setup>
 defineProps({
   orgTree: Array,
+  roleList: Array,
 })
 
 const defaultFrm = {
@@ -138,6 +166,7 @@ const defaultFrm = {
   avatar: [],
   orgId: null,
   isActive: true,
+  roles: [],
 }
 
 const frm = reactive({ ...defaultFrm })
@@ -205,6 +234,7 @@ const saveForm = async () => {
   params.append('phone', frm.phone)
   params.append('orgId', frm.orgId)
   params.append('isActive', frm.isActive)
+  params.append('roles', JSON.stringify(frm.roles))
 
   // Lấy phần tử file cuối cùng
   const fileList = frm.avatar
