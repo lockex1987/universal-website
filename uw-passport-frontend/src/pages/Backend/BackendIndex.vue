@@ -10,10 +10,12 @@
   </div>
 </template>
 
+
 <script setup>
 import TopHeader from './TopHeader.vue'
 import OffcanvasLeftSidebar from './OffcanvasLeftSidebar.vue'
 </script>
+
 
 <style>
 @media (min-width: 992px) {

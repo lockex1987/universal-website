@@ -28,6 +28,7 @@
   </div>
 </template>
 
+
 <script setup>
 import UserInfo from './UserInfo.vue'
 import ChangePassword from './ChangePassword.vue'

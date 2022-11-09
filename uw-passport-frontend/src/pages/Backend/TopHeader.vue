@@ -30,7 +30,6 @@
       >
         <img
           class="rounded-circle avatar object-fit-cover me-2"
-          title="Đổi ảnh đại diện"
           :src="authStore.user.thumbnail ? ('/' + authStore.user.thumbnail) : '/static/images/user_avatar.png'"
           onerror="this.src = '/static/images/user_avatar.png'"
         />
@@ -65,6 +64,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { useAuthStore } from '@/stores/auth.js'
 
@@ -82,9 +82,11 @@ const processLogout = async () => {
 }
 </script>
 
+
 <style scoped>
 .avatar {
   width: 1rem;
   height: 1rem;
+  vertical-align: -2px;
 }
 </style>

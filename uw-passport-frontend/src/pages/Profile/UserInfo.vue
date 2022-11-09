@@ -84,6 +84,7 @@
   </a-form>
 </template>
 
+
 <script setup>
 import { useAuthStore } from '@/stores/auth.js'
 
@@ -160,6 +161,7 @@ onMounted(() => {
   initInfo()
 })
 </script>
+
 
 <style scoped>
 .avatar {

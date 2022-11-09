@@ -1,11 +1,7 @@
-import axios from 'axios'
 import { useAuthStore } from '@/stores/auth.js'
 
 export default async to => {
-  const path = to.path
-
   const authStore = useAuthStore()
-
   if (! authStore.user._id) {
     const { data } = await axios.get('/api/auth/me')
     if (data.code == 0) {
@@ -13,6 +9,7 @@ export default async to => {
     }
   }
 
+  const path = to.path
   if (! authStore.user._id) {
     const isLoginOnlyPage = path.startsWith('/Backend')
     if (path == '/' || isLoginOnlyPage) {
