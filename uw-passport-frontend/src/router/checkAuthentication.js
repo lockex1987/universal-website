@@ -21,7 +21,7 @@ export default async to => {
     }
   } else {
     if (path == '/' || path == '/Login') {
-      return { name: 'Profile' }
+      return { name: 'Dashboard' }
     }
   }
 }

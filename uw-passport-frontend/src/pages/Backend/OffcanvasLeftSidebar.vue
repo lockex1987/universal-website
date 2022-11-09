@@ -70,11 +70,12 @@
 
 <script setup>
 const menuList = [
-  { code: 'Orgs', name: 'Tổ chức' },
+  { code: 'Dashboard', name: 'Dashboard' },
   {
     code: 'Admin',
     name: 'Quản trị',
     children: [
+      { code: 'Orgs', name: 'Tổ chức' },
       { code: 'Permissions', name: 'Quyền' },
       { code: 'Roles', name: 'Vai trò' },
       { code: 'Users', name: 'Người dùng' },

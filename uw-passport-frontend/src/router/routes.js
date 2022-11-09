@@ -15,6 +15,11 @@ export default [
         component: () => import('@/pages/Profile/ProfileIndex.vue'),
       },
       {
+        path: 'Dashboard',
+        name: 'Dashboard',
+        component: () => import('@/pages/Dashboard/DashboardIndex.vue'),
+      },
+      {
         path: 'Users',
         name: 'Users',
         component: () => import('@/pages/Users/UsersIndex.vue'),

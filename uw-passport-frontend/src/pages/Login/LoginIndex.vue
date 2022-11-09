@@ -82,7 +82,7 @@ const processLogin = async () => {
   if (data.code == 0) {
     errorMessage.value = ''
     authStore.user = data.user
-    const defaultPagePath = '/Backend/Profile'
+    const defaultPagePath = '/Backend/Dashboard'
     router.push(authStore.beforeLoginPath || defaultPagePath)
     authStore.beforeLoginPath = ''
   } else if (data.code == 1) {
