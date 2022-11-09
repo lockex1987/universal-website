@@ -55,8 +55,9 @@ router.post('/change-password', async (request, response) => {
 })
 
 
-router.get('/get/:_id', async (request, response) => {
-  const { _id } = request.params
+router.get('/get_user_info', async (request, response) => {
+  const redisUser = await getUser(request)
+  const { _id } = redisUser
   const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
@@ -73,12 +74,22 @@ router.get('/get/:_id', async (request, response) => {
     roles: 1,
     // password: 0,
   }
+
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
   // const row = await db.collection('users').findOne(query, projection)
-  const row = await db.collection('users').findOne(query, { projection: project })
 
-  const redisUser = await getUser(request)
-  const dbUser = await db.collection('users').findOne({ _id: ObjectId(redisUser._id) })
+  // Làm thế này thì không trả về password
+  // const row = await db.collection('users').findOne(query, { projection: project })
+
+  const list = await db.collection('users').aggregate([
+    { $match: query },
+    { $lookup: { from: 'orgs', localField: 'orgId', foreignField: '_id', as: 'org' } },
+    { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'roleList' } },
+    { $project: { ...project, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
+  ])
+    .toArray()
+
+  const row = list[0]
 
   response.json(row)
 })

@@ -42,43 +42,15 @@ router.post('/search', async (request, response) => {
   const col = db.collection('users')
   const total = await col.count(query)
 
-  const list = await col
-    /*
-    .find(query)
-    .project(project)
-    .sort(sort)
-    .skip((page - 1) * size)
-    .limit(size)
-    */
-    .aggregate([
-      { $match: query },
-      { $sort: sort },
-      { $skip: (page - 1) * size },
-      { $limit: size },
-      {
-        $lookup: {
-          from: 'orgs',
-          localField: 'orgId',
-          foreignField: '_id',
-          as: 'org',
-        },
-      },
-      {
-        $lookup: {
-          from: 'roles',
-          localField: 'roles',
-          foreignField: '_id',
-          as: 'roleList',
-        },
-      },
-      {
-        $project: {
-          ...project,
-          org: { $arrayElemAt: ['$org', 0] },
-          roleList: 1,
-        },
-      },
-    ])
+  const list = await col.aggregate([
+    { $match: query },
+    { $sort: sort },
+    { $skip: (page - 1) * size },
+    { $limit: size },
+    { $lookup: { from: 'orgs', localField: 'orgId', foreignField: '_id', as: 'org' } },
+    { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'roleList' } },
+    { $project: { ...project, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
+  ])
     .toArray()
 
   response.json({

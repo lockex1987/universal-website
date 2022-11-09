@@ -29,13 +29,13 @@
       </div>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
       <label class="form-label">
         Tên đăng nhập
       </label>
 
       <div class="text-body">
-        {{ authStore.user?.username }}
+        {{ userInfo.username }}
       </div>
     </div>
 
@@ -68,6 +68,41 @@
         class="form-control-max-width"
       />
     </a-form-item>
+
+    <a-form-item label="Tổ chức">
+      {{ userInfo.org?.name }}
+    </a-form-item>
+
+    <a-form-item label="Trạng thái">
+      <span
+        v-if="userInfo.isActive"
+        class="text-success"
+      >
+        Hoạt động
+      </span>
+      <span
+        v-else
+        class="text-danger"
+      >
+        Đã khóa
+      </span>
+    </a-form-item>
+
+    <div class="mb-4">
+      <label class="form-label">
+        Vai trò
+      </label>
+
+      <div>
+        <span
+          v-for="role in userInfo.roleList"
+          :key="role._id"
+          class="badge bg-primary bg-opacity-10 text-primary fw-normal me-2"
+        >
+          {{ role.name }}
+        </span>
+      </div>
+    </div>
 
     <a-space>
       <a-button
@@ -104,17 +139,21 @@ const rules = {
   avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5 }],
 }
 
+const userInfo = reactive({})
+
 const frmRef = ref()
 
 const imageUrl = ref('')
 
-const initInfo = () => {
-  const loginUser = authStore.user
-  frm.fullName = loginUser.fullName
-  frm.email = loginUser.email
-  frm.phone = loginUser.phone
+const initInfo = async () => {
+  // const userInfo = authStore.user
+  const { data } = await axios.get('/api/profile/get_user_info')
+  Object.assign(userInfo, data)
+  frm.fullName = userInfo.fullName
+  frm.email = userInfo.email
+  frm.phone = userInfo.phone
   frm.avatar = []
-  imageUrl.value = loginUser.avatar ? ('/' + loginUser.avatar) : '/static/images/user_avatar.png'
+  imageUrl.value = userInfo.avatar ? ('/' + userInfo.avatar) : '/static/images/user_avatar.png'
 }
 
 const beforeUpload = file => {
@@ -141,15 +180,13 @@ const saveForm = async () => {
 
   const { data } = await axios.post('/api/profile/update-user-info', params)
   if (data.code == 0) {
-    // Object.assign(authStore.user, frm, data)
-    authStore.user = {
-      ...authStore.user,
+    Object.assign(authStore.user, {
       fullName: frm.fullName,
       email: frm.email,
       phone: frm.phone,
       avatar: data.avatar,
       thumbnail: data.thumbnail,
-    }
+    })
     initInfo()
     noti.success('Cập nhật thông tin thành công')
   } else if (data.code == 1) {

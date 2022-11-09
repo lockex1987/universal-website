@@ -110,7 +110,7 @@
     <div class="mb-3">
       <div>
         <label class="form-label">
-          Vai trò của người dùng
+          Vai trò
         </label>
       </div>
 

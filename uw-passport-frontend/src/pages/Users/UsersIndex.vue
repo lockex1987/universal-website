@@ -57,11 +57,11 @@
               <th class="text-start d-none d-md-table-cell">
                 Tổ chức
               </th>
-              <th class="text-start d-none d-md-table-cell">
-                Vai trò
-              </th>
               <th class="text-start">
                 Trạng thái
+              </th>
+              <th class="text-start d-none d-md-table-cell">
+                Vai trò
               </th>
               <th class="text-center">
                 Hành động
@@ -100,15 +100,6 @@
               <td class="d-none d-md-table-cell">
                 {{ user.org?.name }}
               </td>
-              <td class="d-none d-md-table-cell">
-                <span
-                  v-for="role in user.roleList"
-                  :key="role._id"
-                  class="badge bg-primary bg-opacity-10 text-primary fw-normal me-2"
-                >
-                  {{ role.name }}
-                </span>
-              </td>
               <td>
                 <span
                   v-if="user.isActive"
@@ -121,6 +112,15 @@
                   class="text-danger"
                 >
                   Đã khóa
+                </span>
+              </td>
+              <td class="d-none d-md-table-cell">
+                <span
+                  v-for="role in user.roleList"
+                  :key="role._id"
+                  class="badge bg-primary bg-opacity-10 text-primary fw-normal me-2"
+                >
+                  {{ role.name }}
                 </span>
               </td>
               <td class="text-center">
