@@ -5,7 +5,8 @@ export default async to => {
 
   const needPermission = to.meta?.permission
   if (needPermission) {
-    if (! (authStore.user.permissions ?? []).includes(needPermission)) {
+    const hasPermission = (authStore.user.permissions ?? []).includes(needPermission)
+    if (! hasPermission) {
       return { name: 'NoPermission' }
     }
   }
