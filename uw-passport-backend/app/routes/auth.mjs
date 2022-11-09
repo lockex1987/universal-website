@@ -14,7 +14,8 @@ import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
 
-router.post('/login', async (request, response, next) => {
+
+router.post('/login', async (request, response) => {
   const rules = {
     username: {
       type: 'string',
@@ -70,6 +71,7 @@ router.post('/login', async (request, response, next) => {
   })
 })
 
+
 router.post('/logout', async (request, response) => {
   await removeUser(request)
   clearCookie(response)
@@ -78,6 +80,7 @@ router.post('/logout', async (request, response) => {
     message: 'Logout',
   })
 })
+
 
 router.get('/me', async (request, response) => {
   const redisUser = await getUser(request)
@@ -108,5 +111,6 @@ router.get('/me', async (request, response) => {
     },
   })
 })
+
 
 export default router
