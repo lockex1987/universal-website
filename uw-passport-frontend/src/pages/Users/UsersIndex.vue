@@ -104,7 +104,7 @@
                 <span
                   v-for="role in user.roleList"
                   :key="role._id"
-                  class="badge bg-primary bg-opacity-10 text-primary fw-normal"
+                  class="badge bg-primary bg-opacity-10 text-primary fw-normal me-2"
                 >
                   {{ role.name }}
                 </span>
