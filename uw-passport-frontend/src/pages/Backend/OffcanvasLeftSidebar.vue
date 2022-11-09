@@ -70,29 +70,38 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/auth.js'
+import allMenus from '@/router/menus.js'
 
 const authStore = useAuthStore()
 
-const menuList = [
-  { code: 'Dashboard', name: 'Dashboard' },
-  {
-    code: 'Admin',
-    name: 'Quản trị',
-    children: [
-      { code: 'Orgs', name: 'Tổ chức', permission: 'Orgs' },
-      { code: 'Permissions', name: 'Quyền', permission: 'Permissions' },
-      { code: 'Roles', name: 'Vai trò', permission: 'Roles' },
-      { code: 'Users', name: 'Người dùng', permission: 'Users' },
-    ],
-  },
-  {
-    code: 'Demo',
-    name: 'Demo',
-    children: [
-      { code: 'DemoButton', name: 'Demo Button' },
-    ],
-  },
-]
+// Lấy danh sách menu được phân quyền
+const menuList = computed(() => {
+  const userPermissions = authStore.user.permissions ?? []
+  const hasPermission = lv => ! lv.permission || userPermissions.includes(lv.permission)
+
+  // Có thể có trường hợp menu không có do không được phân quyền menu con nào
+  allMenus.forEach(lv1 => {
+    lv1.isGroup = (lv1.children && lv1.children.length)
+  })
+
+  const result = []
+  allMenus.forEach(lv1 => {
+    if (hasPermission(lv1)) {
+      if (lv1.isGroup) {
+        const children = (lv1.children ?? []).filter(lv2 => hasPermission(lv2))
+        if (children.length) {
+          result.push({
+            ...lv1,
+            children,
+          })
+        }
+      } else {
+        result.push(lv1)
+      }
+    }
+  })
+  return result
+})
 
 const openActiveMenu = () => {
   const activeLink = document.querySelector('#offcanvasLeftSidebar .router-link-active')
