@@ -12,13 +12,13 @@
 
     <a-form
       :model="frm"
+      :rules="rules"
       @finish="processLogin"
       layout="vertical"
     >
       <a-form-item
         label="Tên đăng nhập"
         name="username"
-        :rules="[{ required: true }]"
       >
         <a-input v-model:value.lazy.trim="frm.username" />
       </a-form-item>
@@ -26,7 +26,6 @@
       <a-form-item
         label="Mật khẩu"
         name="password"
-        :rules="[{ required: true }]"
       >
         <a-input-password
           v-model:value.lazy.trim="frm.password"
@@ -39,6 +38,7 @@
           type="primary"
           html-type="submit"
           block
+          :loading="isProcessing"
         >
           Đăng nhập
           <span
@@ -51,10 +51,12 @@
   </div>
 </template>
 
+
 <script setup>
 import { useAuthStore } from '@/stores/auth.js'
 
 const authStore = useAuthStore()
+
 const router = useRouter()
 
 const frm = reactive({
@@ -62,19 +64,18 @@ const frm = reactive({
   password: '',
 })
 
+const rules = {
+  username: [{ required: true }],
+  password: [{ required: true }],
+}
+
 const errorMessage = ref('')
+
 const isProcessing = ref(false)
 
-const processLogin = async values => {
-  console.log(values)
-  if (isProcessing.value) {
-    return
-  }
-
+const processLogin = async () => {
   isProcessing.value = true
-  const params = {
-    ...frm,
-  }
+  const params = frm
   const { data } = await axios.post('/api/auth/login', params)
   isProcessing.value = false
 

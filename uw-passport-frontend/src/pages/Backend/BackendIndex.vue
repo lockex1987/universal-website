@@ -4,7 +4,7 @@
   <div class="d-lg-flex w-100">
     <OffcanvasLeftSidebar class="flex-shrink-0 main-content-height custom-slim-scrollbar" />
 
-    <div class="p-3 flex-grow-1 main-content-height overflow-auto">
+    <div class="p-3 flex-grow-1 main-content-height overflow-auto custom-scrollbar">
       <RouterView />
     </div>
   </div>

@@ -6,8 +6,8 @@
 
   <a-form
     :model="frm"
-    ref="frmRef"
     :rules="rules"
+    ref="frmRef"
     @finish="saveForm()"
     layout="vertical"
   >
