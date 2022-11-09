@@ -250,7 +250,7 @@ const saveForm = async () => {
   isSaving.value = false
 
   if (data.code == 0) {
-    noti.success(actionName.value + ' thành công')
+    noti.success(actionName + ' thành công')
     closeForm()
     emit(emitName)
   } else if (data.code == 1) {

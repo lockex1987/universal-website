@@ -27,7 +27,7 @@ router.post('/login', async (request, response) => {
   const query = { username: { $regex: '^' + username + '$', $options: 'i' } }
   const dbUser = await db.collection('users').findOne(query)
 
-  if (! dbUser) {
+  if (! dbUser || ! dbUser.isActive || dbUser.deletedAt) {
     return response.json({
       code: 1,
       message: 'Đăng nhập thất bại',
