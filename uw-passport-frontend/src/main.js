@@ -1,15 +1,12 @@
 import './scss/style.scss'
 
-// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import * as bootstrap from 'bootstrap'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-import './libs/noti/scss/noti.scss'
 import './libs/noti/js/noti.js'
 import './libs/axios.js'
 import './libs/async-validator.js'
-
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router/index.js'

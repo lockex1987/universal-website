@@ -40,7 +40,7 @@
         />
       </a-form-item>
 
-      <a-form-item>
+      <div>
         <a-button
           type="primary"
           html-type="submit"
@@ -48,12 +48,8 @@
           :loading="isProcessing"
         >
           Đăng nhập
-          <span
-            v-show="isProcessing"
-            class="spinner-border spinner-border-sm"
-          ></span>
         </a-button>
-      </a-form-item>
+      </div>
     </a-form>
   </div>
 </template>

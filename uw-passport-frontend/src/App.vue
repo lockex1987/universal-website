@@ -4,6 +4,7 @@
   </a-config-provider>
 </template>
 
+
 <script setup>
 // zh_CN, vi_VN, en_US, default
 // vi_VN thiếu nhiều so với mặc định

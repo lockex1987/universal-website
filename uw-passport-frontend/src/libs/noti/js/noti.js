@@ -1,3 +1,5 @@
+import '../scss/noti.scss'
+
 const noti = (() => {
   // Tùy chọn mặc định
   const DEFAULT_OPTIONS = {
