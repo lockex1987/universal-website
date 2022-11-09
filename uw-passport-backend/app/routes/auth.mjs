@@ -91,10 +91,9 @@ router.get('/me', async (request, response) => {
     })
   }
 
-  const user = pick(dbUser, 'username', 'fullName', 'email', 'phone', 'avatar', 'thumbnail', '_id')
   response.json({
     code: 0,
-    user,
+    user: redisUser,
   })
 })
 

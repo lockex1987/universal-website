@@ -20,24 +20,28 @@ export default [
         component: () => import('@/pages/Dashboard/DashboardIndex.vue'),
       },
       {
-        path: 'Users',
-        name: 'Users',
-        component: () => import('@/pages/Users/UsersIndex.vue'),
-      },
-      {
         path: 'Orgs',
         name: 'Orgs',
         component: () => import('@/pages/Orgs/OrgsIndex.vue'),
+        meta: { permission: 'Orgs' },
       },
       {
         path: 'Permissions',
         name: 'Permissions',
         component: () => import('@/pages/Permissions/PermissionsIndex.vue'),
+        meta: { permission: 'Permissions' },
       },
       {
         path: 'Roles',
         name: 'Roles',
         component: () => import('@/pages/Roles/RolesIndex.vue'),
+        meta: { permission: 'Roles' },
+      },
+      {
+        path: 'Users',
+        name: 'Users',
+        component: () => import('@/pages/Users/UsersIndex.vue'),
+        meta: { permission: 'Users' },
       },
       {
         path: 'DemoButton',
@@ -45,6 +49,11 @@ export default [
         component: () => import('@/pages/DemoComponents/DemoButton.vue'),
       },
     ],
+  },
+  {
+    path: '/NoPermission',
+    name: 'NoPermission',
+    component: () => import('@/pages/NoPermission/NoPermissionIndex.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
