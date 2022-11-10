@@ -1,6 +1,6 @@
 // import './scss/style.scss'
 
-import * as bootstrap from 'bootstrap'
+import bootstrap from 'bootstrap'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
