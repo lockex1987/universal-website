@@ -39,4 +39,18 @@ export default defineConfig({
       '/upload': 'http://localhost:3000',
     },
   },
+
+  build: {
+    // Bình thường khi dev có thể nhìn file vue
+    // khi build thì không nhìn được
+    // Phải chuyển thành true để nhìn được khi build
+    sourcemap: true, // true, false, 'inline', 'hidden'
+  },
+
+  css: {
+    // Bình thường khi dev không thể nhìn file scss
+    // Phải thiết lập true để nhìn được khi dev
+    // TODO: Để nhìn được khi build?
+    devSourcemap: true,
+  },
 })

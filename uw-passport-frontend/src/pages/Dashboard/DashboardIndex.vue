@@ -52,5 +52,6 @@ const getStats = async () => {
 
 onMounted(() => {
   getStats()
+  // throw new Error('Test source map')
 })
 </script>
