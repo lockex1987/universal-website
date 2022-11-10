@@ -6,15 +6,9 @@ Tuning MongoDB performance (partition, index)
 
 Edge.js parse sẵn template (Edge, Renderer, Template, Compiler)
 
-Trim Ant Design input
-
-Trim Express middleware
-
 ### Introduction
 
 Dựa trên sso-admin, sso-passport, landing-page
-
-Sử dụng Vue 3 (Composition API), Vue Router, Pinia, Vite, Express, MongoDB
 
 Clone:
 
@@ -40,19 +34,17 @@ Clone:
 
 Node.js, VSCode, Ubuntu
 
-Vue 3, Vue Router, Pinia, Vite, (TypeScript), ESLint
+Vue 3 (Composition API), Vue Router, Pinia
 
-Ant Design Vue (Element Plus)
+Bootstrap
 
-Express (AdonisJS) MPA (Shopping backend)
+Ant Design Vue, async-validator
 
-Express (AdonisJS) API (Admin backend)
+Vite, ESLint
 
-MPA (Shopping), SPA (Admin)
+Express
 
-Bootstrap 5.2 (include bootstrap-extended)
-
-MongoDB (MariaDB), Redis
+MongoDB, Redis
 
 Nginx
 
@@ -442,17 +434,7 @@ npm run lint
 npm run dev
 ```
 
-
-
-
-
 http://localhost:3000/
-
-
-
-
-
-
 
 #### Type Support for `.vue` Imports in TS
 
@@ -464,8 +446,6 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
    2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-
 
 #### ESLint
 
@@ -754,10 +734,6 @@ No, first HTML code:
 CSS is processed by JS.
 
 scss/style.scss
-
-
-
-
 
 ### Axios, Fake API, Pinia
 
