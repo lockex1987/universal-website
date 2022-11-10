@@ -10,7 +10,7 @@ export const useProductStore = defineStore({
   }),
 
   getters: {
-    list: state => state.ids.map(id => state.items[id]),
+    list: state => state.ids.map(_id => state.items[_id]),
 
     loaded() {
       return this.ids.length > 0
@@ -25,8 +25,8 @@ export const useProductStore = defineStore({
 
       const { data } = await axios.get('http://localhost:4000/api/products/search')
       this.ids = data.list.map(product => {
-        this.items[product.id] = product
-        return product.id
+        this.items[product._id] = product
+        return product._id
       })
     },
   },

@@ -15,5 +15,5 @@ import { usePersistCart } from '@/composables/usePersistCart.js'
 
 const productStore = useProductStore()
 productStore.getAll()
-usePersistCart()
+// usePersistCart()
 </script>

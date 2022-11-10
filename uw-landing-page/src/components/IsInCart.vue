@@ -5,7 +5,7 @@
   >
     <button
       class="btn btn-light"
-      @click="cartStore.remove(product.id)"
+      @click="cartStore.remove(product._id)"
     >
       -
     </button>
@@ -16,7 +16,7 @@
 
     <button
       class="btn btn-light"
-      @click="cartStore.add(product.id)"
+      @click="cartStore.add(product._id)"
     >
       +
     </button>
@@ -25,7 +25,7 @@
   <button
     v-else
     class="btn btn-light w-100"
-    @click="cartStore.add(product.id)"
+    @click="cartStore.add(product._id)"
   >
     Add to Cart
   </button>
@@ -43,7 +43,7 @@ const props = defineProps({
 const cartStore = useCartStore()
 
 const quantityInCart = computed(() => {
-  const temp = cartStore.contents[props.product.id]
+  const temp = cartStore.contents[props.product._id]
   return temp?.quantity ?? 0
 })
 </script>

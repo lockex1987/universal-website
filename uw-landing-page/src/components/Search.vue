@@ -18,11 +18,11 @@
     >
       <li
         v-for="product in searchResults"
-        :key="product.id"
+        :key="product._id"
       >
         <a
           href="#"
-          @click.prevent="gotoProductPage(product.id)"
+          @click.prevent="gotoProductPage(product._id)"
           class="dropdown-item text-truncate"
         >
           {{ product.title }}
@@ -53,8 +53,8 @@ const searchResults = computed(() => {
   return productStore.list.filter(product => product.title.toLowerCase().includes(temp))
 })
 
-const gotoProductPage = id => {
+const gotoProductPage = _id => {
   searchText.value = ''
-  router.push(`/product/${id}`)
+  router.push(`/product/${_id}`)
 }
 </script>

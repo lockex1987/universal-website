@@ -11,7 +11,7 @@
       <div>
         <RouterLink
           class="text-decoration-none text-body"
-          :to="`/product/${cartProduct.id}`"
+          :to="`/product/${cartProduct._id}`"
         >
           {{ cartProduct.title }}
         </RouterLink>
@@ -25,7 +25,7 @@
         <div class="btn-group">
           <button
             class="btn btn-light"
-            @click="cartStore.remove(cartProduct.id)"
+            @click="cartStore.remove(cartProduct._id)"
           >
             -
           </button>
@@ -36,7 +36,7 @@
 
           <button
             class="btn btn-light"
-            @click="cartStore.add(cartProduct.id)"
+            @click="cartStore.add(cartProduct._id)"
           >
             +
           </button>
