@@ -1,5 +1,5 @@
-import productRouter from './product.mjs'
+import products from './products.mjs'
 
 export default [
-  { path: '/product', router: productRouter },
+  { path: '/products', router: products },
 ]

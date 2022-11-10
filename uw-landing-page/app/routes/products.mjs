@@ -4,7 +4,7 @@ import { getDb } from '#app/helpers/mongodb.mjs'
 const router = express.Router()
 
 /*
-curl http://localhost:3000/product/search
+curl http://localhost:4000/api/product/search
 */
 router.get('/search', async (request, response) => {
   const db = getDb()

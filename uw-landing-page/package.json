@@ -10,7 +10,7 @@
     "lint-be": "eslint --fix --ext=.ts app & eslint --fix --ext=.ts providers & eslint --fix --ext=.ts contracts & eslint --fix --ext=.ts commands & eslint --fix --ext=.ts config",
     "lint-fe": "eslint --fix --ext=.js,.vue frontend/js",
     "clear-fe": "rm public/js/* & rm public/css/*",
-    "dev-app": "nodemon server.mjs"
+    "dev-app": "nodemon index.mjs"
   },
   "dependencies": {
     "@lockex1987/bootstrap-extended": "^1.2.1",
