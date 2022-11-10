@@ -21,11 +21,11 @@
         <img
           :src="avatar"
           class="avatar me-2 rounded-circle"
-          onerror="this.src = '/images/user-avatar.png'"
+          onerror="this.src = '/static/images/user-avatar.png'"
         />
 
         <span class="font-weight-500">
-          {{userFullName}}
+          {{ userFullName }}
         </span>
       </div>
 
@@ -70,11 +70,11 @@
         <img
           :src="comment.user.avatar"
           class="avatar me-2 rounded-circle"
-          onerror="this.src = '/images/user-avatar.png'"
+          onerror="this.src = '/static/images/user-avatar.png'"
         />
 
         <span class="font-weight-500">
-          {{comment.user.full_name}}
+          {{ comment.user.full_name }}
         </span>
 
         <i
@@ -83,7 +83,7 @@
         ></i>
 
         <span class="text-muted font-italic font-size-0.875 ms-3">
-          {{relativeTime(comment.created_at)}}
+          {{ relativeTime(comment.created_at) }}
         </span>
       </div>
 
@@ -112,11 +112,11 @@
             <img
               :src="avatar"
               class="avatar me-2 rounded-circle"
-              onerror="this.src = '/images/user-avatar.png'"
+              onerror="this.src = '/static/images/user-avatar.png'"
             />
 
             <span class="font-weight-500">
-              {{userFullName}}
+              {{ userFullName }}
             </span>
           </div>
 
@@ -159,11 +159,11 @@
             <img
               :src="reply.user.avatar"
               class="avatar me-2 rounded-circle"
-              onerror="this.src = '/images/user-avatar.png'"
+              onerror="this.src = '/static/images/user-avatar.png'"
             />
 
             <span class="font-weight-500">
-              {{reply.user.full_name}}
+              {{ reply.user.full_name }}
             </span>
 
             <i
@@ -172,7 +172,7 @@
             ></i>
 
             <span class="text-muted font-italic font-size-0.875 ms-3">
-              {{relativeTime(reply.created_at)}}
+              {{ relativeTime(reply.created_at) }}
             </span>
           </div>
 
@@ -277,7 +277,7 @@ export default {
       // Sắp xếp danh sách bình luận cấp 1 theo thời gian giảm dần (mới nhất ở đầu)
       // Sắp xếp danh sách bình luận cấp 2 theo thời gian tăng dần (để nắm được luồng thảo luận)
       const level1List = list
-        .filter(level1 => !level1.parent_id)
+        .filter(level1 => ! level1.parent_id)
         .map(level1 => {
           const level2List = list.filter(level2 => level2.parent_id == level1.id).reverse()
           return {
@@ -300,7 +300,7 @@ export default {
 
       const contentHtml = this.$refs.commentEditor.getCode().trim()
       const contentText = $('<div>' + contentHtml + '</div>')[0].textContent.trim()
-      if (!contentText) {
+      if (! contentText) {
         noti.error('Vui lòng nhập nội dung bình luận')
         return
       }
@@ -333,7 +333,7 @@ export default {
     async addReply(comment) {
       const contentHtml = this.$refs['replyEditor' + comment.id].getCode().trim()
       const contentText = $('<div>' + contentHtml + '</div>')[0].textContent.trim()
-      if (!contentText) {
+      if (! contentText) {
         noti.error('Vui lòng nhập nội dung trả lời')
         return
       }

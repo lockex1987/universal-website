@@ -5,7 +5,11 @@
         to="/"
         class="navbar-brand"
       >
-        <img src="/static/images/logo.svg" />
+        <img
+          src="/static/images/logo.svg"
+          class="me-2"
+          style="vertical-align: -9px;"
+        />
         SeC
       </RouterLink>
 

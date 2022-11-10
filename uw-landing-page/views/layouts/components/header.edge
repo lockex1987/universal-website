@@ -5,7 +5,7 @@
     <div class="navbar navbar-expand-md navbar-dark">
       <a href="/#"
           class="navbar-brand">
-          <img src="/images/logo.svg"
+          <img src="/static/images/logo.svg"
               class="site-logo" />
       </a>
 
@@ -58,10 +58,10 @@
                   class="dropdown">
                   <div class="d-flex align-items-center cursor-pointer dropdown-toggle header-text"
                       data-bs-toggle="dropdown">
-                      <img :src="avatar || '/images/user-avatar.png'"
+                      <img :src="avatar || '/static/images/user-avatar.png'"
                           class="rounded-circle object-fit-cover me-2"
                           style="width: 2rem; height: 2rem;"
-                          onerror="this.src = '/images/user-avatar.png'" />
+                          onerror="this.src = '/static/images/user-avatar.png'" />
 
                       @{{ userFullName }}
                   </div>

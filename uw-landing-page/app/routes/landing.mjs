@@ -33,7 +33,7 @@ const products = [
       'Deno',
     ],
     demoLink: 'https://lockex1987.com/posts/php%20-%20rename/',
-    screenshot: '/images/portfolio/rename.png',
+    screenshot: '/static/images/portfolio/rename.png',
   },
   {
     name: 'Gia đình tôi',
@@ -42,7 +42,7 @@ const products = [
       'JS',
     ],
     demoLink: 'https://lockex1987.com/posts/project%20-%20my%20family/',
-    screenshot: '/images/portfolio/my_family.png',
+    screenshot: '/static/images/portfolio/my_family.png',
   },
   {
     name: 'Three.js',
@@ -51,7 +51,7 @@ const products = [
       'Three.js',
     ],
     demoLink: 'https://github.com/lockex1987/learn-threejs',
-    screenshot: '/images/portfolio/learn_three.js.png',
+    screenshot: '/static/images/portfolio/learn_three.js.png',
   },
   {
     name: 'Lịch của tôi',
@@ -62,7 +62,7 @@ const products = [
       'Push notification',
     ],
     demoLink: 'https://lockex1987.com/posts/project%20-%20lich%20cua%20toi/',
-    screenshot: '/images/portfolio/lich_cua_toi.png',
+    screenshot: '/static/images/portfolio/lich_cua_toi.png',
   },
   {
     name: 'Batch downloader',
@@ -71,7 +71,7 @@ const products = [
       'Web extension',
     ],
     demoLink: 'https://lockex1987.com/posts/webext%20-%20batch%20downloader/',
-    screenshot: '/images/portfolio/batch_downloader.png',
+    screenshot: '/static/images/portfolio/batch_downloader.png',
   },
   {
     name: 'Cloud downloader',
@@ -80,7 +80,7 @@ const products = [
       'Web extension',
     ],
     demoLink: 'https://lockex1987.com/posts/webext%20-%20cloud%20downloader/',
-    screenshot: '/images/portfolio/cloud_downloader.png',
+    screenshot: '/static/images/portfolio/cloud_downloader.png',
   },
   {
     name: 'Media player',
@@ -90,7 +90,7 @@ const products = [
       'Vue',
     ],
     demoLink: 'https://lockex1987.com/posts/project%20-%20media%20player/',
-    screenshot: '/images/portfolio/media_player.png',
+    screenshot: '/static/images/portfolio/media_player.png',
   },
   {
     name: 'Tiện ích download subtitle từ YouTube',
@@ -99,7 +99,7 @@ const products = [
       'Web extension',
     ],
     demoLink: 'https://lockex1987.com/posts/webext%20-%20youtube%20subtitle%20downloader/',
-    screenshot: '/images/portfolio/youtube_subtitle_downloader.png',
+    screenshot: '/static/images/portfolio/youtube_subtitle_downloader.png',
   },
   {
     name: 'SSO Passport',
@@ -109,7 +109,7 @@ const products = [
       'Redis',
     ],
     demoLink: 'https://github.com/lockex1987/sso-passport',
-    screenshot: '/images/portfolio/sso_passport.png',
+    screenshot: '/static/images/portfolio/sso_passport.png',
   },
   {
     name: 'SSO Admin',
@@ -119,7 +119,7 @@ const products = [
       'Vue',
     ],
     demoLink: 'https://github.com/lockex1987/sso-admin',
-    screenshot: '/images/portfolio/sso_admin.png',
+    screenshot: '/static/images/portfolio/sso_admin.png',
   },
   {
     name: 'Landing Page',
@@ -130,7 +130,7 @@ const products = [
       'TypeScript',
     ],
     demoLink: 'https://github.com/lockex1987/landing-page',
-    screenshot: '/images/portfolio/landing_page.png',
+    screenshot: '/static/images/portfolio/landing_page.png',
   },
   {
     name: 'Websocket server',
@@ -142,18 +142,18 @@ const products = [
       'TypeScript',
     ],
     demoLink: 'https://github.com/lockex1987/websocket-server',
-    screenshot: '/images/portfolio/websocket_server.png',
+    screenshot: '/static/images/portfolio/websocket_server.png',
   },
 ]
 
 // Sử dụng ở clients.edge
 const clients = [
-  '/images/clients/bkav.png',
-  '/images/clients/nongnghiep.png',
-  '/images/clients/phapluat.png',
-  '/images/clients/quandoinhandan.png',
-  '/images/clients/sacombank.png',
-  '/images/clients/vtv.png',
+  '/static/images/clients/bkav.png',
+  '/static/images/clients/nongnghiep.png',
+  '/static/images/clients/phapluat.png',
+  '/static/images/clients/quandoinhandan.png',
+  '/static/images/clients/sacombank.png',
+  '/static/images/clients/vtv.png',
 ]
 
 // Sử dụng ở testimonials.edge
@@ -161,34 +161,34 @@ const testimonials = [
   {
     text: 'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.',
     author: 'Jean Smith',
-    avatar: '/images/testimonials/facebook-avatar.jpg',
+    avatar: '/static/images/testimonials/facebook-avatar.jpg',
   },
   {
     text: 'A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.',
     author: 'Carl Spencer',
-    avatar: '/images/testimonials/user-avatar.png',
+    avatar: '/static/images/testimonials/user-avatar.png',
   },
   {
     text: 'Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.',
     author: 'Ryan Peters',
-    avatar: '/images/testimonials/user-avatar.png',
+    avatar: '/static/images/testimonials/user-avatar.png',
   },
 ]
 
 // Sử dụng ở about.edge
 const employees = [
   {
-    avatar: '/images/employees/nvh.jpg',
+    avatar: '/static/images/employees/nvh.jpg',
     name: 'Nguyễn Văn Huyên',
     position: 'Developer',
   },
   {
-    avatar: '/images/employees/nat.jpg',
+    avatar: '/static/images/employees/nat.jpg',
     name: 'Nguyễn Anh Tuấn',
     position: 'CEO',
   },
   {
-    avatar: '/images/employees/cttd.jpg',
+    avatar: '/static/images/employees/cttd.jpg',
     name: 'Cao Thị Thùy Dương',
     position: 'Tester',
   },
