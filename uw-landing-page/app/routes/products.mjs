@@ -4,7 +4,7 @@ import { getDb } from '#app/helpers/mongodb.mjs'
 const router = express.Router()
 
 /*
-curl http://localhost:4000/api/product/search
+curl http://localhost:4000/api/products/search | jq .
 */
 router.get('/search', async (request, response) => {
   const db = getDb()
@@ -21,7 +21,7 @@ router.get('/search', async (request, response) => {
 
   response.json({
     code: 0,
-    data: productList,
+    list: productList,
   })
 })
 

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const fakeStoreUrl = 'https://fakestoreapi.com'
 
 export const useProductStore = defineStore({
   id: 'products',
@@ -24,9 +23,9 @@ export const useProductStore = defineStore({
       if (this.loaded) {
         return
       }
-      const resp = await axios.get(`${fakeStoreUrl}/products`)
-      const data = resp.data
-      this.ids = data.map(product => {
+
+      const { data } = await axios.get('http://localhost:4000/api/products/search')
+      this.ids = data.list.map(product => {
         this.items[product.id] = product
         return product.id
       })
