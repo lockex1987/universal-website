@@ -38,7 +38,7 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import CartCard from '@/components/CartCard.vue'
+import CartCard from './CartCard.vue'
 import { computed } from 'vue'
 import { useCartStore } from '@/stores/cart.js'
 import { useProductStore } from '@/stores/products.js'

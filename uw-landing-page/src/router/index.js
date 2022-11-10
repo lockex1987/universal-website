@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/pages/Home.vue' // trang chính, không lazy load
+import HomeView from '@/pages/Home/HomeIndex.vue' // trang chính, không lazy load
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,17 +13,17 @@ const router = createRouter({
     {
       path: '/product/:productId',
       name: 'product',
-      component: () => import('@/pages/Product.vue'),
+      component: () => import('@/pages/Product/ProductIndex.vue'),
     },
     {
       path: '/cart',
       name: 'cart',
-      component: () => import('@/pages/Cart.vue'),
+      component: () => import('@/pages/Cart/CartIndex.vue'),
     },
     {
       path: '/checkout',
       name: 'checkout',
-      component: () => import('@/pages/Checkout.vue'),
+      component: () => import('@/pages/Checkout/CheckoutIndex.vue'),
     },
   ],
 })

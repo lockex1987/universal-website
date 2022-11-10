@@ -53,7 +53,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import CartCardSkeleton from '@/components/CartCardSkeleton.vue'
+import CartCardSkeleton from './CartCardSkeleton.vue'
 import IsInCart from '@/components/IsInCart.vue'
 
 import { useProductStore } from '@/stores/products.js'
