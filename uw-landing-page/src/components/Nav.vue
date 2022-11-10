@@ -5,6 +5,7 @@
         to="/"
         class="navbar-brand"
       >
+        <img src="/static/images/logo.svg" />
         SeC
       </RouterLink>
 
