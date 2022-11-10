@@ -1,43 +1,53 @@
 <div class="site-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 section-title text-center mb-5">
-                Dịch vụ của chúng tôi
+  <div class="container">
+    <div class="row">
+      <div class="col-12 section-title text-center mb-5">
+        Dịch vụ của chúng tôi
+      </div>
+
+      <div class="col-12 text-center mb-3">
+        <!-- Lấy ảnh ở https://icons8.com/ -->
+        <img
+          src="/static/images/clay-bg.png"
+          class="img-fluid"
+          style="max-width: min(400px, 100%)"
+        />
+      </div>
+
+      @each (service in services)
+        <div
+          class="col-md-6 mb-4"
+          data-aos="fade-up"
+        >
+          <!-- border rounded shadow-sm p-4 -->
+          <div class="d-flex h-100 clay clay-card">
+            <div
+              class="flex-shrink-0 me-4"
+              style="width: 60px"
+            >
+              <div
+                class="font-size-2 bg-primary text-white rounded-circle d-inline-block d-flex align-items-center justify-content-center"
+                style="width: 50px; height: 50px;"
+              >
+                {{{ service.icon }}}
+              </div>
             </div>
 
-            <div class="col-12 text-center mb-3">
-                <!-- Lấy ảnh ở https://icons8.com/ -->
-                <img src="/static/images/clay-bg.png"
-                    class="img-fluid"
-                    style="max-width: min(400px, 100%)" />
+            <div class="service-about">
+              <div
+                class="font-size-2 mb-2 font-weight-500"
+                style="text-shadow: 0 0.075em rgb(0 0 0 / 25%);"
+              >
+                {{ service.name }}
+              </div>
+
+              <div>
+                {{ service.description }}
+              </div>
             </div>
-
-            @each (service in services)
-                <div class="col-md-6 mb-4"
-                    data-aos="fade-up">
-                    <!-- border rounded shadow-sm p-4 -->
-                    <div class="d-flex h-100 clay clay-card">
-                        <div class="flex-shrink-0 me-4"
-                            style="width: 60px">
-                            <div class="font-size-2 bg-primary text-white rounded-circle d-inline-block d-flex align-items-center justify-content-center"
-                                style="width: 50px; height: 50px;">
-                                {{{ service.icon }}}
-                            </div>
-                        </div>
-
-                        <div class="service-about">
-                            <div class="font-size-2 mb-2 font-weight-500"
-                                style="text-shadow: 0 0.075em rgb(0 0 0 / 25%);">
-                                {{ service.name }}
-                            </div>
-
-                            <div>
-                                {{ service.description }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @end
+          </div>
         </div>
+      @end
     </div>
+  </div>
 </div>

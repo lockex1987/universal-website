@@ -1,16 +1,18 @@
 <section class="site-section">
-    <div class="container">
-        <div class="section-title text-center mb-5">
-            Khách hàng
-        </div>
-
-        <div class="row">
-            @each (client in clients)
-                <div class="col-6 col-md-4 d-flex justify-content-center align-items-center client-logo">
-                    <img src="{{ client }}"
-                        class="img-fluid" />
-                </div>
-            @end
-        </div>
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      Khách hàng
     </div>
+
+    <div class="row">
+      @each (client in clients)
+        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center client-logo">
+          <img
+            src="{{ client }}"
+            class="img-fluid"
+          />
+        </div>
+      @end
+    </div>
+  </div>
 </section>
