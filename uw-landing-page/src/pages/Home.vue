@@ -21,6 +21,7 @@
   </main>
 </template>
 
+
 <script setup>
 import { computed } from 'vue'
 import ProductCard from '@/components/ProductCard.vue'

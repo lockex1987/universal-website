@@ -35,6 +35,7 @@
   </main>
 </template>
 
+
 <script setup>
 import { RouterLink } from 'vue-router'
 import CartCard from '@/components/CartCard.vue'

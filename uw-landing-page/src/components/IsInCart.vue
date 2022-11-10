@@ -31,6 +31,7 @@
   </button>
 </template>
 
+
 <script setup>
 import { computed } from 'vue'
 import { useCartStore } from '@/stores/cart.js'

@@ -15,6 +15,7 @@
         class=""
       >
         <i class="bi bi-cart fs-5"></i>
+
         <span class="px-2 bg-primary text-white badge ms-1">
           {{ cartStore.count }}
         </span>
@@ -22,6 +23,7 @@
     </div>
   </nav>
 </template>
+
 
 <script setup>
 import { RouterLink } from 'vue-router'

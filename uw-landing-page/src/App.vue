@@ -6,11 +6,12 @@
   </div>
 </template>
 
+
 <script setup>
 import { RouterView } from 'vue-router'
 import Nav from '@/components/Nav.vue'
 import { useProductStore } from '@/stores/products.js'
-import { usePersistCart } from '@/composables/usePersistCart'
+import { usePersistCart } from '@/composables/usePersistCart.js'
 
 const productStore = useProductStore()
 productStore.getAll()

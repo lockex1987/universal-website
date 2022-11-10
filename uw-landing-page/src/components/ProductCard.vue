@@ -30,6 +30,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { RouterLink } from 'vue-router'
 import IsInCart from './IsInCart.vue'

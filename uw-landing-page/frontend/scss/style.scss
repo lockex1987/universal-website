@@ -149,7 +149,9 @@ body {
 }
 
 // TODO: Có ở bootstrap-extended
-@each $color, $value in $theme-colors {
+@each $color,
+$value in $theme-colors {
+
   // Các màu đều là màu đậm
   // Nếu là nền màu thì cần chữ trắng
   // Nếu muốn chữ màu thì màu chữ phải sáng hơn (pha trắng)
