@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { CART_STORAGE } from '@/composables/usePersistCart.js'
-import { useProductStore } from './products.js'
+import { useProductsStore } from './products.js'
 
 export const useCartStore = defineStore({
   id: 'cart',
@@ -17,16 +17,16 @@ export const useCartStore = defineStore({
     },
 
     total() {
-      const products = useProductStore()
+      const productsStore = useProductsStore()
       return Object.keys(this.contents).reduce((acc, id) => {
-        return acc + products.items[id].price * this.contents[id].quantity
+        return acc + productsStore.items[id].price * this.contents[id].quantity
       }, 0)
     },
 
     formattedCart() {
-      const products = useProductStore()
+      const productsStore = useProductsStore()
 
-      if (!products.loaded) {
+      if (! productsStore.loaded) {
         return []
       }
 
@@ -35,10 +35,10 @@ export const useCartStore = defineStore({
 
         return {
           id: purchase.productId,
-          image: products.items[purchase.productId].image,
-          title: products.items[purchase.productId].title,
+          image: productsStore.items[purchase.productId].image,
+          title: productsStore.items[purchase.productId].title,
           quantity: purchase.quantity,
-          cost: purchase.quantity * products.items[purchase.productId].price,
+          cost: purchase.quantity * productsStore.items[purchase.productId].price,
         }
       })
     },
@@ -57,7 +57,7 @@ export const useCartStore = defineStore({
     },
 
     remove(productId) {
-      if (!this.contents[productId]) {
+      if (! this.contents[productId]) {
         return
       }
 

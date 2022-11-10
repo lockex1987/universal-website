@@ -17,7 +17,7 @@
 
       <RouterLink
         to="/cart"
-        class=""
+        class="ms-auto"
       >
         <i class="bi bi-cart fs-5"></i>
 

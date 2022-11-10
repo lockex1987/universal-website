@@ -4,12 +4,15 @@
       Home
     </h4>
 
-    <!-- Product list -->
+    <div class="mb-3">
+      Tổng cộng {{ products.length }} sản phẩm
+    </div>
+
     <div class="row">
       <ProductCardSkeleton
         v-for="n in 15"
         :key="n"
-        v-show="!productStore.loaded"
+        v-show="!productsStore.loaded"
       />
 
       <ProductCard
@@ -26,9 +29,9 @@
 import { computed } from 'vue'
 import ProductCard from './ProductCard.vue'
 import ProductCardSkeleton from './ProductCardSkeleton.vue'
-import { useProductStore } from '@/stores/products.js'
+import { useProductsStore } from '@/stores/products.js'
 
-const productStore = useProductStore()
+const productsStore = useProductsStore()
 
-const products = computed(() => productStore.list)
+const products = computed(() => productsStore.list)
 </script>

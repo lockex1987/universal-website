@@ -33,7 +33,7 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import IsInCart from './IsInCart.vue'
+import IsInCart from '@/components/IsInCart.vue'
 import { toCurrency } from '@/composables/common.js'
 
 defineProps({

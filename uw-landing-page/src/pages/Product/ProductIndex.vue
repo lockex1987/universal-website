@@ -5,7 +5,7 @@
     </h4>
 
     <div>
-      <div v-if="!productStore.loaded">
+      <div v-if="!productsStore.loaded">
         <CartCardSkeleton />
       </div>
 
@@ -55,11 +55,12 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import CartCardSkeleton from './CartCardSkeleton.vue'
 import IsInCart from '@/components/IsInCart.vue'
-
-import { useProductStore } from '@/stores/products.js'
+import { useProductsStore } from '@/stores/products.js'
 import { toCurrency } from '@/composables/common.js'
 
-const productStore = useProductStore()
 const route = useRoute()
-const product = computed(() => productStore.items[route.params.productId])
+
+const productsStore = useProductsStore()
+
+const product = computed(() => productsStore.items[route.params.productId])
 </script>

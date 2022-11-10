@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <div
         class="bg-light"
-        style="height: 25rem;"
+        style="height: 25rem"
       >
       </div>
     </div>

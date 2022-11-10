@@ -7,7 +7,7 @@
       type="text"
       placeholder="Search..."
       class="form-control"
-      :disabled="!productStore.loaded"
+      :disabled="!productsStore.loaded"
       v-model.trim="searchText"
       data-bs-toggle="dropdown"
     />
@@ -36,11 +36,11 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useProductStore } from '@/stores/products.js'
+import { useProductsStore } from '@/stores/products.js'
 
 const router = useRouter()
 
-const productStore = useProductStore()
+const productsStore = useProductsStore()
 
 const searchText = ref('')
 
@@ -50,7 +50,7 @@ const searchResults = computed(() => {
   }
 
   const temp = searchText.value.toLowerCase()
-  return productStore.list.filter(product => product.title.toLowerCase().includes(temp))
+  return productsStore.list.filter(product => product.title.toLowerCase().includes(temp))
 })
 
 const gotoProductPage = _id => {

@@ -4,9 +4,11 @@
       Cart
     </h4>
 
-    <div v-if="productStore.loaded">
+    <div v-if="productsStore.loaded">
       <div v-if="!formattedCart.length">
-        <div class="fs-3 text-danger">Cart is empty</div>
+        <div class="fs-3 text-danger">
+          Cart is empty
+        </div>
       </div>
 
       <div v-else>
@@ -41,10 +43,10 @@ import { RouterLink } from 'vue-router'
 import CartCard from './CartCard.vue'
 import { computed } from 'vue'
 import { useCartStore } from '@/stores/cart.js'
-import { useProductStore } from '@/stores/products.js'
+import { useProductsStore } from '@/stores/products.js'
 import { toCurrency } from '@/composables/common.js'
 
 const cartStore = useCartStore()
-const productStore = useProductStore()
+const productsStore = useProductsStore()
 const formattedCart = computed(() => cartStore.formattedCart)
 </script>

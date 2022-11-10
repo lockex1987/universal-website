@@ -10,11 +10,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import Nav from '@/components/Nav.vue'
-import { useProductStore } from '@/stores/products.js'
+import { useProductsStore } from '@/stores/products.js'
 import { usePersistCart } from '@/composables/usePersistCart.js'
 
-const productStore = useProductStore()
-productStore.getAll()
+const productsStore = useProductsStore()
+productsStore.getAll()
 
 // usePersistCart()
 </script>
