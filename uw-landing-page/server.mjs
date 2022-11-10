@@ -35,6 +35,7 @@ routes.forEach(({ path, router }) => {
 
 app.engine('edge', edgeTemplateEngine)
 app.set('view engine', 'edge')
+
 app.get('/', (request, response) => {
   response.render('index', {
     greeting: 'Hello world 2',

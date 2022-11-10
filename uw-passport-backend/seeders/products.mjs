@@ -1,9 +1,6 @@
 import { connect, close, getDb } from '#app/helpers/mongodb.mjs'
+import { pick } from '#app/helpers/common.mjs'
 import axios from 'axios'
-
-await connect()
-
-const db = getDb()
 
 const options = {
   proxy: {
@@ -14,17 +11,17 @@ const options = {
 }
 const { data } = await axios.get('https://fakestoreapi.com/products', options)
 console.log(data)
+const productList = data.map(e => pick(e,
+  'title',
+  'description',
+  'price',
+  'image',
+  'category',
+  'rating',
+))
 
-const productList = data.map(e => ({
-  title: e.title,
-  description: e.description,
-  price: e.price,
-  image: e.image,
-  category: e.category,
-  rating: e.rating,
-}))
-
+await connect()
+const db = getDb()
 const result = await db.collection('products').insertMany(productList)
 console.log(result.insertedCount)
-
 close()
