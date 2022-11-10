@@ -1,4 +1,3 @@
-/* eslint-env node */
 module.exports = {
   root: true,
   env: {
@@ -8,7 +7,7 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
-    // 'standard',
+    'standard',
   ],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -40,5 +39,6 @@ module.exports = {
         '!': true, // space after !
       },
     }],
+    'no-multiple-empty-lines': 'off',
   },
 }
