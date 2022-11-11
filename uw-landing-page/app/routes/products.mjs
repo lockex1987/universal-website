@@ -28,4 +28,30 @@ router.get('/detail/:_id', async (request, response) => {
   response.json(product)
 })
 
+router.post('/get-full-info', async (request, response) => {
+  const { itemList } = request.body
+  itemList.forEach(item => {
+    item.objId = ObjectId(item._id)
+  })
+
+  const db = getDb()
+  const query = { _id: { $in: itemList.map(item => item.objId) } }
+  const productList = await db.collection('products').find(query).toArray()
+  const resultList = []
+  itemList.forEach(item => {
+    const product = productList.find(p => p._id.equals(item.objId))
+    if (product) {
+      resultList.push({
+        ...item,
+        title: product.title,
+        image: product.image,
+        price: product.price,
+        cost: item.quantity * product.price,
+      })
+    }
+  })
+
+  response.json(resultList)
+})
+
 export default router

@@ -22,7 +22,10 @@
       </div>
 
       <div style="max-width: 12rem">
-        <IsInCart :product="product" />
+        <IsInCart
+          :product="product"
+          @changeItem="$emit('changeItem')"
+        />
       </div>
     </div>
   </div>
