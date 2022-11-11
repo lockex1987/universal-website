@@ -21,26 +21,8 @@
         {{ toCurrency(product.cost) }}
       </div>
 
-      <div>
-        <div class="btn-group">
-          <button
-            class="btn btn-light"
-            @click="removeFromCart(product._id)"
-          >
-            -
-          </button>
-
-          <button class="btn btn-ghost no-animation">
-            {{ product.quantity }}
-          </button>
-
-          <button
-            class="btn btn-light"
-            @click="addToCart(product._id)"
-          >
-            +
-          </button>
-        </div>
+      <div style="max-width: 12rem">
+        <IsInCart :product="product" />
       </div>
     </div>
   </div>
@@ -49,8 +31,8 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import { addToCart, removeFromCart } from '@/stores/cart.js'
 import { toCurrency } from '@/composables/common.js'
+import IsInCart from '@/components/IsInCart.vue'
 
 defineProps({
   product: Object,

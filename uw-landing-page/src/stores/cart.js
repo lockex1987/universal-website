@@ -16,21 +16,30 @@ export const itemsCount = computed(() => {
   return count
 })
 
-export const addToCart = _id => {
-  const existingItem = itemList.value.find(item => item._id === _id)
-  if (! existingItem) {
-    itemList.value.push({ _id, quantity: 1 })
+export const addToCart = product => {
+  const item = itemList.value.find(e => e._id === product._id)
+  if (! item) {
+    itemList.value.push({
+      _id: product._id,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+      quantity: 1,
+      cost: product.price,
+    })
   } else {
-    existingItem.quantity++
+    item.quantity++
+    item.cost = item.quantity * item.price
   }
   saveItemList()
 }
 
-export const removeFromCart = _id => {
-  const i = itemList.value.findIndex(item => item._id == _id)
+export const removeFromCart = product => {
+  const i = itemList.value.findIndex(e => e._id == product._id)
   if (i >= 0) {
     const item = itemList.value[i]
     item.quantity--
+    item.cost = item.quantity * item.price
     if (item.quantity <= 0) {
       itemList.value.splice(i, 1)
     }

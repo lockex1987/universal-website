@@ -5,7 +5,7 @@
     </h4>
 
     <div
-      v-if="!fullList.length"
+      v-if="!itemList.length"
       class="fs-3 text-danger"
     >
       Giỏ hàng rỗng
@@ -13,7 +13,7 @@
 
     <div v-else>
       <CartCard
-        v-for="(product, idx) in fullList"
+        v-for="(product, idx) in itemList"
         :key="product._id"
         :product="product"
         :class="{ 'border-top': idx > 0 }"
@@ -63,8 +63,8 @@ const fullList = computed(() => {
       _id: item._id,
       title: product.title,
       image: product.image,
-      quantity: item.quantity,
       price: product.price,
+      quantity: item.quantity,
       cost: item.quantity * product.price,
     }
   })
@@ -72,11 +72,11 @@ const fullList = computed(() => {
 
 const totalMoney = computed(() => {
   let n = 0
-  fullList.value.forEach(item => {
+  itemList.value.forEach(item => {
     n += item.cost
   })
   return n
 })
 
-getProductList()
+// getProductList()
 </script>
