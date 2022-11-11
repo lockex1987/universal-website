@@ -12,7 +12,7 @@
         <div class="card-title">
           <RouterLink
             class="text-decoration-none text-body"
-            :to="`/product/${product._id}`"
+            :to="`/Product/${product._id}`"
           >
             {{ product.title }}
           </RouterLink>

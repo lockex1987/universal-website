@@ -8,11 +8,13 @@
       placeholder="Tìm kiếm..."
       class="form-control"
       v-model.trim="searchText"
-      data-bs-toggle="dropdown"
+      @focus="showSearchResults = true"
+      @blur="closeSearchResults()"
     />
 
     <ul
-      class="dropdown-menu overflow-auto w-100"
+      v-show="showSearchResults"
+      class="dropdown-menu show overflow-auto w-100"
       style="max-height: 50vh"
     >
       <li
@@ -22,8 +24,14 @@
         <a
           href="#"
           @click.prevent="gotoProductPage(product._id)"
-          class="dropdown-item text-truncate"
+          class="dropdown-item text-truncate py-2"
         >
+          <img
+            :src="product.image"
+            alt="Product image"
+            class="me-2"
+            style="height: 2rem; object-fit: contain;"
+          />
           {{ product.title }}
         </a>
       </li>
@@ -40,6 +48,8 @@ import axios from 'axios'
 const router = useRouter()
 
 const searchText = ref('')
+
+const showSearchResults = ref(false)
 
 const productList = ref([])
 
@@ -59,7 +69,15 @@ const getProductList = async () => {
 
 const gotoProductPage = _id => {
   searchText.value = ''
-  router.push(`/product/${_id}`)
+  router.push(`/Product/${_id}`)
+}
+
+const closeSearchResults = () => {
+  // Phải thêm đoạn này nếu không sẽ bị ẩn luôn
+  // và sẽ không bắt được sự kiện khi click vào các sản phẩm
+  setTimeout(() => {
+    showSearchResults.value = false
+  }, 500)
 }
 
 onMounted(() => {

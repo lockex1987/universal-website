@@ -48,7 +48,7 @@
 
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import IsInCart from '@/components/IsInCart.vue'
@@ -72,4 +72,13 @@ const getProduct = async () => {
 }
 
 getProduct()
+
+// Watch đường dẫn thay đổi,
+// khi đang xem chi tiết sản phẩm A thì search ở header và vào lại sản phẩm B
+watch(route, newValue => {
+  // Chỉ khi vào lại route này
+  if (newValue.name == 'Product') {
+    getProduct()
+  }
+})
 </script>

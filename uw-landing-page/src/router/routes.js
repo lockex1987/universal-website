@@ -3,18 +3,18 @@ import HomeView from '@/pages/Home/HomeIndex.vue' // trang chính, không lazy l
 export default [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     // component: HomeView,
     component: () => import('@/pages/Cart/CartIndex.vue'),
   },
   {
-    path: '/product/:_id',
-    name: 'product',
+    path: '/Product/:_id',
+    name: 'Product',
     component: () => import('@/pages/Product/ProductIndex.vue'),
   },
   {
-    path: '/cart',
-    name: 'cart',
+    path: '/Cart',
+    name: 'Cart',
     component: () => import('@/pages/Cart/CartIndex.vue'),
   },
 ]
