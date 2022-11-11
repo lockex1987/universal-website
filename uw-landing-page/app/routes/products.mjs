@@ -28,10 +28,16 @@ router.get('/detail/:_id', async (request, response) => {
   response.json(product)
 })
 
+// checkout
 router.post('/get-full-info', async (request, response) => {
   const { itemList } = request.body
   itemList.forEach(item => {
     item.objId = ObjectId(item._id)
+  })
+
+  let oldTotalMoney = 0
+  itemList.forEach(item => {
+    oldTotalMoney += item.cost
   })
 
   const db = getDb()
@@ -51,7 +57,15 @@ router.post('/get-full-info', async (request, response) => {
     }
   })
 
-  response.json(resultList)
+  let newTotalMoney = 0
+  resultList.forEach(item => {
+    newTotalMoney += item.cost
+  })
+
+  response.json({
+    list: resultList,
+    totalMoneyChanged: newTotalMoney != oldTotalMoney,
+  })
 })
 
 export default router

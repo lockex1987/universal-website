@@ -12,6 +12,21 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  globals: {
+    computed: true,
+    reactive: true,
+    ref: true,
+    onMounted: true,
+    useRouter: true,
+    useRoute: true,
+    axios: 'readonly',
+    noti: 'readonly',
+    Highcharts: 'readonly',
+    bootstrap: 'readonly',
+    $: 'readonly',
+    ExcelJS: 'readonly',
+    moment: 'readonly',
+  },
   rules: {
     'semi': ['error', 'never'],
     'indent': ['error', 2],

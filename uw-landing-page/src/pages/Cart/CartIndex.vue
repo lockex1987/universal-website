@@ -48,6 +48,8 @@ import CartCard from './CartCard.vue'
 
 const fullList = ref([])
 
+fullList.value = itemList.value
+
 const totalMoney = computed(() => {
   let n = 0
   fullList.value.forEach(item => {
@@ -60,8 +62,12 @@ const getFullList = async () => {
   const params = {
     itemList: itemList.value,
   }
-  const { data } = await axios.post('http://localhost:4000/api/products/get-full-info', params)
-  fullList.value = data
+  const { data } = await axios.post('/api/products/get-full-info', params)
+  const { list, totalMoneyChanged } = data
+  fullList.value = list
+  if (totalMoneyChanged) {
+    noti.warning('Có thay đổi trong tổng tiền')
+  }
 }
 
 getFullList()
