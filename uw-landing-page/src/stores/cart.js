@@ -27,7 +27,7 @@ export const addToCart = productId => {
 }
 
 export const removeFromCart = productId => {
-  const i = itemList.value.lastIndexOf(item => item.productId == productId)
+  const i = itemList.value.findIndex(item => item.productId == productId)
   if (i >= 0) {
     const item = itemList.value[i]
     item.quantity--
