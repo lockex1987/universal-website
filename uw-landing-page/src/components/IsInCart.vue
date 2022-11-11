@@ -5,7 +5,7 @@
   >
     <button
       class="btn btn-light"
-      @click="$emit('changeItem'); removeFromCart(product)"
+      @click="removeFromCart(product)"
     >
       -
     </button>
@@ -16,7 +16,7 @@
 
     <button
       class="btn btn-light"
-      @click="$emit('changeItem'); addToCart(product)"
+      @click="addToCart(product)"
     >
       +
     </button>
@@ -25,7 +25,7 @@
   <button
     v-else
     class="btn btn-light w-100"
-    @click="$emit('changeItem'); addToCart(product)"
+    @click="addToCart(product)"
   >
     Thêm vào giỏ hàng
   </button>

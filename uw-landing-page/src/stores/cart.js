@@ -51,3 +51,8 @@ export const clearCart = () => {
   itemList.value = []
   saveItemList()
 }
+
+export const updateCart = newList => {
+  itemList.value = newList
+  saveItemList()
+}

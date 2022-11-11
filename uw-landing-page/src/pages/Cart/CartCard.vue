@@ -27,7 +27,7 @@
           <button
             v-if="!isPurchased"
             class="btn btn-light"
-            @click="$emit('changeItem'); removeFromCart(product)"
+            @click="removeFromCart(product)"
           >
             -
           </button>
@@ -39,7 +39,7 @@
           <button
             v-if="!isPurchased"
             class="btn btn-light"
-            @click="$emit('changeItem'); addToCart(product)"
+            @click="addToCart(product)"
           >
             +
           </button>

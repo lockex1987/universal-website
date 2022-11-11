@@ -28,7 +28,6 @@ router.get('/detail/:_id', async (request, response) => {
   response.json(product)
 })
 
-// get-full-info
 router.post('/checkout', async (request, response) => {
   const { itemList } = request.body
   itemList.forEach(item => {
