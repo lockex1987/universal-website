@@ -1,4 +1,5 @@
 import express from 'express'
+import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 
 const router = express.Router()
@@ -17,6 +18,14 @@ router.get('/search', async (request, response) => {
     total,
     list,
   })
+})
+
+router.get('/detail/:_id', async (request, response) => {
+  const { _id } = request.params
+  const db = getDb()
+  const query = { _id: ObjectId(_id) }
+  const product = await db.collection('products').findOne(query)
+  response.json(product)
 })
 
 export default router

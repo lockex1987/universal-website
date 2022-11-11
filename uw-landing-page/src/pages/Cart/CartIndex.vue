@@ -1,37 +1,36 @@
 <template>
   <main>
     <h4>
-      Cart
+      Giỏ hàng
     </h4>
 
-    <div v-if="productsStore.loaded">
-      <div v-if="!formattedCart.length">
-        <div class="fs-3 text-danger">
-          Cart is empty
-        </div>
+    <div
+      v-if="!formattedCart.length"
+      class="fs-3 text-danger"
+    >
+      Giỏ hàng rỗng
+    </div>
+
+    <div v-else>
+      <CartCard
+        v-for="(cartProduct, idx) in formattedCart"
+        :key="idx"
+        :cartProduct="cartProduct"
+        :class="{ 'border-top': idx > 0 }"
+      />
+
+      <div class="text-end fs-4 mb-4">
+        Total:
+        {{ toCurrency(cartStore.total) }}
       </div>
 
-      <div v-else>
-        <CartCard
-          v-for="(cartProduct, idx) in formattedCart"
-          :key="idx"
-          :cartProduct="cartProduct"
-          :class="{ 'border-top': idx > 0 }"
-        />
-
-        <div class="text-end fs-4 mb-4">
-          Total:
-          {{ toCurrency(cartStore.total) }}
-        </div>
-
-        <div class="text-center">
-          <RouterLink
-            to="/checkout"
-            class="text-decoration-none fs-3"
-          >
-            Checkout
-          </RouterLink>
-        </div>
+      <div class="text-center">
+        <RouterLink
+          to="/checkout"
+          class="text-decoration-none fs-3"
+        >
+          Thanh toán
+        </RouterLink>
       </div>
     </div>
   </main>
@@ -39,14 +38,13 @@
 
 
 <script setup>
-import { RouterLink } from 'vue-router'
-import CartCard from './CartCard.vue'
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useCartStore } from '@/stores/cart.js'
-import { useProductsStore } from '@/stores/products.js'
 import { toCurrency } from '@/composables/common.js'
+import CartCard from './CartCard.vue'
 
 const cartStore = useCartStore()
-const productsStore = useProductsStore()
+
 const formattedCart = computed(() => cartStore.formattedCart)
 </script>

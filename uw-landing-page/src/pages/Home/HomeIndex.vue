@@ -1,22 +1,16 @@
 <template>
   <main>
     <h4>
-      Home
+      Trang chủ
     </h4>
 
     <div class="mb-3">
-      Tổng cộng {{ products.length }} sản phẩm
+      Tổng cộng {{ productList.length }} sản phẩm
     </div>
 
     <div class="row">
-      <ProductCardSkeleton
-        v-for="n in 15"
-        :key="n"
-        v-show="!productsStore.loaded"
-      />
-
       <ProductCard
-        v-for="product in products"
+        v-for="product in productList"
         :key="product._id"
         :product="product"
       />
@@ -26,12 +20,18 @@
 
 
 <script setup>
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 import ProductCard from './ProductCard.vue'
-import ProductCardSkeleton from './ProductCardSkeleton.vue'
-import { useProductsStore } from '@/stores/products.js'
 
-const productsStore = useProductsStore()
+const productList = ref([])
 
-const products = computed(() => productsStore.list)
+const getProductList = async () => {
+  const { data } = await axios.get('http://localhost:4000/api/products/search')
+  productList.value = data.list
+}
+
+onMounted(() => {
+  getProductList()
+})
 </script>

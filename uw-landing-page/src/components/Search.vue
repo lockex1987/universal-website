@@ -7,7 +7,6 @@
       type="text"
       placeholder="Search..."
       class="form-control"
-      :disabled="!productsStore.loaded"
       v-model.trim="searchText"
       data-bs-toggle="dropdown"
     />
@@ -34,15 +33,15 @@
 
 
 <script setup>
-import { computed, ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useProductsStore } from '@/stores/products.js'
+import axios from 'axios'
 
 const router = useRouter()
 
-const productsStore = useProductsStore()
-
 const searchText = ref('')
+
+const productList = ref([])
 
 const searchResults = computed(() => {
   if (! searchText.value || searchText.value.length < 2) {
@@ -50,11 +49,20 @@ const searchResults = computed(() => {
   }
 
   const temp = searchText.value.toLowerCase()
-  return productsStore.list.filter(product => product.title.toLowerCase().includes(temp))
+  return productList.value.filter(product => product.title.toLowerCase().includes(temp))
 })
+
+const getProductList = async () => {
+  const { data } = await axios.get('http://localhost:4000/api/products/search')
+  productList.value = data.list
+}
 
 const gotoProductPage = _id => {
   searchText.value = ''
   router.push(`/product/${_id}`)
 }
+
+onMounted(() => {
+  getProductList()
+})
 </script>
