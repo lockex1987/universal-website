@@ -22,10 +22,28 @@
       </div>
 
       <div style="max-width: 12rem">
-        <IsInCart
-          :product="product"
-          @changeItem="$emit('changeItem')"
-        />
+        <!-- Gần giống IsInCart, không cần computed quantityInCart, thêm kiểm tra v-if="!isPurchased" -->
+        <div class="btn-group w-100">
+          <button
+            v-if="!isPurchased"
+            class="btn btn-light"
+            @click="$emit('changeItem'); removeFromCart(product)"
+          >
+            -
+          </button>
+
+          <button class="btn btn-ghost no-animation">
+            {{ product.quantity }}
+          </button>
+
+          <button
+            v-if="!isPurchased"
+            class="btn btn-light"
+            @click="$emit('changeItem'); addToCart(product)"
+          >
+            +
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -35,9 +53,9 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { toCurrency } from '@/composables/common.js'
-import IsInCart from '@/components/IsInCart.vue'
 
 defineProps({
   product: Object,
+  isPurchased: Boolean,
 })
 </script>

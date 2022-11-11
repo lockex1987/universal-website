@@ -46,3 +46,8 @@ export const removeFromCart = product => {
     saveItemList()
   }
 }
+
+export const clearCart = () => {
+  itemList.value = []
+  saveItemList()
+}

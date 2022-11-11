@@ -28,8 +28,8 @@ router.get('/detail/:_id', async (request, response) => {
   response.json(product)
 })
 
-// checkout
-router.post('/get-full-info', async (request, response) => {
+// get-full-info
+router.post('/checkout', async (request, response) => {
   const { itemList } = request.body
   itemList.forEach(item => {
     item.objId = ObjectId(item._id)
@@ -62,9 +62,19 @@ router.post('/get-full-info', async (request, response) => {
     newTotalMoney += item.cost
   })
 
+  const totalMoneyChanged = newTotalMoney != oldTotalMoney
+  if (totalMoneyChanged) {
+    return response.json({
+      totalMoneyChanged,
+      list: resultList,
+    })
+  }
+
+  // TODO: Lưu vào order
+
   response.json({
+    code: 0,
     list: resultList,
-    totalMoneyChanged: newTotalMoney != oldTotalMoney,
   })
 })
 
