@@ -20,7 +20,7 @@
       />
 
       <div class="text-end fs-4 mb-4">
-        Total:
+        Tổng tiền:
         {{ toCurrency(cartStore.total) }}
       </div>
 
@@ -45,6 +45,8 @@ import { toCurrency } from '@/composables/common.js'
 import CartCard from './CartCard.vue'
 
 const cartStore = useCartStore()
+
+cartStore.getAll()
 
 const formattedCart = computed(() => cartStore.formattedCart)
 </script>

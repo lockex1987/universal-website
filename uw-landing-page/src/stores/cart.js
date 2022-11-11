@@ -1,32 +1,34 @@
 import { defineStore } from 'pinia'
-import { CART_STORAGE } from '@/composables/usePersistCart.js'
-import { useProductsStore } from './products.js'
+import axios from 'axios'
 
-export const useCartStore = defineStore({
-  id: 'cart',
+export const CART_STORAGE = 'CART_STORAGE'
 
+export const useCartStore = defineStore('cart', {
   state: () => ({
     contents: JSON.parse(localStorage.getItem(CART_STORAGE)) ?? {},
+
+    items: {},
+
+    ids: [],
   }),
 
   getters: {
-    count() {
-      return Object.keys(this.contents).reduce((acc, id) => {
-        return acc + this.contents[id].quantity
-      }, 0)
+    itemsCount() {
+      let count = 0
+      Object.keys(this.contents).forEach(id => {
+        count += this.contents[id].quantity
+      })
+      return count
     },
 
     total() {
-      const productsStore = useProductsStore()
       return Object.keys(this.contents).reduce((acc, id) => {
-        return acc + productsStore.items[id].price * this.contents[id].quantity
+        return acc + this.items[id].price * this.contents[id].quantity
       }, 0)
     },
 
     formattedCart() {
-      const productsStore = useProductsStore()
-
-      if (! productsStore.loaded) {
+      if (! this.loaded) {
         return []
       }
 
@@ -35,12 +37,18 @@ export const useCartStore = defineStore({
 
         return {
           id: purchase.productId,
-          image: productsStore.items[purchase.productId].image,
-          title: productsStore.items[purchase.productId].title,
+          image: this.items[purchase.productId].image,
+          title: this.items[purchase.productId].title,
           quantity: purchase.quantity,
-          cost: purchase.quantity * productsStore.items[purchase.productId].price,
+          cost: purchase.quantity * this.items[purchase.productId].price,
         }
       })
+    },
+
+    list: state => state.ids.map(_id => state.items[_id]),
+
+    loaded() {
+      return this.ids.length > 0
     },
   },
 
@@ -54,6 +62,8 @@ export const useCartStore = defineStore({
           quantity: 1,
         }
       }
+
+      localStorage.setItem(CART_STORAGE, JSON.stringify(this.contents))
     },
 
     remove(productId) {
@@ -66,6 +76,20 @@ export const useCartStore = defineStore({
       if (this.contents[productId].quantity === 0) {
         delete this.contents[productId]
       }
+
+      localStorage.setItem(CART_STORAGE, JSON.stringify(this.contents))
+    },
+
+    async getAll() {
+      if (this.loaded) {
+        return
+      }
+
+      const { data } = await axios.get('http://localhost:4000/api/products/search')
+      this.ids = data.list.map(product => {
+        this.items[product._id] = product
+        return product._id
+      })
     },
   },
 })
