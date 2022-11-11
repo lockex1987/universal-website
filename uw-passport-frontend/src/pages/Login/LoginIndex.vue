@@ -56,9 +56,7 @@
 
 
 <script setup>
-import { useAuthStore } from '@/stores/auth.js'
-
-const authStore = useAuthStore()
+import { setLogin, beforeLoginPath } from '@/stores/auth.js'
 
 const router = useRouter()
 
@@ -84,10 +82,10 @@ const processLogin = async () => {
 
   if (data.code == 0) {
     errorMessage.value = ''
-    authStore.user = data.user
+    setLogin(data.user)
     const defaultPagePath = '/Backend/Dashboard'
-    router.push(authStore.beforeLoginPath || defaultPagePath)
-    authStore.beforeLoginPath = ''
+    router.push(beforeLoginPath.value || defaultPagePath)
+    beforeLoginPath.value = ''
   } else if (data.code == 1) {
     errorMessage.value = data.message
   }

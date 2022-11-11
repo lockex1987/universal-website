@@ -34,7 +34,9 @@ Clone:
 
 Node.js, VSCode, Ubuntu
 
-Vue 3 (Composition API), Vue Router, Pinia
+Vue 3 (Composition API), Vue Router
+
+Không sử dụng Pinia, sử dụng Composition cho đồng bộ, đơn giản
 
 Bootstrap
 

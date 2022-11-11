@@ -1,19 +1,18 @@
-import { useAuthStore } from '@/stores/auth.js'
+import { isLoggedIn, setLogin, beforeLoginPath } from '@/stores/auth.js'
 
 export default async to => {
-  const authStore = useAuthStore()
-  if (! authStore.user._id) {
+  if (! isLoggedIn.value) {
     const { data } = await axios.get('/api/auth/me')
     if (data.code == 0) {
-      authStore.user = data.user
+      setLogin(data.user)
     }
   }
 
   const path = to.path
-  if (! authStore.user._id) {
+  if (! isLoggedIn.value) {
     const isLoginOnlyPage = path.startsWith('/Backend')
     if (path == '/' || isLoginOnlyPage) {
-      authStore.beforeLoginPath = to.fullPath
+      beforeLoginPath.value = to.fullPath
       return { name: 'Login' }
     }
   } else {

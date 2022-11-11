@@ -69,14 +69,13 @@
 
 
 <script setup>
-import { useAuthStore } from '@/stores/auth.js'
+import { loginUser } from '@/stores/auth.js'
 import allMenus from '@/router/menus.js'
 
-const authStore = useAuthStore()
 
 // Lấy danh sách menu được phân quyền
 const menuList = computed(() => {
-  const userPermissions = authStore.user.permissions ?? []
+  const userPermissions = loginUser.permissions ?? []
   const hasPermission = lv => ! lv.permission || userPermissions.includes(lv.permission)
 
   // Có thể có trường hợp menu không có do không được phân quyền menu con nào

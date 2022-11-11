@@ -30,11 +30,11 @@
       >
         <img
           class="rounded-circle avatar object-fit-cover me-2"
-          :src="authStore.user.thumbnail ? ('/' + authStore.user.thumbnail) : '/static/images/user_avatar.png'"
+          :src="loginUser.thumbnail ? ('/' + loginUser.thumbnail) : '/static/images/user_avatar.png'"
           onerror="this.src = '/static/images/user_avatar.png'"
         />
         <span class="d-none d-lg-inline">
-          {{ authStore.user.username }}
+          {{ loginUser.username }}
         </span>
       </button>
 
@@ -66,18 +66,13 @@
 
 
 <script setup>
-import { useAuthStore } from '@/stores/auth.js'
-
-const authStore = useAuthStore()
+import { loginUser, setLogout } from '@/stores/auth.js'
 
 const router = useRouter()
 
 const processLogout = async () => {
   await axios.post('/api/auth/logout')
-  authStore.user = {
-    _id: null,
-    username: '',
-  }
+  setLogout()
   router.push('/Login')
 }
 </script>

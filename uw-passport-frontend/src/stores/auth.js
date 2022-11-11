@@ -1,13 +1,21 @@
-import { defineStore } from 'pinia'
+import { ref, reactive, computed } from 'vue'
 
-// Dùng Pinia mới thiết lập được từ API (axios)
-// ref của Vue không được
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: {
-      _id: null,
-      username: '',
-    },
-    beforeLoginPath: '',
-  }),
+export const loginUser = reactive({
+  _id: null,
+  username: '',
 })
+
+export const isLoggedIn = computed(() => !! loginUser._id)
+
+export const setLogout = () => {
+  Object.assign(loginUser, {
+    _id: null,
+    username: '',
+  })
+}
+
+export const setLogin = userData => {
+  Object.assign(loginUser, userData)
+}
+
+export const beforeLoginPath = ref('')

@@ -121,9 +121,7 @@
 
 
 <script setup>
-import { useAuthStore } from '@/stores/auth.js'
-
-const authStore = useAuthStore()
+import { setLogin } from '@/stores/auth.js'
 
 const frm = reactive({
   fullName: '',
@@ -146,7 +144,6 @@ const frmRef = ref()
 const imageUrl = ref('')
 
 const initInfo = async () => {
-  // const userInfo = authStore.user
   const { data } = await axios.get('/api/profile/get_user_info')
   Object.assign(userInfo, data)
   frm.fullName = userInfo.fullName
@@ -180,7 +177,7 @@ const saveForm = async () => {
 
   const { data } = await axios.post('/api/profile/update-user-info', params)
   if (data.code == 0) {
-    Object.assign(authStore.user, {
+    setLogin({
       fullName: frm.fullName,
       email: frm.email,
       phone: frm.phone,
