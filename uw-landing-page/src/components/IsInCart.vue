@@ -5,7 +5,7 @@
   >
     <button
       class="btn btn-light"
-      @click="cartStore.remove(product._id)"
+      @click="removeFromCart(product._id)"
     >
       -
     </button>
@@ -16,7 +16,7 @@
 
     <button
       class="btn btn-light"
-      @click="cartStore.add(product._id)"
+      @click="addToCart(product._id)"
     >
       +
     </button>
@@ -25,25 +25,23 @@
   <button
     v-else
     class="btn btn-light w-100"
-    @click="cartStore.add(product._id)"
+    @click="addToCart(product._id)"
   >
-    Add to Cart
+    Thêm vào giỏ hàng
   </button>
 </template>
 
 
 <script setup>
 import { computed } from 'vue'
-import { useCartStore } from '@/stores/cart.js'
+import { itemList, addToCart, removeFromCart } from '@/stores/cart.js'
 
 const props = defineProps({
   product: Object,
 })
 
-const cartStore = useCartStore()
-
 const quantityInCart = computed(() => {
-  const temp = cartStore.contents[props.product._id]
+  const temp = itemList.value.find(item => item.productId == props.product._id)
   return temp?.quantity ?? 0
 })
 </script>

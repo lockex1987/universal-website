@@ -21,7 +21,7 @@
 
       <div class="text-end fs-4 mb-4">
         Tổng tiền:
-        {{ toCurrency(cartStore.total) }}
+        {{ toCurrency(totalMoney) }}
       </div>
 
       <div class="text-center">
@@ -38,15 +38,14 @@
 
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useCartStore } from '@/stores/cart.js'
+import axios from 'axios'
+import { itemList, itemsCount, addToCart, removeFromCart } from '@/stores/cart.js'
 import { toCurrency } from '@/composables/common.js'
 import CartCard from './CartCard.vue'
 
-const cartStore = useCartStore()
+const totalMoney = ref(0)
 
-cartStore.getAll()
-
-const formattedCart = computed(() => cartStore.formattedCart)
+const formattedCart = [] // computed(() => cartStore.formattedCart)
 </script>

@@ -5,7 +5,7 @@
   >
     <input
       type="text"
-      placeholder="Search..."
+      placeholder="Tìm kiếm..."
       class="form-control"
       v-model.trim="searchText"
       data-bs-toggle="dropdown"

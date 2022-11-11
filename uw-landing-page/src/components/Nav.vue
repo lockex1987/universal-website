@@ -22,7 +22,7 @@
         <i class="bi bi-cart fs-5"></i>
 
         <span class="px-2 bg-primary text-white badge ms-1">
-          {{ cartStore.itemsCount }}
+          {{ itemsCount }}
         </span>
       </RouterLink>
     </div>
@@ -32,8 +32,6 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useCartStore } from '@/stores/cart.js'
+import { itemsCount } from '@/stores/cart.js'
 import Search from './Search.vue'
-
-const cartStore = useCartStore()
 </script>

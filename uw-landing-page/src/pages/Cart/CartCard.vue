@@ -25,7 +25,7 @@
         <div class="btn-group">
           <button
             class="btn btn-light"
-            @click="cartStore.remove(cartProduct._id)"
+            @click="removeFromCart(cartProduct._id)"
           >
             -
           </button>
@@ -36,7 +36,7 @@
 
           <button
             class="btn btn-light"
-            @click="cartStore.add(cartProduct._id)"
+            @click="addToCart(cartProduct._id)"
           >
             +
           </button>
@@ -49,10 +49,8 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useCartStore } from '@/stores/cart.js'
+import { addToCart, removeFromCart } from '@/stores/cart.js'
 import { toCurrency } from '@/composables/common.js'
-
-const cartStore = useCartStore()
 
 defineProps({
   cartProduct: Object,
