@@ -40,7 +40,7 @@
         v-if="noProduct"
         class="fs-3 text-danger"
       >
-        Không tìm thấy sản phẩm với ID {{ route.params.productId }}
+        Không tìm thấy sản phẩm với ID {{ route.params._id }}
       </div>
     </div>
   </main>
@@ -61,7 +61,7 @@ const product = reactive({})
 const noProduct = ref(false)
 
 const getProduct = async () => {
-  const _id = route.params.productId
+  const _id = route.params._id
   const url = 'http://localhost:4000/api/products/detail/' + _id
   const { data } = await axios.get(url)
   if (data._id) {

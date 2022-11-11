@@ -16,18 +16,18 @@ export const itemsCount = computed(() => {
   return count
 })
 
-export const addToCart = productId => {
-  const existingItem = itemList.value.find(item => item.productId === productId)
+export const addToCart = _id => {
+  const existingItem = itemList.value.find(item => item._id === _id)
   if (! existingItem) {
-    itemList.value.push({ productId, quantity: 1 })
+    itemList.value.push({ _id, quantity: 1 })
   } else {
     existingItem.quantity++
   }
   saveItemList()
 }
 
-export const removeFromCart = productId => {
-  const i = itemList.value.findIndex(item => item.productId == productId)
+export const removeFromCart = _id => {
+  const i = itemList.value.findIndex(item => item._id == _id)
   if (i >= 0) {
     const item = itemList.value[i]
     item.quantity--

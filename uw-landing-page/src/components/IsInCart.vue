@@ -41,7 +41,7 @@ const props = defineProps({
 })
 
 const quantityInCart = computed(() => {
-  const temp = itemList.value.find(item => item.productId == props.product._id)
+  const temp = itemList.value.find(item => item._id == props.product._id)
   return temp?.quantity ?? 0
 })
 </script>

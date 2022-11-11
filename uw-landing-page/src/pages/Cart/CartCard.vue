@@ -1,7 +1,7 @@
 <template>
   <div class="py-4 d-flex">
     <img
-      :src="cartProduct.image"
+      :src="product.image"
       alt="Product image"
       class="me-4"
       style="width: 5rem"
@@ -11,32 +11,32 @@
       <div>
         <RouterLink
           class="text-decoration-none text-body"
-          :to="`/product/${cartProduct._id}`"
+          :to="`/product/${product._id}`"
         >
-          {{ cartProduct.title }}
+          {{ product.title }}
         </RouterLink>
       </div>
 
       <div class="mb-3 fw-bold text-muted">
-        {{ toCurrency(cartProduct.cost) }}
+        {{ toCurrency(product.cost) }}
       </div>
 
       <div>
         <div class="btn-group">
           <button
             class="btn btn-light"
-            @click="removeFromCart(cartProduct._id)"
+            @click="removeFromCart(product._id)"
           >
             -
           </button>
 
           <button class="btn btn-ghost no-animation">
-            {{ cartProduct.quantity }}
+            {{ product.quantity }}
           </button>
 
           <button
             class="btn btn-light"
-            @click="addToCart(cartProduct._id)"
+            @click="addToCart(product._id)"
           >
             +
           </button>
@@ -53,6 +53,6 @@ import { addToCart, removeFromCart } from '@/stores/cart.js'
 import { toCurrency } from '@/composables/common.js'
 
 defineProps({
-  cartProduct: Object,
+  product: Object,
 })
 </script>

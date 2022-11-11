@@ -5,7 +5,7 @@
     </h4>
 
     <div
-      v-if="!formattedCart.length"
+      v-if="!fullList.length"
       class="fs-3 text-danger"
     >
       Giỏ hàng rỗng
@@ -13,9 +13,9 @@
 
     <div v-else>
       <CartCard
-        v-for="(cartProduct, idx) in formattedCart"
-        :key="idx"
-        :cartProduct="cartProduct"
+        v-for="(product, idx) in fullList"
+        :key="product._id"
+        :product="product"
         :class="{ 'border-top': idx > 0 }"
       />
 
@@ -41,11 +41,42 @@
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import axios from 'axios'
-import { itemList, itemsCount, addToCart, removeFromCart } from '@/stores/cart.js'
+import { itemList } from '@/stores/cart.js'
 import { toCurrency } from '@/composables/common.js'
 import CartCard from './CartCard.vue'
 
-const totalMoney = ref(0)
+const productList = ref([])
 
-const formattedCart = [] // computed(() => cartStore.formattedCart)
+const getProductList = async () => {
+  const { data } = await axios.get('http://localhost:4000/api/products/search')
+  productList.value = data.list
+}
+
+const fullList = computed(() => {
+  if (! itemList.value.length || ! productList.value.length) {
+    return []
+  }
+
+  return itemList.value.map(item => {
+    const product = productList.value.find(p => p._id == item._id) ?? {}
+    return {
+      _id: item._id,
+      title: product.title,
+      image: product.image,
+      quantity: item.quantity,
+      price: product.price,
+      cost: item.quantity * product.price,
+    }
+  })
+})
+
+const totalMoney = computed(() => {
+  let n = 0
+  fullList.value.forEach(item => {
+    n += item.cost
+  })
+  return n
+})
+
+getProductList()
 </script>
