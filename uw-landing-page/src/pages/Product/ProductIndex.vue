@@ -25,6 +25,11 @@
             {{ product.description }}
           </div>
 
+          <div
+            class="mb-3 text-muted"
+            v-html="product.content"
+          ></div>
+
           <div class="mb-3 fw-bolder">
             {{ toCurrency(product.price) }}
           </div>
