@@ -11,6 +11,13 @@ export default [
     ],
   },
   {
+    code: 'Category',
+    name: 'Danh mục',
+    children: [
+      { code: 'Products', name: 'Sản phẩm', permission: 'Products' },
+    ],
+  },
+  {
     code: 'Demo',
     name: 'Demo',
     children: [

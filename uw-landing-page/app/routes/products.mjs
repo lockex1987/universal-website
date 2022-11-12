@@ -4,6 +4,7 @@ import { getDb } from '#app/helpers/mongodb.mjs'
 
 const router = express.Router()
 
+
 // curl http://localhost:4000/api/products/search | jq .
 router.get('/search', async (request, response) => {
   const db = getDb()
@@ -20,6 +21,7 @@ router.get('/search', async (request, response) => {
   })
 })
 
+
 router.get('/detail/:_id', async (request, response) => {
   const { _id } = request.params
   const db = getDb()
@@ -27,6 +29,7 @@ router.get('/detail/:_id', async (request, response) => {
   const product = await db.collection('products').findOne(query)
   response.json(product)
 })
+
 
 router.post('/checkout', async (request, response) => {
   const { itemList } = request.body
@@ -76,5 +79,6 @@ router.post('/checkout', async (request, response) => {
     list: resultList,
   })
 })
+
 
 export default router

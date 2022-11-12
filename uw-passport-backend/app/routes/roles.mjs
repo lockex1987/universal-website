@@ -48,6 +48,7 @@ export const getAllRoles = async (request, response) => {
 
 // router.get('/get-all', getAllRoles)
 
+
 router.get('/get-all-permissions', getAllPermissions)
 
 

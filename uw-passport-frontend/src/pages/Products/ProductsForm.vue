@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3 fw-bold">
     {{ action.actionName }}
-    vai trò
+    sản phẩm
   </div>
 
   <a-form
@@ -12,51 +12,45 @@
     layout="vertical"
   >
     <a-form-item
-      label="Mã"
-      name="code"
+      label="Tên"
+      name="title"
     >
       <a-input
-        v-model:value.lazy.trim="frm.code"
+        v-model:value.lazy.trim="frm.title"
         class="form-control-max-width"
       />
     </a-form-item>
 
     <a-form-item
-      label="Tên"
-      name="name"
+      label="Mô tả"
+      name="description"
     >
-      <a-input
-        v-model:value.lazy.trim="frm.name"
+      <a-textarea
+        v-model:value.lazy.trim="frm.description"
         class="form-control-max-width"
       />
     </a-form-item>
 
-    <div class="mb-4">
-      <div>
-        <label class="form-label">
-          Quyền của vai trò
-        </label>
-      </div>
+    <a-form-item
+      label="Ảnh"
+      name="image"
+    >
+      <a-input
+        v-model:value.lazy.trim="frm.image"
+        class="form-control-max-width"
+      />
+    </a-form-item>
 
-      <a-checkbox-group v-model:value="frm.permissions">
-        <div class="row">
-          <div
-            v-for="permission in dropdowns.permissionList"
-            :key="permission._id"
-            class="col-md-6 d-flex mb-2"
-          >
-            <div class="pt-1">
-              <a-checkbox :value="permission._id" />
-            </div>
+    <a-form-item
+      label="Giá"
+      name="price"
+    >
+      <a-input
+        v-model:value.lazy.trim="frm.price"
+        class="form-control-max-width"
+      />
+    </a-form-item>
 
-            <div class="ms-2">
-              <div>{{ permission.code }}</div>
-              <div class="text-muted">{{ permission.name }}</div>
-            </div>
-          </div>
-        </div>
-      </a-checkbox-group>
-    </div>
 
     <a-space>
       <a-button
@@ -78,25 +72,24 @@
 <script setup>
 const defaultFrm = {
   _id: null,
-  code: '',
-  name: '',
-  permissions: [],
+  title: '',
+  description: '',
+  image: '',
+  price: null,
 }
 
 const frm = reactive({ ...defaultFrm })
 
 const rules = {
-  code: [{ required: true, max: 100 }],
-  name: [{ required: true, max: 100 }],
+  title: [{ required: true, max: 200 }],
+  description: [{ required: true, max: 500 }],
+  image: [{ type: 'url', required: true, max: 500 }],
+  price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
 }
 
 const frmRef = ref()
 
 const isSaving = ref(false)
-
-const dropdowns = reactive({
-  permissionList: [],
-})
 
 const emit = defineEmits(['close', 'inserted', 'updated'])
 
@@ -123,7 +116,7 @@ const saveForm = async () => {
 
   const params = frm
   const { method, path, actionName, emitName } = action.value
-  const { data } = await axios[method]('/api/roles/' + path, params)
+  const { data } = await axios[method]('/api/products/' + path, params)
 
   isSaving.value = false
 
@@ -149,15 +142,6 @@ const openForm = row => {
     Object.assign(frm, defaultFrm)
   }
 }
-
-const getPermissionList = async () => {
-  const { data } = await axios.get('/api/roles/get-all-permissions')
-  dropdowns.permissionList = data
-}
-
-onMounted(() => {
-  getPermissionList()
-})
 
 defineExpose({
   openForm,

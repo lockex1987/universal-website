@@ -44,6 +44,12 @@ export default [
         meta: { permission: 'Users' },
       },
       {
+        path: 'Products',
+        name: 'Products',
+        component: () => import('@/pages/Products/ProductsIndex.vue'),
+        meta: { permission: 'Products' },
+      },
+      {
         path: 'DemoButton',
         name: 'DemoButton',
         component: () => import('@/pages/DemoComponents/DemoButton.vue'),
