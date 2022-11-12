@@ -15,10 +15,7 @@
       label="Tên"
       name="title"
     >
-      <a-input
-        v-model:value.lazy.trim="frm.title"
-        class="form-control-max-width"
-      />
+      <a-input v-model:value.lazy.trim="frm.title" />
     </a-form-item>
 
     <a-form-item
@@ -27,7 +24,7 @@
     >
       <a-textarea
         v-model:value.lazy.trim="frm.description"
-        class="form-control-max-width"
+        :autosize="true"
       />
     </a-form-item>
 
@@ -37,7 +34,7 @@
     >
       <a-input
         v-model:value.lazy.trim="frm.image"
-        class="form-control-max-width"
+        class=""
       />
     </a-form-item>
 
@@ -45,8 +42,9 @@
       label="Giá"
       name="price"
     >
-      <a-input
-        v-model:value.lazy.trim="frm.price"
+      <a-input-number
+        v-model:value="frm.price"
+        addon-after="$"
         class="form-control-max-width"
       />
     </a-form-item>

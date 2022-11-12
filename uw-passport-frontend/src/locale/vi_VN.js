@@ -69,7 +69,7 @@ const localeValues = {
         method: typeTemplate,
         array: typeTemplate,
         object: typeTemplate,
-        number: typeTemplate,
+        number: '${label} không phải là một số hợp lệ',
         date: typeTemplate,
         boolean: typeTemplate,
         integer: typeTemplate,
