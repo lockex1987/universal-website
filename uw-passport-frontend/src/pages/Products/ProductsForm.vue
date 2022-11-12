@@ -24,9 +24,25 @@
     >
       <a-textarea
         v-model:value.lazy.trim="frm.description"
-        :autosize="true"
+        :autoSize="true"
       />
     </a-form-item>
+
+    <div class="mb-4">
+      <label class="form-label">
+        HTML
+      </label>
+
+      <QuillEditor
+        theme="snow"
+        contentType="html"
+        v-model:content="frm.content"
+      />
+
+      <div>
+        {{ frm.content }}
+      </div>
+    </div>
 
     <a-form-item
       label="Ảnh"
@@ -46,7 +62,6 @@
       />
     </a-form-item>
 
-
     <a-space>
       <a-button
         type="primary"
@@ -65,10 +80,14 @@
 
 
 <script setup>
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+
 const defaultFrm = {
   _id: null,
   title: '',
   description: '',
+  content: '',
   image: '',
   price: null,
 }
@@ -78,6 +97,7 @@ const frm = reactive({ ...defaultFrm })
 const rules = {
   title: [{ required: true, max: 200 }],
   description: [{ required: true, max: 500 }],
+  content: [{ required: true, max: 5000 }],
   image: [{ type: 'url', required: true, max: 500 }],
   price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
 }

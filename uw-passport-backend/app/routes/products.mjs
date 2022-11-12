@@ -44,12 +44,15 @@ router.post('/insert', async (request, response) => {
       { type: 'unique', dbCol: 'products', dbFieldName: 'Tên' },
     ],
     description: [{ required: true, max: 500 }],
+    content: [{ required: true, max: 5000 }],
     image: [{ type: 'url', required: true, max: 500 }],
     price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
   }
   await request.validate(request.body, rules)
 
-  const data = pick(request.body, 'title', 'description', 'price', 'image')
+  // TODO: sanitize HTML content
+
+  const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
   const db = getDb()
   const result = await db.collection('products').insertOne(data)
 
@@ -69,13 +72,16 @@ router.put('/update', async (request, response) => {
       { type: 'unique', dbCol: 'products', dbFieldName: 'Tên', ignoredIdValue: objId },
     ],
     description: [{ required: true, max: 500 }],
+    content: [{ required: true, max: 5000 }],
     image: [{ type: 'url', required: true, max: 500 }],
     price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
   }
   await request.validate(request.body, rules)
 
+  // TODO: sanitize HTML content
+
   const query = { _id: objId }
-  const data = pick(request.body, 'title', 'description', 'price', 'image')
+  const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
   const db = getDb()
   const result = await db.collection('products').updateOne(query, { $set: data })
 
