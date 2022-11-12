@@ -11,7 +11,7 @@
           <img
             :src="product.image"
             alt="Product image"
-            class="w-100"
+            class="w-100 mb-5 mb-md-0"
             style="height: 25rem; object-fit: contain;"
           />
         </div>
