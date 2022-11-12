@@ -1,0 +1,41 @@
+// Thêm dấu ba chấm khi mà nội dung văn bản vượt quá số dòng chỉ định
+@mixin lineClampEllipsis {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-ellipsis-1 {
+  @include lineClampEllipsis;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-ellipsis-3 {
+  @include lineClampEllipsis;
+  -webkit-line-clamp: 3;
+}
+
+.line-clamp-ellipsis-5 {
+  @include lineClampEllipsis;
+  -webkit-line-clamp: 5;
+}
+
+.overflow-long-content {
+  position: relative;
+
+  // Overlay mờ
+  &::after {
+    content: '';
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 45px;
+    height: 22px;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.6) 50%
+    );
+  }
+}

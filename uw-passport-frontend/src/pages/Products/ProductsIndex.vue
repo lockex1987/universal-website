@@ -11,7 +11,7 @@
       <a-input
         v-model:value="filter.text"
         class="form-control-max-width mb-3"
-        placeholder="Tìm kiếm"
+        placeholder="Tên, mô tả"
         @input="debouncedSearch()"
       />
 
@@ -40,10 +40,14 @@
                 #
               </th>
               <th>
-                Mã
-              </th>
-              <th>
+                Ảnh
+                &amp;
                 Tên
+                &amp;
+                Mô tả
+              </th>
+              <th class="text-end">
+                Giá
               </th>
               <th class="text-center">
                 Hành động
@@ -53,29 +57,51 @@
 
           <tbody>
             <tr
-              v-for="(role, i) in roleList"
-              :key="role._id"
+              v-for="(product, i) in productList"
+              :key="product._id"
             >
               <td class="text-end">
                 {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
               </td>
               <td>
-                {{ role.code }}
+                <div class="d-flex">
+                  <img
+                    class="thumbnail me-4"
+                    :src="product.image ? (product.image.startsWith('http') ? product.image : '/' + product.image) : '/static/images/user_avatar.png'"
+                    onerror="this.src = '/static/images/user_avatar.png'"
+                  />
+
+                  <div>
+                    <div
+                      class="line-clamp-ellipsis-1 fw-semibold b-2"
+                      style="max-width: 30rem"
+                    >
+                      {{ product.title }}
+                    </div>
+
+                    <div
+                      class="line-clamp-ellipsis-3"
+                      style="max-width: 30rem"
+                    >
+                      {{ product.description }}
+                    </div>
+                  </div>
+                </div>
               </td>
-              <td>
-                {{ role.name }}
+              <td class="text-end">
+                {{ product.price }}
               </td>
               <td class="text-center">
                 <i
                   class="cursor-pointer text-primary bi bi-pencil-square"
                   title="Cập nhật"
-                  @click="openForm(role)"
+                  @click="openForm(product)"
                 />
 
                 <i
                   class="cursor-pointer text-primary bi bi-trash ms-3"
                   title="Xóa"
-                  @click="deleteRow(role)"
+                  @click="deleteRow(product)"
                 />
               </td>
             </tr>
@@ -119,7 +145,7 @@ const pagi = reactive({
   currentPage: 1,
 })
 
-const roleList = ref([])
+const productList = ref([])
 
 const frmRef = ref()
 
@@ -134,7 +160,7 @@ const search = async page => {
   const { data } = await axios.post('/api/products/search', params)
   pagi.total = data.total
   pagi.currentPage = page
-  roleList.value = data.list
+  productList.value = data.list
 }
 
 const debouncedSearch = debounce(() => search(1), 500)
@@ -158,3 +184,11 @@ onMounted(() => {
   search(1)
 })
 </script>
+
+
+<style scoped>
+.thumbnail {
+  width: 5rem;
+  height: 5rem;
+}
+</style>

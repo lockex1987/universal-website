@@ -4,6 +4,7 @@
 @import "utils/cursor";
 @import "utils/font-sizes";
 @import "utils/form";
+@import "utils/line-clamp";
 @import "utils/tables";
 @import "utils/custom-scrollbar";
 
@@ -28,4 +29,8 @@ body {
 
 .anticon {
   vertical-align: 1px !important;
+}
+
+.object-fit-cover {
+  object-fit: cover;
 }

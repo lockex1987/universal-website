@@ -80,7 +80,6 @@
               <td class="text-center d-none d-md-table-cell">
                 <img
                   class="rounded-circle avatar object-fit-cover"
-                  title="Đổi ảnh đại diện"
                   :src="user.thumbnail ? (user.thumbnail.startsWith('http') ? user.thumbnail : '/' + user.thumbnail) : '/static/images/user_avatar.png'"
                   onerror="this.src = '/static/images/user_avatar.png'"
                 />
