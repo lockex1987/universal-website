@@ -10,12 +10,19 @@
           class="me-2"
           style="vertical-align: -9px;"
         />
-        SeC
+
+        <span class="d-md-none">
+          HDT
+        </span>
+
+        <span class="d-none d-md-inline">
+          Cửa hàng HDT
+        </span>
       </RouterLink>
 
       <Search />
 
-      <RouterLink
+      <!--RouterLink
         to="/Cart"
         class="ms-auto"
       >
@@ -24,7 +31,7 @@
         <span class="px-2 bg-primary text-white badge ms-1">
           {{ itemsCount }}
         </span>
-      </RouterLink>
+      </RouterLink-->
     </div>
   </nav>
 </template>

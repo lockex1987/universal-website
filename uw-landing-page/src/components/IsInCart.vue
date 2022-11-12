@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!--div
     v-if="quantityInCart > 0"
     class="btn-group w-100"
   >
@@ -28,7 +28,7 @@
     @click="addToCart(product)"
   >
     Thêm vào giỏ hàng
-  </button>
+  </button-->
 </template>
 
 

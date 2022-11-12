@@ -1,49 +1,48 @@
 <template>
-  <main>
-    <h4 class="mb-5">
-      Product detail
-    </h4>
+  <div class="pt-5">
+    <!--h4 class="mb-5">
+      Chi tiết sản phẩm
+    </h4-->
 
-    <div>
-      <div v-if="product">
-        <div class="row">
-          <div class="col-md-6">
-            <img
-              :src="product.image"
-              alt="Product image"
-              class="w-100"
-              style="height: 25rem; object-fit: contain;"
-            />
+
+    <div v-if="product">
+      <div class="row">
+        <div class="col-md-6">
+          <img
+            :src="product.image"
+            alt="Product image"
+            class="w-100"
+            style="height: 25rem; object-fit: contain;"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <div class="fs-3 mb-3">
+            {{ product.title }}
           </div>
 
-          <div class="col-md-6">
-            <div class="fs-3 mb-3">
-              {{ product.title }}
-            </div>
+          <div class="mb-3 text-muted">
+            {{ product.description }}
+          </div>
 
-            <div class="mb-3 text-muted">
-              {{ product.description }}
-            </div>
+          <div class="mb-3 fw-bolder">
+            {{ toCurrency(product.price) }}
+          </div>
 
-            <div class="mb-3 fw-bolder">
-              {{ toCurrency(product.price) }}
-            </div>
-
-            <div style="max-width: 12rem">
-              <IsInCart :product="product" />
-            </div>
+          <div style="max-width: 12rem">
+            <IsInCart :product="product" />
           </div>
         </div>
       </div>
-
-      <div
-        v-if="noProduct"
-        class="fs-3 text-danger"
-      >
-        Không tìm thấy sản phẩm với ID {{ route.params._id }}
-      </div>
     </div>
-  </main>
+
+    <div
+      v-if="noProduct"
+      class="fs-3 text-danger"
+    >
+      Không tìm thấy sản phẩm với ID {{ route.params._id }}
+    </div>
+  </div>
 </template>
 
 

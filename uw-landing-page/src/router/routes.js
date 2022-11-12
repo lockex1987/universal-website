@@ -4,17 +4,19 @@ export default [
   {
     path: '/',
     name: 'Home',
-    // component: HomeView,
-    component: () => import('@/pages/Cart/CartIndex.vue'),
+    component: HomeView,
+    // component: () => import('@/pages/Cart/CartIndex.vue'),
   },
   {
     path: '/Product/:_id',
     name: 'Product',
     component: () => import('@/pages/Product/ProductIndex.vue'),
   },
+  /*
   {
     path: '/Cart',
     name: 'Cart',
     component: () => import('@/pages/Cart/CartIndex.vue'),
   },
+  */
 ]
