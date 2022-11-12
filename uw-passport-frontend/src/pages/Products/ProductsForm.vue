@@ -32,10 +32,7 @@
       label="Ảnh"
       name="image"
     >
-      <a-input
-        v-model:value.lazy.trim="frm.image"
-        class=""
-      />
+      <a-input v-model:value.lazy.trim="frm.image" />
     </a-form-item>
 
     <a-form-item
