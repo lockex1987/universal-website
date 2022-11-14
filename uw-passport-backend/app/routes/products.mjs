@@ -51,6 +51,8 @@ router.post('/insert', async (request, response) => {
   await request.validate(request.body, rules)
 
   // TODO: sanitize HTML content
+  // jitbit/HtmlSanitizer: Fast JavaScript HTML Sanitizer, client-side (i.e. needs a browser, won't work in Node and other backend)
+  // https://github.com/jitbit/HtmlSanitizer
 
   const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
   const db = getDb()
