@@ -60,7 +60,7 @@ routes.forEach(({ path, router, auth, permission }) => {
 app.use(handle404)
 app.use(handle500)
 
-// Disable response header "X-Powered-By"
+// Disable response header 'X-Powered-By'
 app.disable('x-powered-by')
 
 app.listen(port, () => {

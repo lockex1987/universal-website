@@ -14,7 +14,7 @@
     Button loading sẽ không click được.
   </p>
 
-  <a-space class="mb-3">
+  <a-space class="mb-3 flex-wrap">
     <a-button type="primary">Primary Button</a-button>
     <a-button>Default Button</a-button>
     <a-button type="dashed">Dashed Button</a-button>
