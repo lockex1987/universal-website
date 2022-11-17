@@ -103,19 +103,18 @@ const getUserPermissions = async objId => {
   const arr = await db.collection('users').aggregate([
     { $match: { _id: objId } },
     { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'rolesCol' } },
-    { $lookup: { from: 'permissions', localField: 'rolesCol.permissions', foreignField: '_id', as: 'permissionsCol' } },
-    { $unwind: '$permissionsCol' },
-    {
-      $replaceRoot: {
-        newRoot: {
-          $mergeObjects: ['$permissionsCol', '$$ROOT'],
-        },
-      },
-    },
-    { $project: { _id: 0, code: 1 } },
   ])
     .toArray()
-  return arr.map(e => e.code)
+
+  const permissions = []
+  arr.forEach(user => {
+    user.rolesCol.forEach(role => {
+      role.permissions.forEach(p => {
+        permissions.push(p)
+      })
+    })
+  })
+  return permissions
 }
 
 

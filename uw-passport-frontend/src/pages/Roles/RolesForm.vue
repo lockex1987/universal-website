@@ -41,12 +41,12 @@
       <a-checkbox-group v-model:value="frm.permissions">
         <div class="row">
           <div
-            v-for="permission in dropdowns.permissionList"
-            :key="permission._id"
+            v-for="permission in permissionList"
+            :key="permission.code"
             class="col-md-6 d-flex mb-2"
           >
             <div class="pt-1">
-              <a-checkbox :value="permission._id" />
+              <a-checkbox :value="permission.code" />
             </div>
 
             <div class="ms-2">
@@ -76,6 +76,8 @@
 
 
 <script setup>
+import { permissionList } from '@/helpers/permissions.mjs'
+
 const defaultFrm = {
   _id: null,
   code: '',
@@ -93,10 +95,6 @@ const rules = {
 const frmRef = ref()
 
 const isSaving = ref(false)
-
-const dropdowns = reactive({
-  permissionList: [],
-})
 
 const emit = defineEmits(['close', 'inserted', 'updated'])
 
@@ -149,15 +147,6 @@ const openForm = row => {
     Object.assign(frm, defaultFrm)
   }
 }
-
-const getPermissionList = async () => {
-  const { data } = await axios.get('/api/roles/get-all-permissions')
-  dropdowns.permissionList = data
-}
-
-onMounted(() => {
-  getPermissionList()
-})
 
 defineExpose({
   openForm,

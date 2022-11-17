@@ -2,7 +2,6 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
-import { getAllPermissions } from './permissions.mjs'
 
 const router = express.Router()
 
@@ -49,9 +48,6 @@ export const getAllRoles = async (request, response) => {
 // router.get('/get-all', getAllRoles)
 
 
-router.get('/get-all-permissions', getAllPermissions)
-
-
 router.post('/insert', async (request, response) => {
   const { permissions } = request.body
   const rules = {
@@ -64,7 +60,7 @@ router.post('/insert', async (request, response) => {
   await request.validate(request.body, rules)
 
   const data = pick(request.body, 'code', 'name')
-  data.permissions = (permissions ?? []).map(p => ObjectId(p))
+  data.permissions = permissions
   const db = getDb()
   const result = await db.collection('roles').insertOne(data)
 
@@ -88,7 +84,7 @@ router.put('/update', async (request, response) => {
 
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'code', 'name')
-  data.permissions = (permissions ?? []).map(p => ObjectId(p))
+  data.permissions = permissions
   const db = getDb()
   const result = await db.collection('roles').updateOne(query, { $set: data })
 
