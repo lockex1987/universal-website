@@ -1,14 +1,27 @@
 import express from 'express'
 import { getDb } from '#app/helpers/mongodb.mjs'
+import { configList } from '#app/helpers/systemConfig.mjs'
 
 const router = express.Router()
+
+// import { warningThreshold, getConfig } from '#app/helpers/systemConfig.mjs'
+// const test = await getConfig(warningThreshold)
+// console.log(test)
 
 
 router.get('/get-all', async (request, response) => {
   const db = getDb()
   const list = await db.collection('systemConfig').find()
     .toArray()
-  response.json(list)
+  configList.forEach(config => {
+    const temp = list.find(e => e.code == config.code)
+    if (temp) {
+      config.value = temp.value
+    } else {
+      config.value = null
+    }
+  })
+  response.json(configList)
 })
 
 

@@ -23,7 +23,7 @@
 
     <tbody>
       <tr
-        v-for="config in currentConfigList"
+        v-for="config in configList"
         :key="config.code"
       >
         <td>
@@ -55,21 +55,15 @@
 
 
 <script setup>
-import { configList } from '@/helpers/systemConfig.mjs'
-import { onMounted } from 'vue'
-
-const currentConfigList = ref(configList.map(config => ({ ...config, value: null })))
+const configList = ref([])
 
 const isSaving = ref(false)
 
 const saveConfig = async () => {
   isSaving.value = true
-
-  const params = currentConfigList.value
+  const params = configList.value
   const { data } = await axios.post('/api/systemConfig/save-config', params)
-
   isSaving.value = false
-
   if (data.code == 0) {
     noti.success('Lưu cấu hình thành công')
   } else if (data.code == 1) {
@@ -77,17 +71,12 @@ const saveConfig = async () => {
   }
 }
 
-const getAllConfigs = async () => {
+const getConfigList = async () => {
   const { data } = await axios.get('/api/systemConfig/get-all')
-  data.forEach(e => {
-    const config = currentConfigList.value.find(c => c.code == e.code)
-    if (config) {
-      config.value = e.value
-    }
-  })
+  configList.value = data
 }
 
 onMounted(() => {
-  getAllConfigs()
+  getConfigList()
 })
 </script>
