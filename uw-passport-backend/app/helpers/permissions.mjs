@@ -3,6 +3,7 @@ export const Permissions = 'Permissions'
 export const Roles = 'Roles'
 export const Users = 'Users'
 export const Products = 'Products'
+export const SystemConfig = 'SystemConfig'
 
 export const permissionList = [
   {
@@ -20,6 +21,10 @@ export const permissionList = [
   {
     code: Users,
     name: 'Quản trị người dùng',
+  },
+  {
+    code: SystemConfig,
+    name: 'Cấu hình hệ thống',
   },
   {
     code: Products,

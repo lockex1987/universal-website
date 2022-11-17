@@ -3,6 +3,7 @@ import {
   Permissions,
   Roles,
   Users,
+  SystemConfig,
   Products,
 } from '@/helpers/permissions.mjs'
 
@@ -50,6 +51,12 @@ export default [
         name: 'Users',
         component: () => import('@/pages/Users/UsersIndex.vue'),
         meta: { permission: Users },
+      },
+      {
+        path: 'SystemConfig',
+        name: 'SystemConfig',
+        component: () => import('@/pages/SystemConfig/SystemConfigIndex.vue'),
+        meta: { permission: SystemConfig },
       },
       {
         path: 'Products',

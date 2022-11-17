@@ -3,6 +3,7 @@ import {
   Permissions,
   Roles,
   Users,
+  SystemConfig,
   Products,
 } from '@/helpers/permissions.mjs'
 
@@ -16,6 +17,7 @@ export default [
       { code: 'Permissions', name: 'Quyền', permission: Permissions },
       { code: 'Roles', name: 'Vai trò', permission: Roles },
       { code: 'Users', name: 'Người dùng', permission: Users },
+      { code: 'SystemConfig', name: 'Cấu hình hệ thống', permission: SystemConfig },
     ],
   },
   {
