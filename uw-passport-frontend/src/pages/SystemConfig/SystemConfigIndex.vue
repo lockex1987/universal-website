@@ -6,70 +6,88 @@
     </ol>
   </Teleport>
 
-  <div class="d-flex flex-wrap align-items-center">
-    <a-input
-      v-model:value="filter.text"
-      class="form-control-max-width mb-3"
-      placeholder="Tìm kiếm"
-    />
-  </div>
+  <table class="table table-borderless">
+    <thead>
+      <tr>
+        <th>
+          Mã
+        </th>
+        <th>
+          Tên
+        </th>
+        <th>
+          Giá trị
+        </th>
+      </tr>
+    </thead>
 
-  <div
-    v-show="filteredPermissionList.length == 0"
-    class="text-danger"
-  >
-    <a-empty />
-  </div>
+    <tbody>
+      <tr
+        v-for="config in currentConfigList"
+        :key="config.code"
+      >
+        <td>
+          {{ config.code }}
+        </td>
+        <td>
+          {{ config.name }}
+        </td>
+        <td>
+          <a-input
+            :type="config.type"
+            v-model:value.lazy.trim="config.value"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <div v-show="filteredPermissionList.length > 0">
-    <div class="table-responsive-md">
-      <table class="table table-borderless">
-        <thead>
-          <tr>
-            <th class="text-end">
-              #
-            </th>
-            <th>
-              Mã
-            </th>
-            <th>
-              Tên
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr
-            v-for="(permission, i) in filteredPermissionList"
-            :key="permission.code"
-          >
-            <td class="text-end">
-              {{ i + 1 }}
-            </td>
-            <td>
-              {{ permission.code }}
-            </td>
-            <td>
-              {{ permission.name }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div>
+    <a-button
+      type="primary"
+      :loading="isSaving"
+      @click="saveConfig()"
+    >
+      Lưu cấu hình
+    </a-button>
   </div>
 </template>
 
 
 <script setup>
-import { permissionList } from '@/helpers/permissions.mjs'
+import { configList } from '@/helpers/systemConfig.mjs'
+import { onMounted } from 'vue'
 
-const filter = reactive({
-  text: '',
-})
+const currentConfigList = ref(configList.map(config => ({ ...config, value: null })))
 
-const filteredPermissionList = computed(() => {
-  const text = filter.text.trim().toLowerCase()
-  const filterFunc = permission => permission.code.toLowerCase().includes(text) || permission.name.toLowerCase().includes(text)
-  return permissionList.filter(filterFunc)
+const isSaving = ref(false)
+
+const saveConfig = async () => {
+  isSaving.value = true
+
+  const params = currentConfigList.value
+  const { data } = await axios.post('/api/systemConfig/save-config', params)
+
+  isSaving.value = false
+
+  if (data.code == 0) {
+    noti.success('Lưu cấu hình thành công')
+  } else if (data.code == 1) {
+    noti.error(data.message)
+  }
+}
+
+const getAllConfigs = async () => {
+  const { data } = await axios.get('/api/systemConfig/get-all')
+  data.forEach(e => {
+    const config = currentConfigList.value.find(c => c.code == e.code)
+    if (config) {
+      config.value = e.value
+    }
+  })
+}
+
+onMounted(() => {
+  getAllConfigs()
 })
 </script>
