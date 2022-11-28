@@ -63,8 +63,8 @@
               <td class="text-end">
                 {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
               </td>
-              <td>
-                <div class="d-flex">
+              <td style="width: 50%">
+                <div class="d-flex align-items-start">
                   <img
                     class="thumbnail me-4"
                     :src="product.image ? (product.image.startsWith('http') ? product.image : '/' + product.image) : '/static/images/user_avatar.png'"
@@ -72,17 +72,11 @@
                   />
 
                   <div>
-                    <div
-                      class="line-clamp-ellipsis-1 fw-semibold b-2"
-                      style="max-width: 30rem"
-                    >
+                    <div class="line-clamp-ellipsis-1 fw-semibold b-2">
                       {{ product.title }}
                     </div>
 
-                    <div
-                      class="line-clamp-ellipsis-3"
-                      style="max-width: 30rem"
-                    >
+                    <div class="line-clamp-ellipsis-3">
                       {{ product.description }}
                     </div>
                   </div>
@@ -189,6 +183,6 @@ onMounted(() => {
 <style scoped>
 .thumbnail {
   width: 5rem;
-  height: 5rem;
+  height: auto;
 }
 </style>
