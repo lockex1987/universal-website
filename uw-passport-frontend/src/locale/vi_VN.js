@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Pagination from 'ant-design-vue/es/vc-pagination/locale/vi_VN'
 import DatePicker from 'ant-design-vue/es/date-picker/locale/vi_VN'
 import TimePicker from 'ant-design-vue/es/time-picker/locale/vi_VN'
