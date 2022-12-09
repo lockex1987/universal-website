@@ -61,7 +61,7 @@ router.post('/search', async (request, response) => {
 })
 
 
-export const getAllUser = async (request, response) => {
+export const getAllUsers = async (request, response) => {
   const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
   const projection = {
@@ -80,11 +80,14 @@ export const getAllUser = async (request, response) => {
   const query = { deletedAt: null }
   const list = await db.collection('users')
     // .find(query)
-    .find(query, { projection })
-    // .project(projection)
+    .find(query, { projection }) // không hiển thị password
+    // .project(projection) // không hiển thị password
     .toArray()
   response.json(list)
 }
+
+
+// router.get('/get-all-users', getAllUsers)
 
 
 router.get('/get-all-orgs', getAllOrgs)

@@ -229,10 +229,19 @@ const getRoleList = async () => {
   dropdowns.roleList = data
 }
 
+// Test thôi, xem có hiển thị password không
+/*
+const getAllUsers = async () => {
+  const { data } = await axios.get('/api/users/get-all-users')
+  console.log(data)
+}
+*/
+
 onMounted(() => {
   search(1)
   getOrgTree()
   getRoleList()
+  // getAllUsers()
 })
 </script>
 
