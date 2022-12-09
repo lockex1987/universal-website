@@ -24,7 +24,7 @@ router.post('/login', async (request, response) => {
 
   const { username, password } = request.body
   const db = getDb()
-  const query = { username: { $regex: '^' + username + '$', $options: 'i' } }
+  const query = { username: { $regex: '^' + username.toLowerCase() + '$', $options: 'i' } }
   const dbUser = await db.collection('users').findOne(query)
 
   if (! dbUser || ! dbUser.isActive || dbUser.deletedAt) {

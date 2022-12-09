@@ -115,7 +115,8 @@ router.post('/insert', async (request, response) => {
   await request.validate(request.body, rules)
 
   const { orgId, isActive, roles, password } = request.body
-  const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
+  const data = pick(request.body, 'fullName', 'email', 'phone')
+  data.username = request.body.username.toLowerCase()
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
@@ -151,7 +152,8 @@ router.put('/update', async (request, response) => {
   await request.validate(request.body, rules)
 
   const query = { _id: ObjectId(_id) }
-  const data = pick(request.body, 'username', 'fullName', 'email', 'phone')
+  const data = pick(request.body, 'fullName', 'email', 'phone')
+  data.username = request.body.username.toLowerCase()
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
