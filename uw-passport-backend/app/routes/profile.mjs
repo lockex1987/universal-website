@@ -61,7 +61,7 @@ router.get('/get_user_info', async (request, response) => {
   const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  const project = {
+  const projection = {
     _id: 1,
     username: 1,
     fullName: 1,
@@ -76,16 +76,22 @@ router.get('/get_user_info', async (request, response) => {
   }
 
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
+  // mongosh
+  // findOne(query, projection, options)
   // const row = await db.collection('users').findOne(query, projection)
 
   // Làm thế này thì không trả về password
-  // const row = await db.collection('users').findOne(query, { projection: project })
+  // Node.js:
+  // findOne(filter: Filter<TSchema>, options: FindOptions<Document>): Promise<null | WithId<TSchema>>
+  // https://mongodb.github.io/node-mongodb-native/4.12/interfaces/FindOptions.html
+  // FindOptions chứa projection
+  // const row = await db.collection('users').findOne(query, { projection })
 
   const list = await db.collection('users').aggregate([
     { $match: query },
     { $lookup: { from: 'orgs', localField: 'orgId', foreignField: '_id', as: 'org' } },
     { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'roleList' } },
-    { $project: { ...project, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
+    { $project: { ...projection, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
   ])
     .toArray()
 

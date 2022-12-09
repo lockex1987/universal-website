@@ -26,7 +26,7 @@ router.post('/search', async (request, response) => {
   const sort = { _id: -1 }
   const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  const project = {
+  const projection = {
     _id: 1,
     username: 1,
     fullName: 1,
@@ -50,7 +50,7 @@ router.post('/search', async (request, response) => {
     { $limit: size },
     { $lookup: { from: 'orgs', localField: 'orgId', foreignField: '_id', as: 'org' } },
     { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'roleList' } },
-    { $project: { ...project, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
+    { $project: { ...projection, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
   ])
     .toArray()
 
@@ -64,7 +64,7 @@ router.post('/search', async (request, response) => {
 export const getAllUser = async (request, response) => {
   const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
-  const project = {
+  const projection = {
     _id: 1,
     username: 1,
     fullName: 1,
@@ -78,8 +78,10 @@ export const getAllUser = async (request, response) => {
     // password: 0
   }
   const query = { deletedAt: null }
-  const list = await db.collection('users').find(query)
-    .project(project)
+  const list = await db.collection('users')
+    // .find(query)
+    .find(query, { projection })
+    // .project(projection)
     .toArray()
   response.json(list)
 }
