@@ -37,7 +37,7 @@ router.post('/search', async (request, response) => {
     orgId: 1,
     isActive: 1,
     roles: 1,
-    'totp.enabled': 1, // không hiển thị secret, uri
+    'totp.enabled': 1, // không hiển thị secret
     'totp.shouldShow': 1,
     // password: 0
   }
@@ -129,7 +129,6 @@ router.post('/insert', async (request, response) => {
   data.totp = {
     enabled: (body.totpEnabled === 'true'),
     secret: '',
-    uri: '',
     shouldShow: false,
   }
   data.password = bcrypt.hashSync(password, 10)

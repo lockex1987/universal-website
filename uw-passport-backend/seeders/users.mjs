@@ -19,7 +19,6 @@ const insertOne = async () => {
     totp: {
       enabled: false,
       secret: '',
-      uri: '',
       shouldShow: false,
     },
   })
@@ -28,7 +27,7 @@ const insertOne = async () => {
 
 
 // Cập nhật dữ liệu cũ
-// db.users.updateMany({ totp: null }, { $set: { totp: { enabled: false, secret: '' } } })
+// db.users.updateMany({ totp: null }, { $set: { totp: { enabled: false, secret: '', shouldShow: false } } })
 const insertMany = async () => {
   const userList = []
   for (let i = 0; i < 101; i++) {
@@ -43,7 +42,6 @@ const insertMany = async () => {
       totp: {
         enabled: false,
         secret: '',
-        uri: '',
         shouldShow: false,
       },
     }

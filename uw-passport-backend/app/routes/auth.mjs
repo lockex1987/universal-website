@@ -12,6 +12,7 @@ import {
 } from '#app/helpers/auth.mjs'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
+import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
 import { code as appCode } from '#config/app.mjs'
 
 const router = express.Router()
@@ -58,17 +59,25 @@ router.post('/login', async (request, response) => {
         // Chỉ hiển thị một lần
         totp.shouldShow = false
 
+        let plainSecret
         if (! totp.secret) {
-          totp.secret = authenticator.generateSecret()
-          totp.uri = authenticator.keyuri(dbUser.username, appCode, totp.secret)
+          plainSecret = authenticator.generateSecret()
+          totp.secret = encrypt(plainSecret)
+        } else {
+          plainSecret = decrypt(totp.secret)
         }
 
         db.collection('users').updateOne(query, { $set: { totp } })
 
+        const uri = authenticator.keyuri(dbUser.username, appCode, plainSecret)
+
         return response.json({
           code: 2,
           message: 'Hiển thị mã QR',
-          totp,
+          totp: {
+            // ...totp,
+            uri,
+          },
         })
       }
 

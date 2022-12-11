@@ -9,6 +9,7 @@ import { authenticator } from 'otplib'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
 import { pick, getBasePath } from '#app/helpers/common.mjs'
+import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
 import { code as appCode } from '#config/app.mjs'
 
 const router = express.Router()
@@ -118,12 +119,16 @@ router.get('/get_totp', async (request, response) => {
   const user = await db.collection('users').findOne(query, projection)
   const { totp } = user
   if (totp.enabled) {
+    let plainSecret
     if (! totp.secret) {
-      totp.secret = authenticator.generateSecret()
-      totp.uri = authenticator.keyuri(user.username, appCode, totp.secret)
-
+      plainSecret = authenticator.generateSecret()
+      totp.secret = encrypt(plainSecret)
       db.collection('users').updateOne(query, { $set: { totp } })
+    } else {
+      plainSecret = decrypt(totp.secret)
     }
+
+    totp.uri = authenticator.keyuri(user.username, appCode, plainSecret)
   }
   response.json(totp)
 })

@@ -8,6 +8,8 @@ export default {
   // dev, prod, test
   ENVIRONMENT: 'development',
 
+  ENCRYPTION_KEY: '', // crypto.randomBytes(32).toString('hex')
+
   // DRIVE_DISK=local
 
   MONGO: {

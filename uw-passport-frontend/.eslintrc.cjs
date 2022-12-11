@@ -58,5 +58,6 @@ module.exports = {
       },
     }],
     'no-multiple-empty-lines': 'off',
+    'no-new': 'off',
   },
 }
