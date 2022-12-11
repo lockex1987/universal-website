@@ -37,7 +37,8 @@ router.post('/search', async (request, response) => {
     orgId: 1,
     isActive: 1,
     roles: 1,
-    'totp.enabled': 1, // không hiển thị secret
+    'totp.enabled': 1, // không hiển thị secret, uri
+    'totp.shouldShow': 1,
     // password: 0
   }
 
@@ -91,13 +92,13 @@ export const getAllUsers = async (request, response) => {
 }
 
 
-// router.get('/get-all-users', getAllUsers)
+// router.get('/get_all_users', getAllUsers)
 
 
-router.get('/get-all-orgs', getAllOrgs)
+router.get('/get_all_orgs', getAllOrgs)
 
 
-router.get('/get-all-roles', getAllRoles)
+router.get('/get_all_roles', getAllRoles)
 
 
 router.post('/insert', async (request, response) => {
@@ -125,7 +126,12 @@ router.post('/insert', async (request, response) => {
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
-  data['totp.enabled'] = (body.totpEnabled === 'true')
+  data.totp = {
+    enabled: (body.totpEnabled === 'true'),
+    secret: '',
+    uri: '',
+    shouldShow: false,
+  }
   data.password = bcrypt.hashSync(password, 10)
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
@@ -189,6 +195,19 @@ router.delete('/delete/:_id', async (request, response) => {
   response.json({
     code: 0,
     message: 'Deleted ' + result.modifiedCount, // deletedCount
+  })
+})
+
+
+router.post('/show_totp_qr', async (request, response) => {
+  const { _id } = request.body
+  const query = { _id: ObjectId(_id) }
+  const data = { 'totp.shouldShow': true }
+  const db = getDb()
+  const result = await db.collection('users').updateOne(query, { $set: data })
+  response.json({
+    code: 0,
+    message: 'Updated ' + result.modifiedCount,
   })
 })
 

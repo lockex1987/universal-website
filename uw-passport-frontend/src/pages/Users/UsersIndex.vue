@@ -63,7 +63,7 @@
               <th class="text-start d-none d-md-table-cell">
                 Vai trò
               </th>
-              <th class="text-start d-none d-md-table-cell">
+              <th class="text-center d-none d-md-table-cell">
                 TOTP
               </th>
               <th class="text-center">
@@ -130,6 +130,16 @@
                   v-show="user.totp.enabled"
                   class="bi bi-check text-success"
                 ></i>
+
+                <div v-show="user.totp.enabled && !user.totp.shouldShow">
+                  <a-button
+                    type="primary"
+                    size="small"
+                    @click="showTotpQr(user)"
+                  >
+                    Hiển thị QR
+                  </a-button>
+                </div>
               </td>
               <td class="text-center">
                 <i
@@ -229,22 +239,30 @@ const deleteRow = user => {
 }
 
 const getOrgTree = async () => {
-  const { data } = await axios.get('/api/users/get-all-orgs')
+  const { data } = await axios.get('/api/users/get_all_orgs')
   dropdowns.orgTree = convertToTreeData(data)
 }
 
 const getRoleList = async () => {
-  const { data } = await axios.get('/api/users/get-all-roles')
+  const { data } = await axios.get('/api/users/get_all_roles')
   dropdowns.roleList = data
 }
 
 // Test thôi, xem có hiển thị password không
 /*
 const getAllUsers = async () => {
-  const { data } = await axios.get('/api/users/get-all-users')
+  const { data } = await axios.get('/api/users/get_all_users')
   console.log(data)
 }
 */
+
+const showTotpQr = async user => {
+  const params = { _id: user._id }
+  const { data } = await axios.post('/api/users/show_totp_qr', params)
+  if (data.code == 0) {
+    user.totp.shouldShow = true
+  }
+}
 
 onMounted(() => {
   search(1)

@@ -23,6 +23,10 @@
         ></canvas>
       </div>
 
+      <div class="mb-4">
+        Sử dụng Google Authenticator để quét mã QR trên
+      </div>
+
       <div>
         <a-button
           type="primary"

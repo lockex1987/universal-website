@@ -19,6 +19,8 @@ const insertOne = async () => {
     totp: {
       enabled: false,
       secret: '',
+      uri: '',
+      shouldShow: false,
     },
   })
   console.log(result.insertedId)
@@ -41,6 +43,8 @@ const insertMany = async () => {
       totp: {
         enabled: false,
         secret: '',
+        uri: '',
+        shouldShow: false,
       },
     }
     userList.push(user)
