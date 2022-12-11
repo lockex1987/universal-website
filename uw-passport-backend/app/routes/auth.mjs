@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import express from 'express'
 import { ObjectId } from 'mongodb'
+import { authenticator } from 'otplib'
 import {
   generateRandomSessionId,
   getUser,
@@ -11,10 +12,12 @@ import {
 } from '#app/helpers/auth.mjs'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
+import { code as appCode } from '#config/app.mjs'
 
 const router = express.Router()
 
 
+// TODO: throttle đăng nhập thất bại
 router.post('/login', async (request, response) => {
   const rules = {
     username: { required: true },
@@ -22,7 +25,7 @@ router.post('/login', async (request, response) => {
   }
   await request.validate(request.body, rules)
 
-  const { username, password } = request.body
+  const { username, password, totpCode } = request.body
   const db = getDb()
   const query = { username: { $regex: '^' + username.toLowerCase() + '$', $options: 'i' } }
   const dbUser = await db.collection('users').findOne(query)
@@ -39,6 +42,48 @@ router.post('/login', async (request, response) => {
       code: 1,
       message: 'Đăng nhập thất bại',
     })
+  }
+
+  if (! dbUser.isActive) {
+    return response.json({
+      code: 1,
+      message: 'Người dùng đang bị khóa',
+    })
+  }
+
+  const { totp } = dbUser
+  if (totp.enabled) {
+    if (! totpCode) {
+      if (totp.shouldShow) {
+        // Chỉ hiển thị một lần
+        totp.shouldShow = false
+
+        if (! totp.secret) {
+          totp.secret = authenticator.generateSecret()
+          totp.uri = authenticator.keyuri(dbUser.username, appCode, totp.secret)
+        }
+
+        db.collection('users').updateOne(query, { $set: { totp } })
+
+        return response.json({
+          code: 2,
+          message: 'Hiển thị mã QR',
+          totp,
+        })
+      }
+
+      return response.json({
+        code: 3,
+        message: 'Cần nhập TOTP, hiển thị màn hình nhập',
+      })
+    } else {
+      if (! authenticator.check(totpCode, totp.secret)) {
+        return response.json({
+          code: 1,
+          message: 'Mã TOTP không chính xác',
+        })
+      }
+    }
   }
 
   const permissions = await getUserPermissions(dbUser._id)
