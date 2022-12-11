@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-3 fw-bold">
+  <div class="mb-4 fw-bold">
     {{ action.actionName }}
     vai trò
   </div>

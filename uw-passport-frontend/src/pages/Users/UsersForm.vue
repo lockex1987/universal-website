@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-3 fw-bold">
+  <div class="mb-4 fw-bold">
     {{ action.actionName }}
     người dùng
   </div>
@@ -11,7 +11,7 @@
     @finish="saveForm()"
     layout="vertical"
   >
-    <div class="mb-3 mt-3 form-control-max-width py-4 text-center">
+    <div class="mb-4 mt-3 form-control-max-width py-4 text-center">
       <a-form-item name="avatar">
         <a-upload
           v-model:file-list="frm.avatar"

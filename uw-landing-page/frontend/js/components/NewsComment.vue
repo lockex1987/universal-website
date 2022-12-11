@@ -1,6 +1,6 @@
 <template>
   <div class="comments">
-    <div class="mb-3 font-weight-500 text-muted">
+    <div class="mb-4 font-weight-500 text-muted">
       Bình luận
     </div>
 
@@ -17,7 +17,7 @@
 
     <!-- Nếu dùng v-show thì bị lỗi "t.attr(...).tooltip is not a function", phải sử dụng v-if -->
     <div v-show="checkLoginStatus == 1">
-      <div class="mb-3 d-flex align-items-center">
+      <div class="mb-4 d-flex align-items-center">
         <img
           :src="avatar"
           class="avatar me-2 rounded-circle"
@@ -29,7 +29,7 @@
         </span>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-4">
         <html-editor
           ref="commentEditor"
           placeholder="Nội dung bình luận"
@@ -66,7 +66,7 @@
       class="mt-5"
     >
       <!-- Tên, thời gian, nội dung -->
-      <div class="mb-3 d-flex align-items-center">
+      <div class="mb-4 d-flex align-items-center">
         <img
           :src="comment.user.avatar"
           class="avatar me-2 rounded-circle"
@@ -108,7 +108,7 @@
           v-show="comment.showReply"
           class="mt-5"
         >
-          <div class="mb-3 d-flex align-items-center">
+          <div class="mb-4 d-flex align-items-center">
             <img
               :src="avatar"
               class="avatar me-2 rounded-circle"
@@ -120,7 +120,7 @@
             </span>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-4">
             <html-editor
               :ref="'replyEditor' + comment.id"
               placeholder="Nội dung trả lời"
@@ -155,7 +155,7 @@
         >
           <!-- Tên, thời gian, nội dung -->
           <!-- Tương tự phần cấp 1 -->
-          <div class="mb-3 d-flex align-items-center">
+          <div class="mb-4 d-flex align-items-center">
             <img
               :src="reply.user.avatar"
               class="avatar me-2 rounded-circle"

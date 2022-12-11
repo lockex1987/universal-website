@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col-lg-4">
       <div class="h-100 mb-5">
-        <div class="fw-bold mb-3">
+        <div class="fw-bold mb-4">
           Thông tin tài khoản
         </div>
 
@@ -18,7 +18,7 @@
 
     <div class="col-lg-4">
       <div class="h-100 mb-5">
-        <div class="fw-bold mb-3">
+        <div class="fw-bold mb-4">
           Đổi mật khẩu
         </div>
 
@@ -28,7 +28,7 @@
 
     <div class="col-lg-4">
       <div class="h-100 mb-5">
-        <div class="fw-bold mb-3">
+        <div class="fw-bold mb-4">
           TOTP
         </div>
 

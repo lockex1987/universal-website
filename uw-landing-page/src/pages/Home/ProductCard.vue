@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+  <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
     <div class="card h-100">
       <img
         :src="product.image"
@@ -18,7 +18,7 @@
           </RouterLink>
         </div>
 
-        <div class="card-text mb-3 mt-auto">
+        <div class="card-text mb-4 mt-auto">
           {{ toCurrency(product.price) }}
         </div>
 

@@ -17,7 +17,7 @@
         </RouterLink>
       </div>
 
-      <div class="mb-3 fw-bold text-muted">
+      <div class="mb-4 fw-bold text-muted">
         {{ toCurrency(product.cost) }}
       </div>
 

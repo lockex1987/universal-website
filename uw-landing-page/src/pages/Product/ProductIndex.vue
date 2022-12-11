@@ -17,20 +17,20 @@
         </div>
 
         <div class="col-md-6">
-          <div class="fs-3 mb-3">
+          <div class="fs-3 mb-4">
             {{ product.title }}
           </div>
 
-          <div class="mb-3 text-muted">
+          <div class="mb-4 text-muted">
             {{ product.description }}
           </div>
 
           <div
-            class="mb-3 text-muted"
+            class="mb-4 text-muted"
             v-html="product.content"
           ></div>
 
-          <div class="mb-3 fw-bolder">
+          <div class="mb-4 fw-bolder">
             {{ toCurrency(product.price) }}
           </div>
 

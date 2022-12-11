@@ -14,7 +14,7 @@
     Button loading sẽ không click được.
   </p>
 
-  <a-space class="mb-3 flex-wrap">
+  <a-space class="mb-4 flex-wrap">
     <a-button type="primary">Primary Button</a-button>
     <a-button>Default Button</a-button>
     <a-button type="dashed">Dashed Button</a-button>
@@ -39,10 +39,10 @@
     >Loading</a-button>
   </a-space>
 
-  <div class="mb-3">
+  <div class="mb-4">
     <a-button
       type="primary"
-      class="mb-3"
+      class="mb-4"
     >
       No block
     </a-button>
@@ -55,7 +55,7 @@
     </a-button>
   </div>
 
-  <div class="mb-3">
+  <div class="mb-4">
     <a-space>
       <a-button
         type="primary"
@@ -69,7 +69,7 @@
     </a-space>
   </div>
 
-  <div class="mb-3">
+  <div class="mb-4">
     <a-space>
       <a-button type="primary">Type button (default)</a-button>
 

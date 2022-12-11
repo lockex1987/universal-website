@@ -1,56 +1,74 @@
 <template>
   <div
-    class="mx-auto mt-5"
+    class="mx-auto mt-5 text-center"
     style="max-width: 500px"
   >
-    <div class="text-center mb-3">
-      <img
-        src="/static/images/logo.svg"
-        style="width: 5rem"
-      />
-    </div>
-
-    <div
-      v-show="errorMessage"
-      class="mb-3 text-center text-danger"
-    >
-      {{ errorMessage }}
-    </div>
-
-    <a-form
-      :model="frm"
-      :rules="rules"
-      @finish="processLogin"
-      layout="vertical"
-    >
-      <a-form-item
-        label="Tên đăng nhập"
-        name="username"
-      >
-        <a-input v-model:value.lazy.trim="frm.username" />
-      </a-form-item>
-
-      <a-form-item
-        label="Mật khẩu"
-        name="password"
-      >
-        <a-input-password
-          v-model:value.lazy.trim="frm.password"
-          autocomplete="off"
+    <div v-show="screen == 'login'">
+      <div class="mb-4">
+        <img
+          src="/static/images/logo.svg"
+          style="width: 5rem"
         />
-      </a-form-item>
+      </div>
+
+      <div
+        v-show="errorMessage"
+        class="mb-4 text-danger"
+      >
+        {{ errorMessage }}
+      </div>
+
+      <a-form
+        :model="frm"
+        :rules="rules"
+        @finish="processLogin"
+        layout="vertical"
+      >
+        <a-form-item
+          label="Tên đăng nhập"
+          name="username"
+        >
+          <a-input v-model:value.lazy.trim="frm.username" />
+        </a-form-item>
+
+        <a-form-item
+          label="Mật khẩu"
+          name="password"
+        >
+          <a-input-password
+            v-model:value.lazy.trim="frm.password"
+            autocomplete="off"
+          />
+        </a-form-item>
+
+        <div>
+          <a-button
+            type="primary"
+            html-type="submit"
+            block
+            :loading="isProcessing"
+          >
+            Đăng nhập
+          </a-button>
+        </div>
+      </a-form>
+    </div>
+
+    <div v-show="screen == 'qr'">
+      <div class="mb-4">
+        <canvas
+          class="qr-image"
+          ref="qrImage"
+        ></canvas>
+      </div>
 
       <div>
-        <a-button
-          type="primary"
-          html-type="submit"
-          block
-          :loading="isProcessing"
-        >
-          Đăng nhập
-        </a-button>
+        Sử dụng Google Authenticator để quét mã QR trên
       </div>
-    </a-form>
+    </div>
+
+    <div v-show="screen == 'totp'">
+    </div>
   </div>
 </template>
 
@@ -73,6 +91,11 @@ const rules = {
 const errorMessage = ref('')
 
 const isProcessing = ref(false)
+
+// login, qr, totp
+const screen = ref('login')
+
+const qrImage = ref()
 
 const processLogin = async () => {
   isProcessing.value = true

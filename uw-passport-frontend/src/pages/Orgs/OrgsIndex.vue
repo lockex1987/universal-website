@@ -11,7 +11,7 @@
       <div class="col-lg-3">
         <a-input
           v-model:value="filter.text"
-          class="form-control-max-width mb-3"
+          class="form-control-max-width mb-4"
           placeholder="Tìm kiếm"
           @input="debouncedSearch()"
         />
@@ -27,7 +27,7 @@
           <a-button
             type="primary"
             @click="openForm()"
-            class="mb-3 ms-auto"
+            class="mb-4 ms-auto"
           >
             Thêm mới
           </a-button>

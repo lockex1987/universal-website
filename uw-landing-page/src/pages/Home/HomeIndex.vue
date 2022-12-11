@@ -4,7 +4,7 @@
       Trang chủ
     </h4-->
 
-    <div class="mb-3">
+    <div class="mb-4">
       Tổng cộng {{ productList.length }} sản phẩm
     </div>
 

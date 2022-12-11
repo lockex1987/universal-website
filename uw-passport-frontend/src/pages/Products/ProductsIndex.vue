@@ -10,7 +10,7 @@
     <div class="d-flex flex-wrap align-items-center">
       <a-input
         v-model:value="filter.text"
-        class="form-control-max-width mb-3"
+        class="form-control-max-width mb-4"
         placeholder="Tên, mô tả"
         @input="debouncedSearch()"
       />
@@ -18,7 +18,7 @@
       <a-button
         type="primary"
         @click="openForm()"
-        class="mb-3 ms-auto"
+        class="mb-4 ms-auto"
       >
         Thêm mới
       </a-button>

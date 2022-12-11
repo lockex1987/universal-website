@@ -9,7 +9,7 @@
   <div class="d-flex flex-wrap align-items-center">
     <a-input
       v-model:value="filter.text"
-      class="form-control-max-width mb-3"
+      class="form-control-max-width mb-4"
       placeholder="Tìm kiếm"
     />
   </div>
