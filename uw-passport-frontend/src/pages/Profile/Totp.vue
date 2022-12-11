@@ -25,7 +25,7 @@ import QRious from 'qrious'
 const totp = reactive({
   enabled: 0, // chưa xác định, khi xác định sẽ là true hoặc false
   secret: '',
-  url: 'https://github.com/neocotic/qrious',
+  uri: 'https://github.com/neocotic/qrious',
 })
 
 const qrImage = ref()
@@ -37,7 +37,7 @@ const initInfo = async () => {
   if (totp.enabled) {
     new QRious({
       element: qrImage.value,
-      value: totp.url
+      value: totp.uri
     })
   }
 }

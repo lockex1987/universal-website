@@ -5,9 +5,11 @@ import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import { ObjectId } from 'mongodb'
 import Jimp from 'jimp'
+import { authenticator } from 'otplib'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
 import { pick, getBasePath } from '#app/helpers/common.mjs'
+import { code as appCode } from '#config/app.mjs'
 
 const router = express.Router()
 
@@ -79,14 +81,14 @@ router.get('/get_user_info', async (request, response) => {
   // Nếu làm giống mongosh như dưới thì vẫn trả về password
   // mongosh
   // findOne(query, projection, options)
-  // const row = await db.collection('users').findOne(query, projection)
+  // const user = await db.collection('users').findOne(query, projection)
 
   // Làm thế này thì không trả về password
   // Node.js:
   // findOne(filter: Filter<TSchema>, options: FindOptions<Document>): Promise<null | WithId<TSchema>>
   // https://mongodb.github.io/node-mongodb-native/4.12/interfaces/FindOptions.html
   // FindOptions chứa projection
-  // const row = await db.collection('users').findOne(query, { projection })
+  // const user = await db.collection('users').findOne(query, { projection })
 
   const list = await db.collection('users').aggregate([
     { $match: query },
@@ -96,9 +98,9 @@ router.get('/get_user_info', async (request, response) => {
   ])
     .toArray()
 
-  const row = list[0]
+  const user = list[0]
 
-  response.json(row)
+  response.json(user)
 })
 
 
@@ -113,8 +115,17 @@ router.get('/get_totp', async (request, response) => {
     totp: 1,
     // password: 0,
   }
-  const row = await db.collection('users').findOne(query, projection)
-  response.json(row.totp)
+  const user = await db.collection('users').findOne(query, projection)
+  const { totp } = user
+  if (totp.enabled) {
+    if (! totp.secret) {
+      totp.secret = authenticator.generateSecret()
+      totp.uri = authenticator.keyuri(user.username, appCode, totp.secret)
+
+      db.collection('users').updateOne(query, { $set: { totp } })
+    }
+  }
+  response.json(totp)
 })
 
 
