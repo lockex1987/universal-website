@@ -16,10 +16,17 @@ const insertOne = async () => {
   const result = await db.collection('users').insertOne({
     username,
     password: hashedPassword,
+    totp: {
+      enabled: false,
+      secret: '',
+    },
   })
   console.log(result.insertedId)
 }
 
+
+// Cập nhật dữ liệu cũ
+// db.users.updateMany({ totp: null }, { $set: { totp: { enabled: false, secret: '' } } })
 const insertMany = async () => {
   const userList = []
   for (let i = 0; i < 101; i++) {
@@ -31,6 +38,10 @@ const insertMany = async () => {
       avatar: faker.image.avatar(),
       thumbnail: faker.image.avatar(),
       password: faker.internet.password(),
+      totp: {
+        enabled: false,
+        secret: '',
+      },
     }
     userList.push(user)
   }

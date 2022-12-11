@@ -10,8 +10,8 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'semi': ['error', 'never'],
-    'indent': ['error', 2],
+    semi: ['error', 'never'],
+    indent: ['error', 2],
     'space-before-function-paren': ['error', {
       anonymous: 'always',
       named: 'never',
@@ -19,10 +19,10 @@ module.exports = {
     }],
     'operator-linebreak': ['error', 'before'],
     'comma-dangle': ['error', 'always-multiline'],
-    'quote-props': ['error', 'consistent-as-needed'],
+    'quote-props': ['error', 'as-needed'], // consistent-as-needed
     'arrow-parens': ['error', 'as-needed'],
     'object-curly-spacing': ['error', 'always'],
-    'eqeqeq': 'off',
+    eqeqeq: 'off',
     'space-unary-ops': ['error', {
       words: true,
       nonwords: false, // no space before ++, --

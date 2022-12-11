@@ -37,6 +37,7 @@ router.post('/search', async (request, response) => {
     orgId: 1,
     isActive: 1,
     roles: 1,
+    'totp.enabled': 1, // không hiển thị secret
     // password: 0
   }
 
@@ -68,6 +69,7 @@ export const getAllUsers = async (request, response) => {
     _id: 1,
     username: 1,
     fullName: 1,
+    /*
     email: 1,
     phone: 1,
     avatar: 1,
@@ -75,6 +77,8 @@ export const getAllUsers = async (request, response) => {
     orgId: 1,
     isActive: 1,
     roles: 1,
+    'totp.enabled': 1, // không hiển thị secret
+    */
     // password: 0
   }
   const query = { deletedAt: null }
@@ -97,6 +101,7 @@ router.get('/get-all-roles', getAllRoles)
 
 
 router.post('/insert', async (request, response) => {
+  const { body } = request
   const rules = {
     username: [
       { required: true, max: 100 },
@@ -112,14 +117,15 @@ router.post('/insert', async (request, response) => {
       { type: 'strongPassword' },
     ],
   }
-  await request.validate(request.body, rules)
+  await request.validate(body, rules)
 
-  const { orgId, isActive, roles, password } = request.body
-  const data = pick(request.body, 'fullName', 'email', 'phone')
-  data.username = request.body.username.toLowerCase()
+  const { orgId, isActive, roles, password } = body
+  const data = pick(body, 'fullName', 'email', 'phone')
+  data.username = body.username.toLowerCase()
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
+  data['totp.enabled'] = (body.totp_enabled === 'true')
   data.password = bcrypt.hashSync(password, 10)
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
@@ -133,7 +139,8 @@ router.post('/insert', async (request, response) => {
 
 
 router.put('/update', async (request, response) => {
-  const { _id, orgId, isActive, roles, password } = request.body
+  const { body } = request
+  const { _id, orgId, isActive, roles, password } = body
   const rules = {
     username: [
       { required: true, max: 100 },
@@ -149,14 +156,15 @@ router.put('/update', async (request, response) => {
       { type: 'strongPassword' },
     ],
   }
-  await request.validate(request.body, rules)
+  await request.validate(body, rules)
 
   const query = { _id: ObjectId(_id) }
-  const data = pick(request.body, 'fullName', 'email', 'phone')
-  data.username = request.body.username.toLowerCase()
+  const data = pick(body, 'fullName', 'email', 'phone')
+  data.username = body.username.toLowerCase()
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
+  data['totp.enabled'] = (body.totp_enabled === 'true')
   if (password) {
     data.password = bcrypt.hashSync(password, 10)
   }

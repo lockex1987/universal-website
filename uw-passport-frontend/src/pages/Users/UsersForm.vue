@@ -135,6 +135,13 @@
     </div>
 
     <a-form-item
+      label="TOTP"
+      name="totp.enabled"
+    >
+      <a-checkbox v-model:checked="frm.totp.enabled" />
+    </a-form-item>
+
+    <a-form-item
       label="Mật khẩu"
       name="password"
     >
@@ -178,6 +185,9 @@ const defaultFrm = {
   orgId: null,
   isActive: true,
   roles: [],
+  totp: {
+    enabled: false,
+  },
   password: '',
 }
 
@@ -239,6 +249,7 @@ const saveForm = async () => {
   params.append('orgId', frm.orgId)
   params.append('isActive', frm.isActive)
   params.append('roles', JSON.stringify(frm.roles))
+  params.append('totp_enabled', frm.totp.enabled)
   params.append('password', frm.password)
 
   // Lấy phần tử file cuối cùng

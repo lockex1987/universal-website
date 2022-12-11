@@ -63,6 +63,9 @@
               <th class="text-start d-none d-md-table-cell">
                 Vai trò
               </th>
+              <th class="text-start d-none d-md-table-cell">
+                TOTP
+              </th>
               <th class="text-center">
                 Hành động
               </th>
@@ -122,18 +125,24 @@
                   {{ role.name }}
                 </span>
               </td>
+              <td class="text-center d-none d-md-table-cell">
+                <i
+                  v-show="user.totp.enabled"
+                  class="bi bi-check text-success"
+                ></i>
+              </td>
               <td class="text-center">
                 <i
                   class="cursor-pointer text-primary bi bi-pencil-square"
                   title="Cập nhật"
                   @click="openForm(user)"
-                />
+                ></i>
 
                 <i
                   class="cursor-pointer text-primary bi bi-trash ms-3"
                   title="Xóa"
                   @click="deleteRow(user)"
-                />
+                ></i>
               </td>
             </tr>
           </tbody>
