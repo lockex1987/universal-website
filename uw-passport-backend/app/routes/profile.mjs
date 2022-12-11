@@ -129,6 +129,17 @@ router.get('/get_totp', async (request, response) => {
 })
 
 
+router.post('/update_totp', async (request, response) => {
+  const redisUser = await getUser(request)
+  const { _id } = redisUser
+  const query = { _id: ObjectId(_id) }
+  const data = { 'totp.enabled': request.body.totpEnabled }
+  const db = getDb()
+  await db.collection('users').updateOne(query, { $set: data })
+  response.json({ code: 0 })
+})
+
+
 router.post('/update_user_info', async (request, response) => {
   const rules = {
     fullName: [{ type: 'string', required: true }],

@@ -249,7 +249,7 @@ const saveForm = async () => {
   params.append('orgId', frm.orgId)
   params.append('isActive', frm.isActive)
   params.append('roles', JSON.stringify(frm.roles))
-  params.append('totp_enabled', frm.totp.enabled)
+  params.append('totpEnabled', frm.totp.enabled)
   params.append('password', frm.password)
 
   // Lấy phần tử file cuối cùng

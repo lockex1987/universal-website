@@ -125,7 +125,7 @@ router.post('/insert', async (request, response) => {
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
-  data['totp.enabled'] = (body.totp_enabled === 'true')
+  data['totp.enabled'] = (body.totpEnabled === 'true')
   data.password = bcrypt.hashSync(password, 10)
   const db = getDb()
   const result = await db.collection('users').insertOne(data)
@@ -164,7 +164,7 @@ router.put('/update', async (request, response) => {
   data.orgId = orgId ? ObjectId(orgId) : null
   data.isActive = (isActive == 'true')
   data.roles = JSON.parse(roles).map(r => ObjectId(r))
-  data['totp.enabled'] = (body.totp_enabled === 'true')
+  data['totp.enabled'] = (body.totpEnabled === 'true')
   if (password) {
     data.password = bcrypt.hashSync(password, 10)
   }
