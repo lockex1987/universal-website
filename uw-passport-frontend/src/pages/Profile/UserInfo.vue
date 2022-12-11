@@ -175,7 +175,7 @@ const saveForm = async () => {
     params.append('avatar', avatarFile)
   }
 
-  const { data } = await axios.post('/api/profile/update-user-info', params)
+  const { data } = await axios.post('/api/profile/update_user_info', params)
   if (data.code == 0) {
     setLogin({
       fullName: frm.fullName,

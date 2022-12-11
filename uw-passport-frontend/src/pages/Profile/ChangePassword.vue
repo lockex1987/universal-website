@@ -71,7 +71,7 @@ const isProcessing = ref(false)
 const changePassword = async () => {
   isProcessing.value = true
   const params = frm
-  const { data } = await axios.post('/api/profile/change-password', params)
+  const { data } = await axios.post('/api/profile/change_password', params)
   isProcessing.value = false
 
   if (data.code == 0) {

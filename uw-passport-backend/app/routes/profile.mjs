@@ -12,7 +12,7 @@ import { pick, getBasePath } from '#app/helpers/common.mjs'
 const router = express.Router()
 
 
-router.post('/change-password', async (request, response) => {
+router.post('/change_password', async (request, response) => {
   const rules = {
     oldPassword: [{ required: true }],
     newPassword: [
@@ -72,6 +72,7 @@ router.get('/get_user_info', async (request, response) => {
     orgId: 1,
     isActive: 1,
     roles: 1,
+    // totp: 1,
     // password: 0,
   }
 
@@ -101,7 +102,23 @@ router.get('/get_user_info', async (request, response) => {
 })
 
 
-router.post('/update-user-info', async (request, response) => {
+router.get('/get_totp', async (request, response) => {
+  const redisUser = await getUser(request)
+  const { _id } = redisUser
+  const db = getDb()
+  const query = { _id: ObjectId(_id) }
+  // Không trả về các thông tin nhạy cảm như mật khẩu
+  const projection = {
+    _id: 0,
+    totp: 1,
+    // password: 0,
+  }
+  const row = await db.collection('users').findOne(query, projection)
+  response.json(row.totp)
+})
+
+
+router.post('/update_user_info', async (request, response) => {
   const rules = {
     fullName: [{ type: 'string', required: true }],
     email: [{ type: 'email', required: true }],

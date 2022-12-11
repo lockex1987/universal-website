@@ -6,7 +6,7 @@
   </Teleport>
 
   <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-4">
       <div class="h-100 mb-5">
         <div class="fw-bold mb-3">
           Thông tin tài khoản
@@ -16,13 +16,23 @@
       </div>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-4">
       <div class="h-100 mb-5">
         <div class="fw-bold mb-3">
           Đổi mật khẩu
         </div>
 
         <ChangePassword />
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="h-100 mb-5">
+        <div class="fw-bold mb-3">
+          TOTP
+        </div>
+
+        <Totp />
       </div>
     </div>
   </div>
@@ -32,4 +42,5 @@
 <script setup>
 import UserInfo from './UserInfo.vue'
 import ChangePassword from './ChangePassword.vue'
+import Totp from './Totp.vue'
 </script>
