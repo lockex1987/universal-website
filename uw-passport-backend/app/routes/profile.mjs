@@ -122,8 +122,9 @@ router.get('/get_totp', async (request, response) => {
     let plainSecret
     if (! totp.secret) {
       plainSecret = authenticator.generateSecret()
+
       totp.secret = encrypt(plainSecret)
-      db.collection('users').updateOne(query, { $set: { totp } })
+      await db.collection('users').updateOne(query, { $set: { totp } })
     } else {
       plainSecret = decrypt(totp.secret)
     }

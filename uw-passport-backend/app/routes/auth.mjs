@@ -54,20 +54,21 @@ router.post('/login', async (request, response) => {
 
   const { totp } = dbUser
   if (totp.enabled) {
+    let plainSecret
+    if (! totp.secret) {
+      plainSecret = authenticator.generateSecret()
+
+      totp.secret = encrypt(plainSecret)
+      await db.collection('users').updateOne(query, { $set: { totp } })
+    } else {
+      plainSecret = decrypt(totp.secret)
+    }
+
     if (! totpCode) {
       if (totp.shouldShow) {
         // Chỉ hiển thị một lần
         totp.shouldShow = false
-
-        let plainSecret
-        if (! totp.secret) {
-          plainSecret = authenticator.generateSecret()
-          totp.secret = encrypt(plainSecret)
-        } else {
-          plainSecret = decrypt(totp.secret)
-        }
-
-        db.collection('users').updateOne(query, { $set: { totp } })
+        await db.collection('users').updateOne(query, { $set: { totp } })
 
         const uri = authenticator.keyuri(dbUser.username, appCode, plainSecret)
 
@@ -83,10 +84,10 @@ router.post('/login', async (request, response) => {
 
       return response.json({
         code: 3,
-        message: 'Cần nhập TOTP, hiển thị màn hình nhập',
+        message: 'Vui lòng nhập mã TOTP',
       })
     } else {
-      if (! authenticator.check(totpCode, totp.secret)) {
+      if (! authenticator.check(totpCode, plainSecret)) {
         return response.json({
           code: 1,
           message: 'Mã TOTP không chính xác',
