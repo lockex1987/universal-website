@@ -6,10 +6,6 @@ const key = Buffer.from(encryptionKey, 'hex')
 
 const algorithm = 'aes-256-cbc'
 
-export const generateEncryptionKey = () => {
-  return crypto.randomBytes(32).toString('hex')
-}
-
 export const encrypt = text => {
   // For AES, this is always 16
   const initVector = crypto.randomBytes(16)

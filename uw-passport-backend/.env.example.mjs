@@ -6,9 +6,9 @@ export default {
   LOG_LEVEL: 'info',
 
   // dev, prod, test
-  ENVIRONMENT: 'development',
+  ENVIRONMENT: 'dev',
 
-  ENCRYPTION_KEY: '', // crypto.randomBytes(32).toString('hex')
+  ENCRYPTION_KEY: '', // node app/helpers/generateEncryptionKey.mjs
 
   // DRIVE_DISK=local
 
