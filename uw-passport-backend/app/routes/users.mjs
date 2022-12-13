@@ -46,13 +46,41 @@ router.post('/search', async (request, response) => {
   const total = await col.count(query)
 
   const list = await col.aggregate([
-    { $match: query },
-    { $sort: sort },
-    { $skip: (page - 1) * size },
-    { $limit: size },
-    { $lookup: { from: 'orgs', localField: 'orgId', foreignField: '_id', as: 'org' } },
-    { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'roleList' } },
-    { $project: { ...projection, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
+    {
+      $match: query,
+    },
+    {
+      $sort: sort,
+    },
+    {
+      $skip: (page - 1) * size,
+    },
+    {
+      $limit: size,
+    },
+    {
+      $lookup: {
+        from: 'orgs',
+        localField: 'orgId',
+        foreignField: '_id',
+        as: 'org',
+      },
+    },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'roles',
+        foreignField: '_id',
+        as: 'roleList',
+      },
+    },
+    {
+      $project: {
+        ...projection,
+        org: { $arrayElemAt: ['$org', 0] },
+        roleList: 1,
+      },
+    },
   ])
     .toArray()
 

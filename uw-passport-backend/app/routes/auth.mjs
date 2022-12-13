@@ -156,8 +156,19 @@ router.get('/me', async (request, response) => {
 const getUserPermissions = async objId => {
   const db = getDb()
   const arr = await db.collection('users').aggregate([
-    { $match: { _id: objId } },
-    { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'rolesCol' } },
+    {
+      $match: {
+        _id: objId,
+      },
+    },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'roles',
+        foreignField: '_id',
+        as: 'rolesCol',
+      },
+    },
   ])
     .toArray()
 

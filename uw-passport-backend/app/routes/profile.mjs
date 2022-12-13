@@ -92,10 +92,32 @@ router.get('/get_user_info', async (request, response) => {
   // const user = await db.collection('users').findOne(query, { projection })
 
   const list = await db.collection('users').aggregate([
-    { $match: query },
-    { $lookup: { from: 'orgs', localField: 'orgId', foreignField: '_id', as: 'org' } },
-    { $lookup: { from: 'roles', localField: 'roles', foreignField: '_id', as: 'roleList' } },
-    { $project: { ...projection, org: { $arrayElemAt: ['$org', 0] }, roleList: 1 } },
+    {
+      $match: query,
+    },
+    {
+      $lookup: {
+        from: 'orgs',
+        localField: 'orgId',
+        foreignField: '_id',
+        as: 'org',
+      },
+    },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'roles',
+        foreignField: '_id',
+        as: 'roleList',
+      },
+    },
+    {
+      $project: {
+        ...projection,
+        org: { $arrayElemAt: ['$org', 0] },
+        roleList: 1,
+      },
+    },
   ])
     .toArray()
 
