@@ -8,7 +8,7 @@ export default {
   // dev, prod, test
   ENVIRONMENT: 'dev',
 
-  ENCRYPTION_KEY: '', // node app/helpers/generateEncryptionKey.mjs
+  ENCRYPTION_KEY: '', // node console/commands/generateEncryptionKey.mjs
 
   // DRIVE_DISK=local
 
