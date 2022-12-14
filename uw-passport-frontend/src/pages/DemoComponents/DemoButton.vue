@@ -2,7 +2,7 @@
   <Teleport to="#appBreadcrumb">
     <ol class="breadcrumb mb-0 ps-3">
       <li class="breadcrumb-item">Demo</li>
-      <li class="breadcrumb-item active">Button</li>
+      <li class="breadcrumb-item active">Demo Button</li>
     </ol>
   </Teleport>
 

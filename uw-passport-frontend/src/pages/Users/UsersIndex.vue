@@ -131,7 +131,10 @@
                   class="bi bi-check text-success"
                 ></i>
 
-                <div v-show="user.totp.enabled && !user.totp.shouldShow">
+                <span
+                  v-show="user.totp.enabled && !user.totp.shouldShow"
+                  class="ms-2"
+                >
                   <a-button
                     type="primary"
                     size="small"
@@ -139,7 +142,7 @@
                   >
                     Hiển thị QR
                   </a-button>
-                </div>
+                </span>
               </td>
               <td class="text-center">
                 <i
