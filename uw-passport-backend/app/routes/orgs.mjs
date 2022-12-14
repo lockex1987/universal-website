@@ -7,7 +7,7 @@ const router = express.Router()
 
 
 router.post('/search', async (request, response) => {
-  const { text, page, size, selectedOrg } = request.body
+  const { text, selectedOrg, page, size } = request.body
 
   const query = {}
   if (text) {
@@ -98,7 +98,6 @@ router.put('/update', async (request, response) => {
     name: [
       // TODO: Đang không thông báo được tiếng Việt
       { required: true, max: 100 },
-      // { type: 'telephone' },
       // TODO: Đang không thông báo được gì luôn
       { type: 'unique', dbCol: 'orgs', ignoredIdValue: ObjectId(_id), dbFieldName: 'Tên' },
     ],
