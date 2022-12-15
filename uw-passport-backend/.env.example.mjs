@@ -13,7 +13,9 @@ export default {
   // DRIVE_DISK=local
 
   MONGO: {
-    URI: 'mongodb://localhost:27017',
+    // mongodb://localhost:27017
+    // mongodb://uw:abc123a%40@127.0.0.1:27017/?authSource=admin
+    URI: 'mongodb://username:password@host:port/?authSource=admin',
 
     // db.copyDatabase('univeral-website', 'universal-website')
     // use univeral-website
