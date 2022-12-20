@@ -32,6 +32,7 @@ export default [
     name: 'Demo',
     children: [
       { code: 'DemoButton', name: 'Demo Button' },
+      { code: 'DemoTree', name: 'Demo Tree' },
     ],
   },
 ]

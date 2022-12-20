@@ -69,6 +69,11 @@ export default [
         name: 'DemoButton',
         component: () => import('@/pages/DemoComponents/DemoButton.vue'),
       },
+      {
+        path: 'DemoTree',
+        name: 'DemoTree',
+        component: () => import('@/pages/DemoComponents/DemoTree.vue'),
+      },
     ],
   },
   {

@@ -19,6 +19,7 @@ module.exports = {
     computed: true,
     reactive: true,
     ref: true,
+    watch: true,
     onMounted: true,
     useRouter: true,
     useRoute: true,
