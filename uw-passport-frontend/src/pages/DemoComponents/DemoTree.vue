@@ -68,6 +68,17 @@
       </template>
     </a-tree>
   </div>
+
+  <h4>Directory</h4>
+  <p>Built-in directory tree. multiple support ctrl(Windows) / command(Mac) selection.</p>
+  <div class="mb-4">
+    <a-directory-tree
+      v-model:expandedKeys="expandedKeys4"
+      v-model:selectedKeys="selectedKeys4"
+      multiple
+      :tree-data="treeData4"
+    ></a-directory-tree>
+  </div>
 </template>
 
 
@@ -247,4 +258,43 @@ watch(searchValue3, value => {
   searchValue3.value = value
   autoExpandParent3.value = true
 })
+
+
+// Demo 4
+const expandedKeys4 = ref(['0-0', '0-1'])
+const selectedKeys4 = ref([])
+const treeData4 = [
+  {
+    title: 'parent 0',
+    key: '0-0',
+    children: [
+      {
+        title: 'leaf 0-0',
+        key: '0-0-0',
+        isLeaf: true,
+      },
+      {
+        title: 'leaf 0-1',
+        key: '0-0-1',
+        isLeaf: true,
+      },
+    ],
+  },
+  {
+    title: 'parent 1',
+    key: '0-1',
+    children: [
+      {
+        title: 'leaf 1-0',
+        key: '0-1-0',
+        isLeaf: true,
+      },
+      {
+        title: 'leaf 1-1',
+        key: '0-1-1',
+        isLeaf: true,
+      },
+    ],
+  },
+]
 </script>
