@@ -21,7 +21,9 @@
       />
     </a-form-item>
 
-    <!-- TODO: Không search được -->
+    <!-- Không search được, cần thêm treeNodeFilterProp="title" -->
+    <!-- Mặc định đang search theo trường value chứ không phải title -->
+    <!-- Trường key là gì? Tương tự value. Chỉ sử dụng value thôi, không sử dụng key. -->
     <a-form-item
       label="Tổ chức cha"
       name="parentId"
@@ -31,6 +33,7 @@
         :treeData="orgTreeIgnoreUpdating"
         showSearch
         allowClear
+        treeNodeFilterProp="title"
         class="form-control-max-width"
         :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
       />

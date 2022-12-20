@@ -5,6 +5,8 @@ export const convertToTreeData = flatData => {
       const children = getChildrenNode(flatData, rootRow)
       const rootNode = {
         title: rootRow.name,
+        // Bị lỗi Warning: `key` or `value` with TreeNode must be the same or you can remove one of them
+        // value: rootRow.name, // để search
         value: rootRow._id,
         key: rootRow._id,
         _id: rootRow._id,
@@ -57,6 +59,7 @@ const getChildrenNode = (flatData, parentRow) => {
       const grandChildren = getChildrenNode(flatData, childRow)
       const childNode = {
         title: childRow.name,
+        // value: childRow.name, // để search
         value: childRow._id,
         key: childRow._id,
         _id: childRow._id,

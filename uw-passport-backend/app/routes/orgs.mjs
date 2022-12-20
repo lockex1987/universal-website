@@ -152,26 +152,27 @@ router.put('/update', async (request, response) => {
 
 
 router.delete('/delete/:_id', async (request, response) => {
-  // Chú ý cần xóa cả các bản ghi con
-  // Hoặc để các bản ghi con ra ngoài
-
-  // TODO: Cập nhật khóa ngoại chỗ người dùng
-
   const { _id } = request.params
   const objId = ObjectId(_id)
   const db = getDb()
-  const row = await db.collection('orgs').findOne({ _id: objId })
+
+  // Chú ý cần xóa cả các bản ghi con
+  // Hoặc để các bản ghi con ra ngoài
+
+  // await db.collection('orgs').deleteMany({ path: { $regex: '/' + _id + '/' } })
+
+  const orgObj = await db.collection('orgs').findOne({ _id: objId })
   await db.collection('orgs').updateMany(
     { parentId: objId },
-    { $set: { parentId: row.parentId } },
+    { $set: { parentId: orgObj.parentId } },
   )
 
   const result = await db.collection('orgs')
     .deleteOne({ _id: objId })
-    // .deleteMany({ path: { $regex: '/' + _id + '/' } })
 
   await updatePaths()
 
+  // Cập nhật khóa ngoại chỗ người dùng
   db.collection('users').updateMany(
     { orgId: objId },
     { $set: { orgId: null } },
