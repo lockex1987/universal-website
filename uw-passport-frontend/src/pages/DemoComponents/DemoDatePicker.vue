@@ -60,9 +60,29 @@
     </a-space>
   </div>
 
-  <h4></h4>
-  <p></p>
+  <h4>Switchable picker</h4>
+  <p>Switch in different types of pickers by Select.</p>
   <div class="mb-4">
+    <a-space
+      direction="vertical"
+      :size="12"
+    >
+      <a-select v-model:value="type">
+        <a-select-option value="time">Time</a-select-option>
+        <a-select-option value="date">Date</a-select-option>
+        <a-select-option value="week">Week</a-select-option>
+        <a-select-option value="month">Month</a-select-option>
+        <a-select-option value="quarter">Quarter</a-select-option>
+        <a-select-option value="year">Year</a-select-option>
+      </a-select>
+
+      <template v-if="type === 'time'">
+        <a-time-picker />
+      </template>
+      <template v-else>
+        <a-date-picker :picker="type" />
+      </template>
+    </a-space>
   </div>
 
   <h4></h4>
@@ -101,4 +121,8 @@ const demo2 = reactive({
   value4: null,
   value5: null,
 })
+
+
+// Demo 3
+const type = ref('time')
 </script>
