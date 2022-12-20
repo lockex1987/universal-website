@@ -74,6 +74,11 @@ export default [
         name: 'DemoTree',
         component: () => import('@/pages/DemoComponents/DemoTree.vue'),
       },
+      {
+        path: 'DemoTreeSelect',
+        name: 'DemoTreeSelect',
+        component: () => import('@/pages/DemoComponents/DemoTreeSelect.vue'),
+      },
     ],
   },
   {
