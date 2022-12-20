@@ -79,6 +79,11 @@ export default [
         name: 'DemoTreeSelect',
         component: () => import('@/pages/DemoComponents/DemoTreeSelect.vue'),
       },
+      {
+        path: 'DemoDatePicker',
+        name: 'DemoDatePicker',
+        component: () => import('@/pages/DemoComponents/DemoDatePicker.vue'),
+      },
     ],
   },
   {

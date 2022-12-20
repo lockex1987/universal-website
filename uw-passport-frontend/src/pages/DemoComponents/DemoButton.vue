@@ -6,13 +6,9 @@
     </ol>
   </Teleport>
 
-  <h4>
-    Type
-  </h4>
-  <p>
-    There are primary button, default button, dashed button, text button and link button in antd.
-    Button loading sẽ không click được.
-  </p>
+  <h4>Type</h4>
+  <p>There are primary button, default button, dashed button, text button and link button in antd. Button loading sẽ
+    không click được.</p>
 
   <a-space class="mb-4 flex-wrap">
     <a-button type="primary">Primary Button</a-button>

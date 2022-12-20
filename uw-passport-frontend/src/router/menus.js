@@ -34,6 +34,7 @@ export default [
       { code: 'DemoButton', name: 'Demo Button' },
       { code: 'DemoTree', name: 'Demo Tree' },
       { code: 'DemoTreeSelect', name: 'Demo Tree Select' },
+      { code: 'DemoDatePicker', name: 'Demo Date Picker' },
     ],
   },
 ]
