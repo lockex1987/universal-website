@@ -65,7 +65,8 @@
 
       <a-range-picker
         v-model:value="demo2.value2"
-        show-time
+        :showTime="false"
+        :allowEmpty="[true, true]"
       />
       <a-range-picker
         v-model:value="demo2.value3"
@@ -125,6 +126,12 @@
 
 
 <script setup>
+// TODO:
+// - Date: bind update, validate
+// - Predefined (preset) ranges
+// - Chỉ chọn ngày bắt đầu,
+// - Không bắt buộc ngày kết thúc
+
 import dayjs from 'dayjs'
 // import isoWeek from 'dayjs/plugin/isoWeek'
 
@@ -146,7 +153,7 @@ const demo1 = reactive({
 const demo2 = reactive({
   // value1: null,
   value1: [dayjs().subtract(7, 'day'), dayjs()],
-  value2: null,
+  value2: [dayjs(), null],
   value3: null,
   value4: null,
   value5: null,
