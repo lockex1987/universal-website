@@ -8,12 +8,26 @@
 
   <h4>Basic Usage</h4>
   <p>Basic use case. Users can select or input a date in panel.</p>
+  <p>Các thuộc tính v-model:value đều có kiểu dữ liệu là dayjs.</p>
   <div class="mb-4">
     <a-space
       direction="vertical"
       :size="12"
     >
-      <a-date-picker v-model:value="demo1.value1" />
+      <a-date-picker
+        v-model:value="demo1.value1"
+        :format="'DD-MM-YYYY'"
+      />
+
+      <div>
+        {{ demo1.value1 }}
+      </div>
+
+      <a-date-picker
+        v-model:value="demo1.value6"
+        :format="'DD-MM-YYYY'"
+      />
+
       <a-date-picker
         v-model:value="demo1.value2"
         picker="week"
@@ -40,7 +54,15 @@
       direction="vertical"
       :size="12"
     >
-      <a-range-picker v-model:value="demo2.value1" />
+      <a-range-picker
+        v-model:value="demo2.value1"
+        :ranges="ranges"
+      />
+
+      <div>
+        {{ demo2.value1 }}
+      </div>
+
       <a-range-picker
         v-model:value="demo2.value2"
         show-time
@@ -103,24 +125,43 @@
 
 
 <script setup>
+import dayjs from 'dayjs'
+
 // Demo 1
 const demo1 = reactive({
-  value1: '',
-  value2: '',
+  value1: dayjs(),
+  value2: null,
   value3: '',
   value4: '',
   value5: '',
+  value6: dayjs('1987-05-11', 'YYYY-MM-DD'),
 })
 
 
 // Demo 2
 const demo2 = reactive({
-  value1: null,
+  // value1: null,
+  value1: [dayjs().subtract(7, 'day'), dayjs()],
   value2: null,
   value3: null,
   value4: null,
   value5: null,
 })
+
+const ranges = {
+  // Today: [dayjs(), dayjs()],
+  // 'This Month': [dayjs(), dayjs().endOf('month')],
+
+  'Hôm nay': [dayjs().startOf('day'), dayjs()],
+  'Hôm qua': [dayjs().subtract(1, 'day').startOf('day'), dayjs().subtract(1, 'day').endOf('day')],
+  '7 ngày qua': [dayjs().subtract(6, 'day').startOf('day'), dayjs()],
+  '30 ngày qua': [dayjs().subtract(29, 'day').startOf('day'), dayjs()],
+  // Đang lỗi chỗ tuần
+  // 'Tuần này': [dayjs().startOf('isoWeek').startOf('day'), dayjs()], // endOfWeek
+  // 'Tuần trước': [dayjs().subtract(1, 'week').startOf('isoWeek').startOf('day'), dayjs().subtract(1, 'week').endOf('isoWeek').endOf('day')],
+  'Tháng này': [dayjs().startOf('month').startOf('day'), dayjs()], // endOfMonth
+  'Tháng trước': [dayjs().subtract(1, 'month').startOf('month').startOf('day'), dayjs().subtract(1, 'month').endOf('month').endOf('day')],
+}
 
 
 // Demo 3
