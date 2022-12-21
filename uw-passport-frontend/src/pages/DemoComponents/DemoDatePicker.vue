@@ -126,6 +126,10 @@
 
 <script setup>
 import dayjs from 'dayjs'
+// import isoWeek from 'dayjs/plugin/isoWeek'
+
+// Khai báo ở main.js
+// dayjs.extend(isoWeek)
 
 // Demo 1
 const demo1 = reactive({
@@ -156,9 +160,9 @@ const ranges = {
   'Hôm qua': [dayjs().subtract(1, 'day').startOf('day'), dayjs().subtract(1, 'day').endOf('day')],
   '7 ngày qua': [dayjs().subtract(6, 'day').startOf('day'), dayjs()],
   '30 ngày qua': [dayjs().subtract(29, 'day').startOf('day'), dayjs()],
-  // Đang lỗi chỗ tuần
-  // 'Tuần này': [dayjs().startOf('isoWeek').startOf('day'), dayjs()], // endOfWeek
-  // 'Tuần trước': [dayjs().subtract(1, 'week').startOf('isoWeek').startOf('day'), dayjs().subtract(1, 'week').endOf('isoWeek').endOf('day')],
+  // Đang lỗi chỗ tuần, phải thêm plugin isoWeek
+  'Tuần này': [dayjs().startOf('isoWeek').startOf('day'), dayjs()], // endOfWeek
+  'Tuần trước': [dayjs().subtract(1, 'week').startOf('isoWeek').startOf('day'), dayjs().subtract(1, 'week').endOf('isoWeek').endOf('day')],
   'Tháng này': [dayjs().startOf('month').startOf('day'), dayjs()], // endOfMonth
   'Tháng trước': [dayjs().subtract(1, 'month').startOf('month').startOf('day'), dayjs().subtract(1, 'month').endOf('month').endOf('day')],
 }
