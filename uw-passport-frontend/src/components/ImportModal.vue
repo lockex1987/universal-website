@@ -111,7 +111,8 @@
 <script setup>
 import ExcelJS from 'exceljs'
 import { normalizeExcelCellData } from '@/helpers/excel.js'
-import bootstrap from 'bootstrap'
+// import bootstrap from 'bootstrap'
+import * as bootstrap from 'bootstrap'
 
 const props = defineProps({
   // Tiêu đề của modal
@@ -164,7 +165,7 @@ const rootEle = ref()
 
 const excelFileInput = ref()
 
-const myModal = new bootstrap.Modal(rootEle.value)
+let myModal
 
 const openModal = () => {
   myModal.show()
@@ -355,7 +356,10 @@ const importSingleRow = async () => {
 }
 
 onMounted(() => {
+  myModal = new bootstrap.Modal(rootEle.value)
+
   rootEle.value.addEventListener('hidden.bs.modal', () => {
+    // Bắt buộc nhập file
     // CV.clearErrorMessages(rootEle.value)
     resetInfo()
   })
