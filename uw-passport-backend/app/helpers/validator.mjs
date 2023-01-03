@@ -3,7 +3,7 @@ import path from 'node:path'
 import asyncValidator from 'async-validator'
 import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
-import vietnameseValidatorMessages from './vietnameseValidatorMessages.mjs'
+import vietnameseValidatorMessages from './vietnamese-validator-messages.mjs'
 
 const strongPassword = (rule, value, callback, source, options) => {
   if (! value) {

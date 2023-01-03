@@ -1,6 +1,6 @@
 import express from 'express'
 import { getDb } from '#app/helpers/mongodb.mjs'
-import { configList } from '#app/helpers/systemConfig.mjs'
+import { configList } from '#app/helpers/system-config.mjs'
 
 const router = express.Router()
 

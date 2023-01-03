@@ -4,7 +4,7 @@ import dashboard from './dashboard.mjs'
 import orgs from './orgs.mjs'
 import roles from './roles.mjs'
 import users from './users.mjs'
-import systemConfig from './systemConfig.mjs'
+import systemConfig from './system-config.mjs'
 import products from './products.mjs'
 
 import {
