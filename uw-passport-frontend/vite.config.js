@@ -23,7 +23,9 @@ export default defineConfig({
     }),
 
     Components({
-      resolvers: [AntDesignVueResolver()],
+      resolvers: [
+        AntDesignVueResolver(),
+      ],
     }),
   ],
 

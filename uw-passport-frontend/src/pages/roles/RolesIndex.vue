@@ -22,6 +22,14 @@
       >
         Thêm mới
       </a-button>
+
+      <a-button
+        type="primary"
+        @click="openImportForm()"
+        class="mb-4 ms-3"
+      >
+        Import
+      </a-button>
     </div>
 
     <div
@@ -102,11 +110,17 @@
       @inserted="search(1)"
     />
   </div>
+
+  <RolesImport
+    ref="rolesImport"
+    @done="search(1)"
+  />
 </template>
 
 
 <script setup>
 import RolesForm from './RolesForm.vue'
+import RolesImport from './RolesImport.vue'
 import { debounce } from '@/helpers/common.js'
 
 const filter = reactive({
@@ -122,6 +136,8 @@ const pagi = reactive({
 const roleList = ref([])
 
 const frmRef = ref()
+
+const rolesImport = ref()
 
 const screen = ref('list')
 
@@ -152,6 +168,10 @@ const deleteRow = role => {
       search(1)
     }
   })
+}
+
+const openImportForm = () => {
+  rolesImport.value.openImportForm()
 }
 
 onMounted(() => {
