@@ -22,6 +22,6 @@ export default [
   { path: '/orgs', router: orgs, auth: true, permission: Orgs },
   { path: '/roles', router: roles, auth: true, permission: Roles },
   { path: '/users', router: users, auth: true, permission: Users },
-  { path: '/systemConfig', router: systemConfig, auth: true, permission: SystemConfig },
+  { path: '/system-config', router: systemConfig, auth: true, permission: SystemConfig },
   { path: '/products', router: products, auth: true, permission: Products },
 ]

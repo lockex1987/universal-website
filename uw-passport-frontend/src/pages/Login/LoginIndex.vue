@@ -160,7 +160,7 @@ const processLogin = async () => {
     // Đăng nhập thành công
     errorMessage.value = ''
     setLogin(data.user)
-    const defaultPagePath = '/Backend/Dashboard'
+    const defaultPagePath = '/backend/dashboard'
     router.push(beforeLoginPath.value || defaultPagePath)
     beforeLoginPath.value = ''
   } else if (data.code == 1) {
@@ -171,7 +171,7 @@ const processLogin = async () => {
     screen.value = 'qr'
     new QRious({
       element: qrImage.value,
-      value: data.totp.uri
+      value: data.totp.uri,
     })
   } else if (data.code == 3) {
     // Hiển thị nhập TOTP code

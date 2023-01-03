@@ -10,13 +10,13 @@ export default async to => {
 
   const path = to.path
   if (! isLoggedIn.value) {
-    const isLoginOnlyPage = path.startsWith('/Backend')
+    const isLoginOnlyPage = path.startsWith('/backend')
     if (path == '/' || isLoginOnlyPage) {
       beforeLoginPath.value = to.fullPath
       return { name: 'Login' }
     }
   } else {
-    if (path == '/' || path == '/Login') {
+    if (path == '/' || path == '/login') {
       return { name: 'Dashboard' }
     }
   }
