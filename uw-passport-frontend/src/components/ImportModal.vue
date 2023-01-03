@@ -1,5 +1,8 @@
 <template>
-  <div class="modal fade">
+  <div
+    class="modal fade"
+    ref="rootEle"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <form
@@ -105,264 +108,262 @@
 </template>
 
 
-<script>
-import { normalizeExcelCellData } from '~/helpers/excel.js'
+<script setup>
+import ExcelJS from 'exceljs'
+import { normalizeExcelCellData } from '@/helpers/excel.js'
+import bootstrap from 'bootstrap'
 
-export default {
-  props: {
-    // Tiêu đề của modal
-    modalTitle: String,
+const props = defineProps({
+  // Tiêu đề của modal
+  modalTitle: String,
 
-    // Hàm validate dữ liệu
-    validateRow: Function,
+  // Hàm validate dữ liệu
+  validateRow: Function,
 
-    // Hàm thêm mới dữ liệu
-    insertRow: Function,
+  // Hàm thêm mới dữ liệu
+  insertRow: Function,
 
-    // Hàm kiểm tra có phải là dòng chứa dữ liệu hay không
-    isDataRow: {
-      type: Function,
-      default: rowData => {
-        if (! rowData || ! rowData.length) {
-          return false
-        }
-        return rowData.some(e => !! e)
-      },
-    },
-
-    // Đường dẫn file mẫu
-    templatePath: String,
-
-    // Số bản ghi tối đa
-    maxRows: Number,
-  },
-
-  data() {
-    return {
-      // Danh sách dữ liệu khi import Excel
-      rows: null,
-
-      // Có import thành công không
-      isImportSuccess: true,
-
-      // Tổng số bản ghi
-      totalRow: 0,
-
-      // Số bản ghi đã xử lý
-      processedRow: 0,
-
-      // Đang import
-      isSaving: false,
-    }
-  },
-
-  mounted() {
-    $(this.$el).on('hidden.bs.modal', () => {
-      CV.clearErrorMessages(this.$el)
-      this.resetInfo()
-    })
-  },
-
-  methods: {
-    openModal() {
-      $(this.$el).modal('show')
-    },
-
-    closeModal() {
-      $(this.$el).modal('hide')
-    },
-
-    resetInfo() {
-      this.rows = null
-      this.isImportSuccess = true
-      this.totalRow = 0
-      this.processedRow = 0
-      this.isSaving = false
-
-      this.$refs.excelFileInput.value = ''
-    },
-
-    openImportForm() {
-      this.openModal()
-    },
-
-    async submitForm() {
-      if (this.isSaving) {
-        return
+  // Hàm kiểm tra có phải là dòng chứa dữ liệu hay không
+  isDataRow: {
+    type: Function,
+    default: rowData => {
+      if (! rowData || ! rowData.length) {
+        return false
       }
-
-      if (CV.invalidForm(this.$el)) {
-        return
-      }
-
-      if (! this.$refs.excelFileInput.value) {
-        noti.error('Vui lòng chọn file')
-        return
-      }
-
-      this.importExcel()
-    },
-
-    /**
-     * Import dữ liệu Excel.
-     */
-    importExcel() {
-      const reader = new FileReader()
-      reader.addEventListener('load', () => {
-        const arrayBuffer = reader.result
-        this.processImportFile(arrayBuffer)
-        this.$refs.excelFileInput.value = ''
-      })
-      reader.readAsArrayBuffer(this.$refs.excelFileInput.files[0])
-    },
-
-    /**
-     * Xử lý import.
-     */
-    async processImportFile(arrayBuffer) {
-      const workbook = new ExcelJS.Workbook()
-      await workbook.xlsx.load(arrayBuffer)
-
-      // Đọc sheet đầu tiên
-      const worksheet = workbook.worksheets[0]
-
-      // Xử lý từng dòng
-      const rows = []
-      worksheet.eachRow((row, rowNumber) => {
-        // Dữ liệu bắt đầu từ phần tử thứ nhất
-        if (rowNumber > 1) {
-          rows.push({
-            rowNumber,
-            data: row.values.slice(1),
-          })
-        }
-      })
-
-      this.processImportData(rows)
-    },
-
-    /**
-     * Xử lý dữ liệu file Excel.
-     */
-    processImportData(rows) {
-      if (rows.length == 0) {
-        noti.error('File Excel không có dữ liệu')
-        return
-      }
-
-      if (this.maxRows && rows.length > this.maxRows) {
-        noti.error('File Excel chứa tối đa ' + this.maxRows + ' dòng dữ liệu')
-        return
-      }
-
-      this.rows = rows
-      this.isImportSuccess = true
-      this.totalRow = this.rows.length
-      this.processedRow = 0
-      this.isSaving = true
-
-      // Bắt đầu import
-      this.importSingleRow()
-    },
-
-    /**
-     * Import từng dòng dữ liệu.
-     */
-    async importSingleRow() {
-      // Nếu đã import xong
-      if (this.rows.length == 0) {
-        // Thông báo thành công
-        if (this.isImportSuccess) {
-          noti.success('Đã import xong')
-          this.closeModal()
-        }
-
-        // Tìm kiếm lại
-        this.$emit('done')
-
-        // Ẩn progress bar
-        this.totalRow = 0
-
-        this.isSaving = false
-
-        // Dừng lại
-        return
-      }
-
-      // Lấy dữ liệu dòng hiện tại
-      const currentRow = this.rows.shift()
-      const rowNumber = currentRow.rowNumber
-      const rowData = currentRow.data
-
-      for (let idx = 0; idx < rowData.length; idx++) {
-        rowData[idx] = normalizeExcelCellData(rowData, idx)
-      }
-
-      // Nếu không phải dòng dữ liệu thì bỏ qua và import tiếp
-      if (! this.isDataRow(rowData)) {
-        this.processedRow++
-        this.importSingleRow()
-        return
-      }
-
-      const validateErrors = this.validateRow(rowData)
-
-      // Nếu có lỗi validate thì thông báo
-      if (validateErrors.length) {
-        this.processedRow++
-
-        const messages = validateErrors.join('. ')
-        noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + messages + '. Bạn có muốn tiếp tục?', () => {
-          this.isSaving = true
-
-          // Tiếp tục dòng nữa
-          this.importSingleRow()
-        })
-
-        // Tìm kiếm lại
-        this.$emit('done')
-
-        // Ẩn progress bar
-        this.totalRow = 0
-
-        this.isSaving = false
-
-        // Dừng lại
-        return
-      }
-
-      // Gọi lên server
-      const { data } = await this.insertRow(rowData)
-
-      this.processedRow++
-
-      // Xử lý dữ liệu trả về
-      if (data.code == 0) {
-        // Tiếp tục dòng nữa
-        this.importSingleRow()
-      } else if (data.code == 2 || data.code == 422) {
-        this.isSaving = false
-
-        noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + data.message + '. Bạn có muốn tiếp tục?', () => {
-          this.isSaving = true
-
-          // Tiếp tục dòng nữa
-          this.importSingleRow()
-        })
-      } else {
-        this.isSaving = false
-        this.isImportSuccess = false
-        noti.error('Đã có lỗi xảy ra')
-
-        // Tìm kiếm lại
-        this.$emit('done')
-
-        // Ẩn progress bar
-        this.totalRow = 0
-      }
+      return rowData.some(e => !! e)
     },
   },
+
+  // Đường dẫn file mẫu
+  templatePath: String,
+
+  // Số bản ghi tối đa
+  maxRows: Number,
+})
+
+const emit = defineEmits([
+  'done',
+])
+
+// Danh sách dữ liệu khi import Excel
+const rows = ref([])
+
+// Có import thành công không
+const isImportSuccess = ref(true)
+
+// Tổng số bản ghi
+const totalRow = ref(0)
+
+// Số bản ghi đã xử lý
+const processedRow = ref(0)
+
+// Đang import
+const isSaving = ref(false)
+
+const rootEle = ref()
+
+const excelFileInput = ref()
+
+const myModal = new bootstrap.Modal(rootEle.value)
+
+const openModal = () => {
+  myModal.show()
 }
+
+const closeModal = () => {
+  myModal.hide()
+}
+
+const resetInfo = () => {
+  rows.value = null
+  isImportSuccess.value = true
+  totalRow.value = 0
+  processedRow.value = 0
+  isSaving.value = false
+
+  excelFileInput.value.value = ''
+}
+
+const openImportForm = () => {
+  openModal()
+}
+
+const submitForm = async () => {
+  if (isSaving.value) {
+    return
+  }
+
+  /*
+  if (CV.invalidForm(rootEle.value)) {
+    return
+  }
+  */
+
+  if (! excelFileInput.value.value) {
+    noti.error('Vui lòng chọn file')
+    return
+  }
+
+  importExcel()
+}
+
+const importExcel = () => {
+  const reader = new FileReader()
+  reader.addEventListener('load', () => {
+    const arrayBuffer = reader.result
+    processImportFile(arrayBuffer)
+    excelFileInput.value.value = ''
+  })
+  reader.readAsArrayBuffer(excelFileInput.value.files[0])
+}
+
+const processImportFile = async arrayBuffer => {
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(arrayBuffer)
+
+  // Đọc sheet đầu tiên
+  const worksheet = workbook.worksheets[0]
+
+  // Xử lý từng dòng
+  const rowsX = []
+  worksheet.eachRow((row, rowNumber) => {
+    // Dữ liệu bắt đầu từ phần tử thứ nhất
+    if (rowNumber > 1) {
+      rowsX.push({
+        rowNumber,
+        data: row.values.slice(1),
+      })
+    }
+  })
+
+  processImportData(rowsX)
+}
+
+const processImportData = rowsX => {
+  if (rowsX.length == 0) {
+    noti.error('File Excel không có dữ liệu')
+    return
+  }
+
+  if (props.maxRows && rowsX.length > props.maxRows) {
+    noti.error('File Excel chứa tối đa ' + props.maxRows + ' dòng dữ liệu')
+    return
+  }
+
+  rows.value = rowsX
+  isImportSuccess.value = true
+  totalRow.value = rows.value.length
+  processedRow.value = 0
+  isSaving.value = true
+
+  // Bắt đầu import
+  importSingleRow()
+}
+
+const importSingleRow = async () => {
+  // Nếu đã import xong
+  if (rows.value.length == 0) {
+    // Thông báo thành công
+    if (isImportSuccess.value) {
+      noti.success('Đã import xong')
+      closeModal()
+    }
+
+    // Tìm kiếm lại
+    emit('done')
+
+    // Ẩn progress bar
+    totalRow.value = 0
+
+    isSaving.value = false
+
+    // Dừng lại
+    return
+  }
+
+  // Lấy dữ liệu dòng hiện tại
+  const currentRow = rows.value.shift()
+  const rowNumber = currentRow.rowNumber
+  const rowData = currentRow.data
+
+  for (let idx = 0; idx < rowData.length; idx++) {
+    rowData[idx] = normalizeExcelCellData(rowData, idx)
+  }
+
+  // Nếu không phải dòng dữ liệu thì bỏ qua và import tiếp
+  if (! props.isDataRow(rowData)) {
+    processedRow.value++
+    importSingleRow()
+    return
+  }
+
+  const validateErrors = props.validateRow(rowData)
+
+  // Nếu có lỗi validate thì thông báo
+  if (validateErrors.length) {
+    processedRow.value++
+
+    const messages = validateErrors.join('. ')
+    noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + messages + '. Bạn có muốn tiếp tục?', () => {
+      isSaving.value = true
+
+      // Tiếp tục dòng nữa
+      importSingleRow()
+    })
+
+    // Tìm kiếm lại
+    emit('done')
+
+    // Ẩn progress bar
+    totalRow.value = 0
+
+    isSaving.value = false
+
+    // Dừng lại
+    return
+  }
+
+  // Gọi lên server
+  const { data } = await props.insertRow(rowData)
+
+  processedRow.value++
+
+  // Xử lý dữ liệu trả về
+  if (data.code == 0) {
+    // Tiếp tục dòng nữa
+    importSingleRow()
+  } else if (data.code == 2 || data.code == 422) {
+    isSaving.value = false
+
+    noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + data.message + '. Bạn có muốn tiếp tục?', () => {
+      isSaving.value = true
+
+      // Tiếp tục dòng nữa
+      importSingleRow()
+    })
+  } else {
+    isSaving.value = false
+    isImportSuccess.value = false
+    noti.error('Đã có lỗi xảy ra')
+
+    // Tìm kiếm lại
+    emit('done')
+
+    // Ẩn progress bar
+    totalRow.value = 0
+  }
+}
+
+onMounted(() => {
+  rootEle.value.addEventListener('hidden.bs.modal', () => {
+    // CV.clearErrorMessages(rootEle.value)
+    resetInfo()
+  })
+})
+
+defineExpose({
+  openImportForm,
+})
 </script>
 
 
