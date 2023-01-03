@@ -73,7 +73,7 @@ const router = useRouter()
 const processLogout = async () => {
   await axios.post('/api/auth/logout')
   setLogout()
-  router.push('/Login')
+  router.push('/login')
 }
 </script>
 
