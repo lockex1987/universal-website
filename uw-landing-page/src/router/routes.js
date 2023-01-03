@@ -1,22 +1,22 @@
-import HomeView from '@/pages/Home/HomeIndex.vue' // trang chính, không lazy load
+import HomeView from '@/pages/home/HomeIndex.vue' // trang chính, không lazy load
 
 export default [
   {
     path: '/',
     name: 'Home',
     component: HomeView,
-    // component: () => import('@/pages/Cart/CartIndex.vue'),
+    // component: () => import('@/pages/cart/CartIndex.vue'),
   },
   {
-    path: '/Product/:_id',
+    path: '/product/:_id',
     name: 'Product',
-    component: () => import('@/pages/Product/ProductIndex.vue'),
+    component: () => import('@/pages/product/ProductIndex.vue'),
   },
   /*
   {
-    path: '/Cart',
+    path: '/cart',
     name: 'Cart',
-    component: () => import('@/pages/Cart/CartIndex.vue'),
+    component: () => import('@/pages/cart/CartIndex.vue'),
   },
   */
 ]

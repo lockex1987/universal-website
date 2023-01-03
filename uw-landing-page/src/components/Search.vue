@@ -69,7 +69,7 @@ const getProductList = async () => {
 
 const gotoProductPage = _id => {
   searchText.value = ''
-  router.push(`/Product/${_id}`)
+  router.push(`/product/${_id}`)
 }
 
 const closeSearchResults = () => {
