@@ -20,16 +20,27 @@ router.post('/search', async (request, response) => {
 
   const db = getDb()
   const col = db.collection('roles')
-  const total = await col.count(query)
-
   const sort = { _id: -1 }
+
+  // Lấy tất cả các bản ghi khi export Excel
+  if (size == -1) {
+    const list = await col
+      .find(query)
+      .sort(sort)
+      .toArray()
+    response.json({
+      list,
+    })
+    return
+  }
+
+  const total = await col.count(query)
   const list = await col
     .find(query)
     .sort(sort)
     .skip((page - 1) * size)
     .limit(size)
     .toArray()
-
   response.json({
     total,
     list,

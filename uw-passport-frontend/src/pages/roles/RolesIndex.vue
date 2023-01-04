@@ -30,6 +30,14 @@
       >
         Import
       </a-button>
+
+      <a-button
+        type="primary"
+        @click="exportExcel()"
+        class="mb-4 ms-3"
+      >
+        Export
+      </a-button>
     </div>
 
     <div
@@ -122,6 +130,7 @@
 import RolesForm from './RolesForm.vue'
 import RolesImport from './RolesImport.vue'
 import { debounce } from '@/helpers/common.js'
+import { exportExcelCommon } from '@/helpers/excel.js'
 
 const filter = reactive({
   text: '',
@@ -172,6 +181,36 @@ const deleteRow = role => {
 
 const openImportForm = () => {
   rolesImport.value.openImportForm()
+}
+
+const exportExcel = async () => {
+  const params = {
+    text: filter.text.trim(),
+    size: -1,
+  }
+  const { data } = await axios.post('/api/roles/search', params)
+  const list = data.list
+
+  if (list.length == 0) {
+    noti.warning('Không có dữ liệu')
+    return
+  }
+
+  const columns = [
+    {
+      header: 'Mã',
+      key: 'code',
+      width: 20,
+    },
+    {
+      header: 'Tên',
+      key: 'name',
+      width: 30,
+    },
+  ]
+  const sheetName = 'Roles'
+  const fileName = 'vai tro.xlsx'
+  exportExcelCommon(list, columns, sheetName, fileName)
 }
 
 onMounted(() => {

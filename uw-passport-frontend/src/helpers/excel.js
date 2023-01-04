@@ -3,21 +3,19 @@ import { downloadBlob } from './common.js'
 
 /**
  * Xuất file Excel.
+ * @param {Array} list
+ * @param {Array} columns
+ * @param {string} sheetName
+ * @param {string} fileName
  */
 export const exportExcelCommon = async (list, columns, sheetName, fileName) => {
-  // Tạo các đối tượng Workbook và Worksheet
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet(sheetName)
-
-  // Header
   worksheet.columns = columns
-
-  // Thêm dữ liệu
   list.forEach(e => {
     worksheet.addRow(e)
   })
 
-  // Style
   const borderStyle = {
     style: 'thin',
   }
@@ -64,7 +62,6 @@ export const exportExcelCommon = async (list, columns, sheetName, fileName) => {
     }
   }
 
-  // Download file
   const buffer = await workbook.xlsx.writeBuffer()
   const blob = new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -75,6 +72,9 @@ export const exportExcelCommon = async (list, columns, sheetName, fileName) => {
 
 /**
  * Chuẩn hóa dữ liệu import Excel.
+ * @param {Array} data
+ * @param {number} columnIndex
+ * @return {string}
  */
 export const normalizeExcelCellData = (data, columnIndex) => {
   if (columnIndex >= data.length) {
@@ -82,7 +82,7 @@ export const normalizeExcelCellData = (data, columnIndex) => {
   }
 
   const value = data[columnIndex]
-  // console.log(typeof value);
+  // console.log(typeof value)
 
   // Dữ liệu rỗng
   if (typeof value == 'undefined') {
