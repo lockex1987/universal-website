@@ -261,7 +261,7 @@ const importSingleRow = async () => {
     return
   }
 
-  const validateErrors = props.validateRow(rowData)
+  const validateErrors = await props.validateRow(rowData)
 
   // Nếu có lỗi validate thì thông báo
   if (validateErrors.length) {
@@ -289,7 +289,8 @@ const importSingleRow = async () => {
     importSingleRow()
   } else if (data.code == 1 || data.code == 422) {
     isImporting.value = false
-    noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + data.message + '. Bạn có muốn tiếp tục?', () => {
+    const message = (data.code == 1) ? (data.message + '. ') : ''
+    noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + message + 'Bạn có muốn tiếp tục?', () => {
       isImporting.value = true
       importSingleRow()
     })

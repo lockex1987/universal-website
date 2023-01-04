@@ -12,7 +12,15 @@
 
 <script setup>
 import dayjs from 'dayjs'
+import Schema from 'async-validator'
 import ImportModal from '@/components/ImportModal.vue'
+
+const rules = {
+  code: [{ required: true, max: 100 }],
+  name: [{ required: true, max: 100 }],
+}
+
+const validator = new Schema(rules)
 
 const facebookUrlPattern = 'https?:\\/\\/(www\\.)?(facebook|fb)\\.com\\/\\S+\\/?'
 
@@ -28,15 +36,25 @@ const openImportForm = () => {
   importModal.value.openImportForm()
 }
 
-const validateRow = rowData => {
+const validateRow = async rowData => {
   let col = 0
-  const actionTimeStr = rowData[col++] ?? ''
-  const wallTypeStr = rowData[col++] ?? ''
-  const fbId = rowData[col++] ?? ''
-  const sourceUrl = rowData[col++] ?? ''
+  const code = rowData[col++] ?? ''
+  const name = rowData[col++] ?? ''
+  const data = {
+    code,
+    name,
+  }
 
-  // Validate dữ liệu ở client
   const validateErrors = []
+  validator.validate(data, (errors, fields) => {
+    if (errors) {
+      console.log(errors, fields)
+    }
+
+    // validation passed
+  })
+
+
 
   /*
   const actionTimeRules = CV.parseValidationFromString('required')
