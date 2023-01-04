@@ -1,8 +1,8 @@
 <template>
   <ImportModal
     ref="importModal"
-    modalTitle="Import"
-    templatePath="ThichBaiDangTrenTrangNhomLL47.xlsx"
+    modalTitle="Import vai trò"
+    templatePath="roles.xlsx"
     :validateRow="validateRow"
     :insertRow="insertRow"
     @done="$emit('done')"
@@ -114,21 +114,13 @@ const validateRow = rowData => {
   return validateErrors
 }
 
-// Thêm mới dòng dữ liệu.
 const insertRow = async rowData => {
   let col = 0
-  const actionTimeStr = rowData[col++]
-  const wallTypeStr = rowData[col++]
-  const fbId = rowData[col++]
-  const sourceUrl = rowData[col++]
-  const actionTimeMoment = rowData[col++]
-  const wallTypeId = rowData[col++]
-  const wallId = rowData[col++]
-
+  const code = rowData[col++]
+  const name = rowData[col++]
   const params = {
-    // fb_user_id: this.userId,
-    code: 'like',
-    name: actionTimeMoment.format('YYYY/MM/DD HH:mm:ss'),
+    code,
+    name,
     permissions: [],
   }
 
@@ -139,11 +131,4 @@ const insertRow = async rowData => {
 defineExpose({
   openImportForm,
 })
-
-/*
-const wallTypeList = [
-  { id: 'page', name: 'Trang' },
-  { id: 'group', name: 'Nhóm công khai' },
-]
-*/
 </script>

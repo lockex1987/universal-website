@@ -180,20 +180,20 @@ const submitForm = async () => {
     return
   }
 
-  importExcel()
+  readExcelFileAsArrayBuffer()
 }
 
-const importExcel = () => {
+const readExcelFileAsArrayBuffer = () => {
   const reader = new FileReader()
   reader.addEventListener('load', () => {
     const arrayBuffer = reader.result
-    processImportFile(arrayBuffer)
+    loadArrayBufferIntoRows(arrayBuffer)
     excelFileInput.value.value = ''
   })
   reader.readAsArrayBuffer(excelFileInput.value.files[0])
 }
 
-const processImportFile = async arrayBuffer => {
+const loadArrayBufferIntoRows = async arrayBuffer => {
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(arrayBuffer)
 
@@ -201,27 +201,27 @@ const processImportFile = async arrayBuffer => {
   const worksheet = workbook.worksheets[0]
 
   // Xử lý từng dòng
-  const rowsX = []
+  const tempRows = []
   worksheet.eachRow((row, rowNumber) => {
     // Dữ liệu bắt đầu từ phần tử thứ nhất
     if (rowNumber > 1) {
-      rowsX.push({
+      tempRows.push({
         rowNumber,
         data: row.values.slice(1),
       })
     }
   })
 
-  processImportData(rowsX)
-}
-
-const processImportData = rowsX => {
-  if (rowsX.length == 0) {
+  if (tempRows.length == 0) {
     noti.error('File Excel không có dữ liệu')
     return
   }
 
-  rows.value = rowsX
+  rows.value = tempRows
+  startImportRows()
+}
+
+const startImportRows = () => {
   isImportSuccess.value = true
   totalRow.value = rows.value.length
   processedRow.value = 0
@@ -234,21 +234,13 @@ const processImportData = rowsX => {
 const importSingleRow = async () => {
   // Nếu đã import xong
   if (rows.value.length == 0) {
-    // Thông báo thành công
     if (isImportSuccess.value) {
       noti.success('Đã import xong')
       closeModal()
     }
-
-    // Tìm kiếm lại
     emit('done')
-
-    // Ẩn progress bar
     totalRow.value = 0
-
     isImporting.value = false
-
-    // Dừng lại
     return
   }
 
@@ -262,6 +254,7 @@ const importSingleRow = async () => {
   }
 
   // Nếu không phải dòng dữ liệu thì bỏ qua và import tiếp
+  // TODO: Chuyển vào hàm loadArrayBufferIntoRows
   if (! props.isDataRow(rowData)) {
     processedRow.value++
     importSingleRow()
@@ -282,45 +275,29 @@ const importSingleRow = async () => {
       importSingleRow()
     })
 
-    // Tìm kiếm lại
     emit('done')
-
-    // Ẩn progress bar
     totalRow.value = 0
-
     isImporting.value = false
-
-    // Dừng lại
     return
   }
 
-  // Gọi lên server
   const { data } = await props.insertRow(rowData)
 
   processedRow.value++
 
-  // Xử lý dữ liệu trả về
   if (data.code == 0) {
-    // Tiếp tục dòng nữa
     importSingleRow()
-  } else if (data.code == 2 || data.code == 422) {
+  } else if (data.code == 1 || data.code == 422) {
     isImporting.value = false
-
     noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + data.message + '. Bạn có muốn tiếp tục?', () => {
       isImporting.value = true
-
-      // Tiếp tục dòng nữa
       importSingleRow()
     })
   } else {
     isImporting.value = false
     isImportSuccess.value = false
     noti.error('Đã có lỗi xảy ra')
-
-    // Tìm kiếm lại
     emit('done')
-
-    // Ẩn progress bar
     totalRow.value = 0
   }
 }
