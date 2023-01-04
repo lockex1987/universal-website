@@ -20,6 +20,7 @@ const rules = {
 }
 
 const validator = new Schema(rules)
+console.log(Schema.messages)
 
 const importModal = ref()
 
