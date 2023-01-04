@@ -1,11 +1,10 @@
 <template>
   <ImportModal
     ref="importModal"
-    modalTitle="Import file Lịch sử hoạt động"
+    modalTitle="Import"
     templatePath="ThichBaiDangTrenTrangNhomLL47.xlsx"
     :validateRow="validateRow"
     :insertRow="insertRow"
-    :maxRows="200"
     @done="$emit('done')"
   />
 </template>

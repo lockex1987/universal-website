@@ -26,25 +26,17 @@
             <div class="mb-3">
               <ul>
                 <li>
-                  <strong>Ghi chú:</strong> Import file Excel
+                  <strong>Ghi chú:</strong>
                   <ul>
-                    <li>Mỗi lần không import quá 01 file</li>
+                    <li>Mỗi lần chọn một file Excel</li>
                     <li>Mỗi thông tin hoạt động nằm trên một dòng</li>
-                    <li>Mỗi file không quá {{ maxRows }} hoạt động</li>
                   </ul>
                 </li>
 
                 <li>
-                  File mẫu import:
                   <a :href="'/static/template/' + templatePath">File mẫu</a>
                 </li>
               </ul>
-            </div>
-
-            <div class="mb-3 text-danger">
-              Chú ý:
-              Quá trình import có thể mất một khoảng thời gian,
-              vui lòng không thoát khỏi tab làm việc
             </div>
 
             <div class="mb-3">
@@ -58,11 +50,11 @@
 
             <!-- Progress bar -->
             <div
-              class="position-fixed top-left mt-4 w-100 text-center"
+              class="mb-3"
               v-if="totalRow > 0"
             >
               <div
-                class="progress w-50 mx-auto"
+                class="progress"
                 style="height: 3px"
               >
                 <div
@@ -72,34 +64,27 @@
                 </div>
               </div>
 
-              <div
-                v-if="totalRow > 100"
-                class="mt-2"
-              >
+              <div class="mt-2">
                 {{ formatNumber(processedRow) }} / {{ formatNumber(totalRow) }}
               </div>
             </div>
           </div>
 
           <div class="modal-footer">
-            <button
-              type="submit"
-              class="btn btn-primary"
+            <a-button
+              type="primary"
+              html-type="submit"
+              :loading="isImporting"
             >
-              Tải lên
-              <span
-                v-show="isSaving"
-                class="la la-spin la-spinner"
-              ></span>
-            </button>
+              Import
+            </a-button>
 
-            <button
-              type="button"
-              class="btn btn-outline-primary ms-3"
+            <a-button
+              class="ms-3"
               data-bs-dismiss="modal"
             >
               Đóng
-            </button>
+            </a-button>
           </div>
         </form>
       </div>
@@ -110,21 +95,20 @@
 
 <script setup>
 import ExcelJS from 'exceljs'
-import { normalizeExcelCellData } from '@/helpers/excel.js'
-// import bootstrap from 'bootstrap'
 import * as bootstrap from 'bootstrap'
+import { normalizeExcelCellData } from '@/helpers/excel.js'
+import { formatNumber } from '@/helpers/common.js'
 
 const props = defineProps({
-  // Tiêu đề của modal
-  modalTitle: String,
+  modalTitle: {
+    type: String,
+    default: 'Import',
+  },
 
-  // Hàm validate dữ liệu
   validateRow: Function,
 
-  // Hàm thêm mới dữ liệu
   insertRow: Function,
 
-  // Hàm kiểm tra có phải là dòng chứa dữ liệu hay không
   isDataRow: {
     type: Function,
     default: rowData => {
@@ -135,31 +119,22 @@ const props = defineProps({
     },
   },
 
-  // Đường dẫn file mẫu
   templatePath: String,
-
-  // Số bản ghi tối đa
-  maxRows: Number,
 })
 
 const emit = defineEmits([
   'done',
 ])
 
-// Danh sách dữ liệu khi import Excel
 const rows = ref([])
 
-// Có import thành công không
 const isImportSuccess = ref(true)
 
-// Tổng số bản ghi
 const totalRow = ref(0)
 
-// Số bản ghi đã xử lý
 const processedRow = ref(0)
 
-// Đang import
-const isSaving = ref(false)
+const isImporting = ref(false)
 
 const rootEle = ref()
 
@@ -176,11 +151,11 @@ const closeModal = () => {
 }
 
 const resetInfo = () => {
-  rows.value = null
+  rows.value = []
   isImportSuccess.value = true
   totalRow.value = 0
   processedRow.value = 0
-  isSaving.value = false
+  isImporting.value = false
 
   excelFileInput.value.value = ''
 }
@@ -190,7 +165,7 @@ const openImportForm = () => {
 }
 
 const submitForm = async () => {
-  if (isSaving.value) {
+  if (isImporting.value) {
     return
   }
 
@@ -246,16 +221,11 @@ const processImportData = rowsX => {
     return
   }
 
-  if (props.maxRows && rowsX.length > props.maxRows) {
-    noti.error('File Excel chứa tối đa ' + props.maxRows + ' dòng dữ liệu')
-    return
-  }
-
   rows.value = rowsX
   isImportSuccess.value = true
   totalRow.value = rows.value.length
   processedRow.value = 0
-  isSaving.value = true
+  isImporting.value = true
 
   // Bắt đầu import
   importSingleRow()
@@ -276,7 +246,7 @@ const importSingleRow = async () => {
     // Ẩn progress bar
     totalRow.value = 0
 
-    isSaving.value = false
+    isImporting.value = false
 
     // Dừng lại
     return
@@ -306,7 +276,7 @@ const importSingleRow = async () => {
 
     const messages = validateErrors.join('. ')
     noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + messages + '. Bạn có muốn tiếp tục?', () => {
-      isSaving.value = true
+      isImporting.value = true
 
       // Tiếp tục dòng nữa
       importSingleRow()
@@ -318,7 +288,7 @@ const importSingleRow = async () => {
     // Ẩn progress bar
     totalRow.value = 0
 
-    isSaving.value = false
+    isImporting.value = false
 
     // Dừng lại
     return
@@ -334,16 +304,16 @@ const importSingleRow = async () => {
     // Tiếp tục dòng nữa
     importSingleRow()
   } else if (data.code == 2 || data.code == 422) {
-    isSaving.value = false
+    isImporting.value = false
 
     noti.confirm('Lỗi ở dòng ' + rowNumber + '. ' + data.message + '. Bạn có muốn tiếp tục?', () => {
-      isSaving.value = true
+      isImporting.value = true
 
       // Tiếp tục dòng nữa
       importSingleRow()
     })
   } else {
-    isSaving.value = false
+    isImporting.value = false
     isImportSuccess.value = false
     noti.error('Đã có lỗi xảy ra')
 
@@ -369,10 +339,3 @@ defineExpose({
   openImportForm,
 })
 </script>
-
-
-<style lang="scss" scoped>
-.progress {
-  max-width: 500px;
-}
-</style>
