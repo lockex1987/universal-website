@@ -42,6 +42,7 @@ const validateRow = async rowData => {
 
   const validateErrors = []
   try {
+    // await validator.validate(data, { messages: vietnameseValidatorMessages })
     await validator.validate(data)
   } catch ({ errors, fields }) {
     errors.forEach(e => {
