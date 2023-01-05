@@ -1,4 +1,4 @@
-import asyncValidator from 'async-validator'
+import Schema from 'async-validator'
 import vietnameseValidatorMessages from '@/helpers/vietnamese-validator-messages.mjs'
 
 const upload = (rule, fileList, callback, source, options) => {
@@ -24,10 +24,11 @@ const upload = (rule, fileList, callback, source, options) => {
   callback(errors)
 }
 
-asyncValidator.register('upload', upload)
+Schema.register('upload', upload)
 
+// TODO: Có chạy được không?
 // console.log(asyncValidator)
 // console.log(vietnameseValidatorMessages)
 // const Schema = asyncValidator.default
 // Schema.messages = vietnameseValidatorMessages
-asyncValidator.messages = vietnameseValidatorMessages
+Schema.messages = vietnameseValidatorMessages

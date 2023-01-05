@@ -1,4 +1,4 @@
-import asyncValidator from 'async-validator'
+import Schema from 'async-validator'
 
 const upload = (rule, fileList, callback, source, options) => {
   const temp = fileList.length ? fileList[fileList.length - 1] : null
@@ -23,4 +23,4 @@ const upload = (rule, fileList, callback, source, options) => {
   callback(errors)
 }
 
-asyncValidator.register('upload', upload)
+Schema.register('upload', upload)

@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import vietnameseValidatorMessages from './vietnamese-validator-messages.mjs'
 
+const Schema = asyncValidator.default
+
 const strongPassword = (rule, value, callback, source, options) => {
   if (! value) {
     return true
@@ -108,13 +110,11 @@ const upload = (rule, value, callback, source, options) => {
 }
 
 const setupValidator = () => {
-  const Schema = asyncValidator.default
-
-  // Tiếng Việt
-  Schema.messages = vietnameseValidatorMessages
-
+  // Đa ngôn ngữ: Tiếng Việt
   // TODO: tên attribute chưa có tiếng Việt
   // để message là chung chung
+  // TODO: Có chạy được không?
+  Schema.messages = vietnameseValidatorMessages
 
   // Thêm phương thức cho request
   // https://github.com/mikeerickson/validatorjs/issues/418
@@ -131,6 +131,7 @@ const setupValidator = () => {
     }
   }
 
+  // Thêm các luật
   Schema.register('strongPassword', strongPassword)
   Schema.register('telephone', telephone)
   Schema.register('unique', unique)
