@@ -90,7 +90,7 @@ const defaultFrm = {
 const frm = reactive({ ...defaultFrm })
 
 const rules = {
-  name: [{ required: true, max: 100 }],
+  // name: [{ required: true, max: 100 }],
   description: [{ max: 500 }],
 }
 

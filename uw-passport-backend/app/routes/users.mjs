@@ -120,7 +120,7 @@ router.post('/insert', async (request, response) => {
   const rules = {
     username: [
       { required: true, max: 100 },
-      { type: 'unique', dbCol: 'users', dbFieldName: 'Tên đăng nhập' },
+      { type: 'unique', dbCol: 'users', fullField: 'Tên đăng nhập' },
     ],
     fullName: [{ required: true, max: 100 }],
     email: [{ type: 'email', required: true, max: 100 }],
@@ -163,7 +163,7 @@ router.put('/update', async (request, response) => {
   const rules = {
     username: [
       { required: true, max: 100 },
-      { type: 'unique', dbCol: 'users', dbFieldName: 'Tên đăng nhập', ignoredIdValue: ObjectId(_id) },
+      { type: 'unique', dbCol: 'users', fullField: 'Tên đăng nhập', ignoredIdValue: ObjectId(_id) },
     ],
     fullName: [{ required: true, max: 100 }],
     email: [{ type: 'email', required: true, max: 100 }],

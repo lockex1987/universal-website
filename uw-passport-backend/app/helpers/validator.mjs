@@ -38,7 +38,7 @@ const unique = async (rule, value, callback, source, options) => {
     return true
   }
 
-  // console.log(rule)
+  console.log(rule)
   // console.log(value)
   // console.log(source)
   // console.log(options)
@@ -62,7 +62,7 @@ const unique = async (rule, value, callback, source, options) => {
   const count = await db.collection(col).count(query)
   if (count > 0) {
     // console.log(options.messages)
-    errors.push((rule.dbFieldName ?? rule.field) + vietnameseValidatorMessages.unique) // options.messages.unique
+    errors.push((rule.fullField ?? rule.field) + vietnameseValidatorMessages.unique) // options.messages.unique
   }
   callback(errors)
 }
@@ -79,7 +79,7 @@ const exist = async (rule, value, callback, source, options) => {
   const count = await db.collection(col).count(query)
   if (count == 0) {
     // console.log(options)
-    errors.push((rule.dbFieldName ?? rule.field) + vietnameseValidatorMessages.exist) // options.messages.exist
+    errors.push((rule.fullField ?? rule.field) + vietnameseValidatorMessages.exist) // options.messages.exist
   }
   callback(errors)
 }

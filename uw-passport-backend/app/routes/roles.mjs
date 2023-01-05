@@ -63,7 +63,7 @@ router.post('/insert', async (request, response) => {
   const rules = {
     code: [
       { required: true, max: 100, fullField: 'Mã' },
-      { type: 'unique', dbCol: 'roles', dbFieldName: 'Mã' },
+      { type: 'unique', dbCol: 'roles', fullField: 'Mã' },
     ],
     name: [{ required: true, max: 100, fullField: 'Tên' }],
   }
@@ -86,7 +86,7 @@ router.put('/update', async (request, response) => {
   const rules = {
     code: [
       { required: true, max: 100, fullField: 'Mã' },
-      { type: 'unique', dbCol: 'roles', dbFieldName: 'Mã', ignoredIdValue: ObjectId(_id) },
+      { type: 'unique', dbCol: 'roles', fullField: 'Mã', ignoredIdValue: ObjectId(_id) },
     ],
     name: [{ required: true, max: 100, fullField: 'Tên' }],
   }

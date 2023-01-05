@@ -55,7 +55,7 @@ router.post('/insert', async (request, response) => {
       { type: 'unique', dbCol: 'orgs' },
     ],
     description: [{ max: 500 }],
-    parentId: [{ type: 'exist', dbCol: 'orgs', dbFieldName: 'Tổ chức cha' }],
+    parentId: [{ type: 'exist', dbCol: 'orgs', fullField: 'Tổ chức cha' }],
   }
   await request.validate(rules)
 
@@ -96,13 +96,11 @@ router.put('/update', async (request, response) => {
   const { _id, parentId } = request.body
   const rules = {
     name: [
-      // TODO: Đang không thông báo được tiếng Việt
-      { required: true, max: 100 },
-      // TODO: Đang không thông báo được gì luôn
-      { type: 'unique', dbCol: 'orgs', ignoredIdValue: ObjectId(_id), dbFieldName: 'Tên' },
+      { required: true, max: 100, fullField: 'Tên' },
+      { type: 'unique', dbCol: 'orgs', ignoredIdValue: ObjectId(_id), fullField: 'Tên' },
     ],
-    description: [{ max: 500 }],
-    parentId: [{ type: 'exist', dbCol: 'orgs', dbFieldName: 'Tổ chức cha' }],
+    description: [{ max: 500, fullField: 'Mô tả' }],
+    parentId: [{ type: 'exist', dbCol: 'orgs', fullField: 'Tổ chức cha' }],
   }
   await request.validate(rules)
 

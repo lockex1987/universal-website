@@ -41,7 +41,7 @@ router.post('/insert', async (request, response) => {
   const rules = {
     title: [
       { required: true, max: 200 },
-      { type: 'unique', dbCol: 'products', dbFieldName: 'Tên' },
+      { type: 'unique', dbCol: 'products', fullField: 'Tên' },
     ],
     description: [{ required: true, max: 500 }],
     content: [{ required: true, max: 5000 }],
@@ -71,7 +71,7 @@ router.put('/update', async (request, response) => {
   const rules = {
     title: [
       { required: true, max: 200 },
-      { type: 'unique', dbCol: 'products', dbFieldName: 'Tên', ignoredIdValue: objId },
+      { type: 'unique', dbCol: 'products', fullField: 'Tên', ignoredIdValue: objId },
     ],
     description: [{ required: true, max: 500 }],
     content: [{ required: true, max: 5000 }],
