@@ -57,7 +57,7 @@ router.post('/insert', async (request, response) => {
     description: [{ max: 500 }],
     parentId: [{ type: 'exist', dbCol: 'orgs', dbFieldName: 'Tổ chức cha' }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const { parentId } = request.body
   const data = pick(request.body, 'name', 'description')
@@ -104,7 +104,7 @@ router.put('/update', async (request, response) => {
     description: [{ max: 500 }],
     parentId: [{ type: 'exist', dbCol: 'orgs', dbFieldName: 'Tổ chức cha' }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const db = getDb()
   let parentObj

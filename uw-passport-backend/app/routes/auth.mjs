@@ -24,7 +24,7 @@ router.post('/login', async (request, response) => {
     username: { required: true },
     password: { required: true },
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const { username, password, totpCode } = request.body
   const db = getDb()

@@ -67,7 +67,7 @@ router.post('/insert', async (request, response) => {
     ],
     name: [{ required: true, max: 100 }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const data = pick(request.body, 'code', 'name')
   data.permissions = request.body.permissions
@@ -90,7 +90,7 @@ router.put('/update', async (request, response) => {
     ],
     name: [{ required: true, max: 100 }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'code', 'name')

@@ -132,7 +132,7 @@ router.post('/insert', async (request, response) => {
       { type: 'strongPassword' },
     ],
   }
-  await request.validate(body, rules)
+  await request.validate(rules)
 
   const { orgId, isActive, roles, password } = body
   const data = pick(body, 'fullName', 'email', 'phone')
@@ -175,7 +175,7 @@ router.put('/update', async (request, response) => {
       { type: 'strongPassword' },
     ],
   }
-  await request.validate(body, rules)
+  await request.validate(rules)
 
   const query = { _id: ObjectId(_id) }
   const data = pick(body, 'fullName', 'email', 'phone')

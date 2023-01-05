@@ -48,7 +48,7 @@ router.post('/insert', async (request, response) => {
     image: [{ type: 'url', required: true, max: 500 }],
     price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   // TODO: sanitize HTML content
   // jitbit/HtmlSanitizer: Fast JavaScript HTML Sanitizer, client-side (i.e. needs a browser, won't work in Node and other backend)
@@ -78,7 +78,7 @@ router.put('/update', async (request, response) => {
     image: [{ type: 'url', required: true, max: 500 }],
     price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   // TODO: sanitize HTML content
 

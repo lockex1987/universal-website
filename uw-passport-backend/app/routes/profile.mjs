@@ -23,7 +23,7 @@ router.post('/change_password', async (request, response) => {
       { type: 'strongPassword' },
     ],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const { oldPassword, newPassword } = request.body
   const redisUser = await getUser(request)
@@ -170,7 +170,7 @@ router.post('/update_user_info', async (request, response) => {
     phone: [{ type: 'string', required: false, min: 9, max: 12 }],
     avatar: [{ type: 'upload', extensions: ['png', 'jpg', 'jpeg'], maxFileSize: 5, request }],
   }
-  await request.validate(request.body, rules)
+  await request.validate(rules)
 
   const redisUser = await getUser(request)
   const db = getDb()

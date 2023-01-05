@@ -1,6 +1,6 @@
 export default {
   default: 'Validation error on field %s',
-  required: '%s is required',
+  required: 'Vui lòng nhập %s',
   enum: '%s must be one of %s',
   whitespace: '%s cannot be empty',
   date: {
@@ -44,7 +44,8 @@ export default {
   pattern: {
     mismatch: '%s value %s does not match pattern %s',
   },
-  clone() {
+
+  clone: function () {
     const cloned = JSON.parse(JSON.stringify(this))
     cloned.clone = this.clone
     return cloned

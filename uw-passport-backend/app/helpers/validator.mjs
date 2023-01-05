@@ -110,18 +110,15 @@ const upload = (rule, value, callback, source, options) => {
 }
 
 const setupValidator = () => {
-  // Đa ngôn ngữ: Tiếng Việt
-  // TODO: tên attribute chưa có tiếng Việt
-  // để message là chung chung
-  // TODO: Có chạy được không?
-  Schema.messages = vietnameseValidatorMessages
-
   // Thêm phương thức cho request
-  // https://github.com/mikeerickson/validatorjs/issues/418
-  request.validate = async (body, rules) => {
+  request.validate = async function (rules) {
     try {
+      const data = this.body // request.body
       const validator = new Schema(rules)
-      await validator.validate(body)
+      // Đa ngôn ngữ: Tiếng Việt
+      // TODO: tên attribute chưa có tiếng Việt
+      validator.messages(vietnameseValidatorMessages)
+      await validator.validate(data)
     } catch ({ errors, fields }) {
       const error = new Error('validate')
       // Custom prop to specify handling behaviour
