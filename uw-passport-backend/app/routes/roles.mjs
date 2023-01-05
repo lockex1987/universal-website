@@ -60,18 +60,17 @@ export const getAllRoles = async (request, response) => {
 
 
 router.post('/insert', async (request, response) => {
-  const { permissions } = request.body
   const rules = {
     code: [
       { required: true, max: 100 },
       { type: 'unique', dbCol: 'roles', dbFieldName: 'Mã' },
     ],
-    name: [{ max: 100 }],
+    name: [{ required: true, max: 100 }],
   }
   await request.validate(request.body, rules)
 
   const data = pick(request.body, 'code', 'name')
-  data.permissions = permissions
+  data.permissions = request.body.permissions
   const db = getDb()
   const result = await db.collection('roles').insertOne(data)
 
@@ -83,19 +82,19 @@ router.post('/insert', async (request, response) => {
 
 
 router.put('/update', async (request, response) => {
-  const { _id, permissions } = request.body
+  const { _id } = request.body
   const rules = {
     code: [
       { required: true, max: 100 },
       { type: 'unique', dbCol: 'roles', dbFieldName: 'Mã', ignoredIdValue: ObjectId(_id) },
     ],
-    name: [{ max: 100 }],
+    name: [{ required: true, max: 100 }],
   }
   await request.validate(request.body, rules)
 
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'code', 'name')
-  data.permissions = permissions
+  data.permissions = request.body.permissions
   const db = getDb()
   const result = await db.collection('roles').updateOne(query, { $set: data })
 

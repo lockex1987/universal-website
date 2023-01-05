@@ -5,11 +5,11 @@
   </div>
 
   <a-form
-    :model="frm"
     ref="frmRef"
+    layout="vertical"
+    :model="frm"
     :rules="rules"
     @finish="saveForm()"
-    layout="vertical"
   >
     <a-form-item
       label="Mã"
@@ -96,7 +96,11 @@ const frmRef = ref()
 
 const isSaving = ref(false)
 
-const emit = defineEmits(['close', 'inserted', 'updated'])
+const emit = defineEmits([
+  'close',
+  'inserted',
+  'updated',
+])
 
 const action = computed(() => {
   if (frm._id) {
@@ -117,12 +121,11 @@ const action = computed(() => {
 })
 
 const saveForm = async () => {
-  isSaving.value = true
-
-  const params = frm
   const { method, path, actionName, emitName } = action.value
-  const { data } = await axios[method]('/api/roles/' + path, params)
 
+  isSaving.value = true
+  const params = frm
+  const { data } = await axios[method]('/api/roles/' + path, params)
   isSaving.value = false
 
   if (data.code == 0) {
