@@ -62,10 +62,10 @@ export const getAllRoles = async (request, response) => {
 router.post('/insert', async (request, response) => {
   const rules = {
     code: [
-      { required: true, max: 100 },
+      { required: true, max: 100, fullField: 'Mã' },
       { type: 'unique', dbCol: 'roles', dbFieldName: 'Mã' },
     ],
-    name: [{ required: true, max: 100 }],
+    name: [{ required: true, max: 100, fullField: 'Tên' }],
   }
   await request.validate(rules)
 
@@ -85,10 +85,10 @@ router.put('/update', async (request, response) => {
   const { _id } = request.body
   const rules = {
     code: [
-      { required: true, max: 100 },
+      { required: true, max: 100, fullField: 'Mã' },
       { type: 'unique', dbCol: 'roles', dbFieldName: 'Mã', ignoredIdValue: ObjectId(_id) },
     ],
-    name: [{ required: true, max: 100 }],
+    name: [{ required: true, max: 100, fullField: 'Tên' }],
   }
   await request.validate(rules)
 

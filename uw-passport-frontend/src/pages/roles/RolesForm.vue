@@ -88,8 +88,8 @@ const defaultFrm = {
 const frm = reactive({ ...defaultFrm })
 
 const rules = {
-  // code: [{ required: true, max: 100 }],
-  // name: [{ required: true, max: 100 }],
+  code: [{ required: true, max: 100 }],
+  name: [{ required: true, max: 100 }],
 }
 
 const frmRef = ref()

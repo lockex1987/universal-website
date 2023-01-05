@@ -115,8 +115,6 @@ const setupValidator = () => {
     try {
       const data = this.body // request.body
       const validator = new Schema(rules)
-      // Đa ngôn ngữ: Tiếng Việt
-      // TODO: tên attribute chưa có tiếng Việt
       validator.messages(vietnameseValidatorMessages)
       await validator.validate(data)
     } catch ({ errors, fields }) {
