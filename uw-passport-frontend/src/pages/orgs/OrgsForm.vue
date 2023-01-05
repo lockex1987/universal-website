@@ -111,7 +111,11 @@ const actionName = computed(() => {
 
 const saveForm = async () => {
   isSaving.value = true
-  const params = frm
+  const params = {
+    ...frm,
+    // Test validate tổ chức cha không tồn tại
+    // parentId: '63b67c14a35641f792d8f5c0',
+  }
   const method = frm._id ? 'put' : 'post'
   const path = frm._id ? 'update' : 'insert'
   const { data } = await axios[method]('/api/orgs/' + path, params)

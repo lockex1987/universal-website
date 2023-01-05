@@ -52,7 +52,11 @@ export default {
   },
 
   // Thêm
-  unique: ' đã tồn tại',
+  unique: '%s đã tồn tại',
 
-  exist: ' không tồn tại',
+  exist: '%s không tồn tại',
+
+  strongPassword: 'Mật khẩu phải chứa chữ hoa, chữ thường, số',
+
+  telephone: 'Không đúng định dạng số điện thoại XXX-XXX-XXXX',
 }

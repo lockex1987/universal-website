@@ -15,7 +15,7 @@ const strongPassword = (rule, value, callback, source, options) => {
   const errors = []
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]/
   if (! strongPasswordRegex.test(value)) {
-    errors.push('Mật khẩu phải chứa chữ hoa, chữ thường, số')
+    errors.push(options.messages.strongPassword)
   }
   callback(errors)
 }
@@ -28,7 +28,7 @@ const telephone = (rule, value, callback, source, options) => {
   const errors = []
   const telephoneRegex = /^\d{3}-\d{3}-\d{4}$/
   if (! telephoneRegex.test(value)) {
-    errors.push('Không đúng định dạng số điện thoại XXX-XXX-XXXX')
+    errors.push(options.messages.telephone)
   }
   callback(errors)
 }
@@ -38,7 +38,7 @@ const unique = async (rule, value, callback, source, options) => {
     return true
   }
 
-  console.log(rule)
+  // console.log(rule)
   // console.log(value)
   // console.log(source)
   // console.log(options)
@@ -50,19 +50,15 @@ const unique = async (rule, value, callback, source, options) => {
 
   const errors = []
   const db = getDb()
-  const query = {
-    [field]: {
-      $regex: '^' + value + '$',
-      $options: 'i',
-    },
-  }
+  const query = { [field]: { $regex: '^' + value + '$', $options: 'i' } }
   if (ignoredIdValue) {
     query[idField] = { $ne: ignoredIdValue }
   }
   const count = await db.collection(col).count(query)
   if (count > 0) {
     // console.log(options.messages)
-    errors.push((rule.fullField ?? rule.field) + vietnameseValidatorMessages.unique) // options.messages.unique
+    // vietnameseValidatorMessages.unique
+    errors.push(options.messages.unique.replace('%s', rule.fullField ?? rule.field))
   }
   callback(errors)
 }
@@ -78,8 +74,7 @@ const exist = async (rule, value, callback, source, options) => {
   const query = { _id: ObjectId(value) }
   const count = await db.collection(col).count(query)
   if (count == 0) {
-    // console.log(options)
-    errors.push((rule.fullField ?? rule.field) + vietnameseValidatorMessages.exist) // options.messages.exist
+    errors.push(options.messages.exist.replace('%s', rule.fullField ?? rule.field))
   }
   callback(errors)
 }
