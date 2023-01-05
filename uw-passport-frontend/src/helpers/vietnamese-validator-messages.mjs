@@ -44,14 +44,19 @@ export default {
   pattern: {
     mismatch: '%s value %s does not match pattern %s',
   },
-  clone() {
+
+  clone: function () {
     const cloned = JSON.parse(JSON.stringify(this))
     cloned.clone = this.clone
     return cloned
   },
 
   // Thêm
-  unique: ' đã tồn tại',
+  unique: '%s đã tồn tại',
 
-  exist: ' không tồn tại',
+  exist: '%s không tồn tại',
+
+  strongPassword: 'Mật khẩu phải chứa chữ hoa, chữ thường, số',
+
+  telephone: 'Không đúng định dạng số điện thoại XXX-XXX-XXXX',
 }

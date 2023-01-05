@@ -13,15 +13,17 @@
 <script setup>
 import Schema from 'async-validator'
 import ImportModal from '@/components/ImportModal.vue'
+import vietnameseValidatorMessages from '@/helpers/vietnamese-validator-messages.mjs'
+// import viVN from '@/locale/vi_VN.js'
+// const vietnameseValidatorMessages = viVN.Form.defaultValidateMessages
 
 const rules = {
-  code: [{ required: true, max: 100 }],
-  name: [{ required: true, max: 100 }],
+  code: [{ required: true, max: 100, fullField: 'Mã' }],
+  name: [{ required: true, max: 100, fullField: 'Tên' }],
 }
 
 const validator = new Schema(rules)
-// validator.messages(vietnameseValidatorMessages)
-// console.log(Schema.messages)
+validator.messages(vietnameseValidatorMessages)
 
 const importModal = ref()
 
