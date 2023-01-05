@@ -107,7 +107,7 @@
     <a-space>
       <a-button
         type="primary"
-        html-type="submit"
+        htmlType="submit"
       >
         Lưu thông tin
       </a-button>

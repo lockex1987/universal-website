@@ -35,7 +35,7 @@
     <a-space>
       <a-button
         type="primary"
-        html-type="submit"
+        htmlType="submit"
         :loading="isProcessing"
       >
         Đổi mật khẩu

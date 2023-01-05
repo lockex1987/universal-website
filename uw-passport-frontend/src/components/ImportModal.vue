@@ -73,7 +73,7 @@
           <div class="modal-footer">
             <a-button
               type="primary"
-              html-type="submit"
+              htmlType="submit"
               :loading="isImporting"
             >
               Import

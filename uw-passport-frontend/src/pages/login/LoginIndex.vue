@@ -44,7 +44,7 @@
         <div>
           <a-button
             type="primary"
-            html-type="submit"
+            htmlType="submit"
             block
             :loading="isProcessing"
           >
@@ -101,7 +101,7 @@
         <div class="mb-4">
           <a-button
             type="primary"
-            html-type="submit"
+            htmlType="submit"
             block
             :loading="isProcessing"
           >

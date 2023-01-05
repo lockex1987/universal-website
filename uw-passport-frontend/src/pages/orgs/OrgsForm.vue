@@ -5,11 +5,11 @@
   </div>
 
   <a-form
-    :model="frm"
+    layout="vertical"
     ref="frmRef"
+    :model="frm"
     :rules="rules"
     @finish="saveForm()"
-    layout="vertical"
   >
     <a-form-item
       label="Tên"
@@ -52,7 +52,7 @@
     <a-space>
       <a-button
         type="primary"
-        html-type="submit"
+        htmlType="submit"
         :loading="isSaving"
       >
         {{ actionName }}
@@ -99,7 +99,11 @@ const frmRef = ref()
 const isSaving = ref(false)
 
 // Không khai báo sẽ có cảnh báo
-const emit = defineEmits(['close', 'inserted', 'updated'])
+const emit = defineEmits([
+  'close',
+  'inserted',
+  'updated',
+])
 
 const actionName = computed(() => {
   return frm._id ? 'Cập nhật' : 'Thêm mới'
@@ -107,12 +111,10 @@ const actionName = computed(() => {
 
 const saveForm = async () => {
   isSaving.value = true
-
   const params = frm
   const method = frm._id ? 'put' : 'post'
   const path = frm._id ? 'update' : 'insert'
   const { data } = await axios[method]('/api/orgs/' + path, params)
-
   isSaving.value = false
 
   if (data.code == 0) {
