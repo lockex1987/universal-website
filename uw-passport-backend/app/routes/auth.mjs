@@ -33,28 +33,17 @@ const limiterConsecutiveFails = new RateLimiterRedis({
  * Tăng số lần đăng nhập thất bại.
  * @param {string} ip Địa chỉ IP
  * @param {Response} response
- * @returns {boolean} false nếu cần thông báo lỗi request quá nhiều, true nếu có thể xử lý tiếp
+ * @returns {Promise<boolean>} false nếu cần thông báo lỗi request quá nhiều, true nếu có thể xử lý tiếp
  */
 const increaseFailAttempt = async (ip, response) => {
   try {
+    // Tạo Redis với key là login_fail_consecutive:<ip>
+    // và value là số lần đăng nhập sai
+    // ttl là ?
     await limiterConsecutiveFails.consume(ip)
     return true
   } catch (rlRejected) {
-    /*
-    if (rlRejected instanceof Error) {
-      return true
-    } else {
-      response.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000)) || 1)
-      response
-        // .status(429)
-        // .send('Too Many Requests')
-        .json({
-          code: 1,
-          message: 'Gọi request quá nhiều',
-        })
-      return false
-    }
-    */
+    // Có thể bị lỗi 'Too Many Requests' ở đây
     return true
   }
 }
@@ -72,7 +61,7 @@ router.post('/login', async (request, response) => {
 
   if (rlRes !== null && rlRes.consumedPoints > maxConsecutiveFails) {
     const retrySecs = Math.round(rlRes.msBeforeNext / 1000) || 1
-    response.set('Retry-After', String(retrySecs))
+    // response.set('Retry-After', String(retrySecs))
     response
       // .status(429)
       .json({
@@ -88,14 +77,16 @@ router.post('/login', async (request, response) => {
   const dbUser = await db.collection('users').findOne(query)
 
   if (! dbUser || ! dbUser.isActive || dbUser.deletedAt) {
-    return response.json({
+    await increaseFailAttempt(ip, response)
+    response.json({
       code: 1,
       message: 'Đăng nhập thất bại',
     })
+    return
   }
 
   if (! bcrypt.compareSync(password, dbUser.password)) {
-    increaseFailAttempt(ip, response)
+    await increaseFailAttempt(ip, response)
     response.json({
       code: 1,
       message: 'Đăng nhập thất bại',
@@ -104,7 +95,7 @@ router.post('/login', async (request, response) => {
   }
 
   if (! dbUser.isActive) {
-    increaseFailAttempt(ip, response)
+    await increaseFailAttempt(ip, response)
     response.json({
       code: 1,
       message: 'Người dùng đang bị khóa',
@@ -150,7 +141,7 @@ router.post('/login', async (request, response) => {
       return
     } else {
       if (! authenticator.check(totpCode, plainSecret)) {
-        increaseFailAttempt(ip, response)
+        await increaseFailAttempt(ip, response)
         response.json({
           code: 1,
           message: 'Mã TOTP không chính xác',
