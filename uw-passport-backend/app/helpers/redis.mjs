@@ -4,23 +4,23 @@ import { createClient } from 'redis'
  * Tạo kết nối.
  * Trả về đối tượng Redis.
  */
-function createRedisClient() {
-  const redisClient = createClient()
+function init() {
+  const redis = createClient()
 
-  redisClient.on('connect', () => {
+  redis.on('connect', () => {
     // TODO: Log
     console.log('Redis connected')
   })
 
-  redisClient.on('error', err => {
+  redis.on('error', err => {
     // TODO: Log
     console.log('Đã có lỗi xảy ra')
     console.error(err)
   })
 
-  return redisClient
+  return redis
 }
 
-const redisClient = createRedisClient()
+const redis = init()
 
-export default redisClient
+export default redis

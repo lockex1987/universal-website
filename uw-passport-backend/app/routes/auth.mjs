@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import express from 'express'
 import { ObjectId } from 'mongodb'
 import { authenticator } from 'otplib'
+import { RateLimiterRedis } from 'rate-limiter-flexible'
 import {
   generateRandomSessionId,
   getUser,
@@ -11,20 +12,75 @@ import {
   clearCookie,
 } from '#app/helpers/auth.mjs'
 import { getDb } from '#app/helpers/mongodb.mjs'
-import { pick } from '#app/helpers/common.mjs'
+import { pick, getIp } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
+import redis from '#app/helpers/redis.mjs'
 import { code as appCode } from '#config/app.mjs'
 
 const router = express.Router()
 
+const maxConsecutiveFails = 5
 
-// TODO: throttle đăng nhập thất bại
+const limiterConsecutiveFails = new RateLimiterRedis({
+  redis,
+  keyPrefix: 'login_fail_consecutive',
+  points: maxConsecutiveFails,
+  duration: 1 * 60, // có thể sai 5 lần trong 1 phút
+  blockDuration: 2 * 60, // khóa 2 phút
+})
+
+/**
+ * Tăng số lần đăng nhập thất bại.
+ * @param {string} ip Địa chỉ IP
+ * @param {Response} response
+ * @returns {boolean} false nếu cần thông báo lỗi request quá nhiều, true nếu có thể xử lý tiếp
+ */
+const increaseFailAttempt = async (ip, response) => {
+  try {
+    await limiterConsecutiveFails.consume(ip)
+    return true
+  } catch (rlRejected) {
+    /*
+    if (rlRejected instanceof Error) {
+      return true
+    } else {
+      response.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000)) || 1)
+      response
+        // .status(429)
+        // .send('Too Many Requests')
+        .json({
+          code: 1,
+          message: 'Gọi request quá nhiều',
+        })
+      return false
+    }
+    */
+    return true
+  }
+}
+
+
 router.post('/login', async (request, response) => {
   const rules = {
     username: { required: true },
     password: { required: true },
   }
   await request.validate(rules)
+
+  const ip = getIp(request)
+  const rlRes = await limiterConsecutiveFails.get(ip)
+
+  if (rlRes !== null && rlRes.consumedPoints > maxConsecutiveFails) {
+    const retrySecs = Math.round(rlRes.msBeforeNext / 1000) || 1
+    response.set('Retry-After', String(retrySecs))
+    response
+      // .status(429)
+      .json({
+        code: 1,
+        message: 'Gọi request quá nhiều, vui lòng thử lại sau ' + retrySecs + ' giây',
+      })
+    return
+  }
 
   const { username, password, totpCode } = request.body
   const db = getDb()
@@ -39,17 +95,21 @@ router.post('/login', async (request, response) => {
   }
 
   if (! bcrypt.compareSync(password, dbUser.password)) {
-    return response.json({
+    increaseFailAttempt(ip, response)
+    response.json({
       code: 1,
       message: 'Đăng nhập thất bại',
     })
+    return
   }
 
   if (! dbUser.isActive) {
-    return response.json({
+    increaseFailAttempt(ip, response)
+    response.json({
       code: 1,
       message: 'Người dùng đang bị khóa',
     })
+    return
   }
 
   const { totp } = dbUser
@@ -72,7 +132,7 @@ router.post('/login', async (request, response) => {
 
         const uri = authenticator.keyuri(dbUser.username, appCode, plainSecret)
 
-        return response.json({
+        response.json({
           code: 2,
           message: 'Hiển thị mã QR',
           totp: {
@@ -80,18 +140,22 @@ router.post('/login', async (request, response) => {
             uri,
           },
         })
+        return
       }
 
-      return response.json({
+      response.json({
         code: 3,
         message: 'Vui lòng nhập mã TOTP',
       })
+      return
     } else {
       if (! authenticator.check(totpCode, plainSecret)) {
-        return response.json({
+        increaseFailAttempt(ip, response)
+        response.json({
           code: 1,
           message: 'Mã TOTP không chính xác',
         })
+        return
       }
     }
   }
