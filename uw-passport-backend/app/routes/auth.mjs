@@ -26,7 +26,10 @@ const consecutiveFailsLimiter = new RateLimiterRedis({
   keyPrefix: 'login_fail_consecutive',
   points: maxConsecutiveFails,
   duration: 1 * 60, // có thể sai 5 lần trong 1 phút
-  blockDuration: 2 * 60, // khóa 2 phút
+
+  blockDuration: 5 * 60, // khóa 5 phút, TODO: đang không được sử dụng?
+  // inMemoryBlockOnConsumed: maxConsecutiveFails, // If userId or IP consume >=300 points per minute
+  // inMemoryBlockDuration: 10 * 60, // Block it for a minute in memory, so no requests go to Redis
 })
 
 /**
@@ -36,10 +39,18 @@ const consecutiveFailsLimiter = new RateLimiterRedis({
  */
 const increaseFailAttempt = async ip => {
   try {
-    // Tạo Redis với key là login_fail_consecutive:<ip>
+    // Tạo Redis với key là login_fail_consecutive:<ip> (nếu chưa có)
     // và value là số lần đăng nhập sai
-    // ttl là ?
+    // ttl là duration.
+    // Sau đó tăng số lần đăng nhập sai lên 1.
     await consecutiveFailsLimiter.consume(ip)
+
+    /*
+    if (resConsume.remainingPoints <= 0) {
+      const resPenalty = await limiterConsecutiveOutOfLimits.penalty(userId)
+      await loginLimiter.block(userId, 60 * getFibonacciBlockDurationMinutes(resPenalty.consumedPoints))
+    }
+    */
   } catch (ex) {
     if (ex instanceof Error) {
       // Có thể bị lỗi kết nối Redis

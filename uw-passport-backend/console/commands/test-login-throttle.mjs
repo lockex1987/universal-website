@@ -11,4 +11,5 @@ const testLogin = async () => {
   console.log(response.data)
 }
 
-setInterval(testLogin, 1000)
+// setInterval(testLogin, 1000)
+testLogin()
