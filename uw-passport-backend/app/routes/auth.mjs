@@ -21,7 +21,7 @@ const router = express.Router()
 
 const maxConsecutiveFails = 5
 
-const limiterConsecutiveFails = new RateLimiterRedis({
+const consecutiveFailsLimiter = new RateLimiterRedis({
   redis,
   keyPrefix: 'login_fail_consecutive',
   points: maxConsecutiveFails,
@@ -39,9 +39,14 @@ const increaseFailAttempt = async ip => {
     // Tạo Redis với key là login_fail_consecutive:<ip>
     // và value là số lần đăng nhập sai
     // ttl là ?
-    await limiterConsecutiveFails.consume(ip)
-  } catch (rlRejected) {
-    // Có thể bị lỗi 'Too Many Requests' ở đây
+    await consecutiveFailsLimiter.consume(ip)
+  } catch (ex) {
+    if (ex instanceof Error) {
+      // Có thể bị lỗi kết nối Redis
+      throw ex
+    } else {
+      // Lỗi 'Too Many Requests' ở đây
+    }
   }
 }
 
@@ -54,7 +59,7 @@ router.post('/login', async (request, response) => {
   await request.validate(rules)
 
   const ip = getIp(request)
-  const rlRes = await limiterConsecutiveFails.get(ip)
+  const rlRes = await consecutiveFailsLimiter.get(ip)
 
   if (rlRes !== null
     && rlRes.consumedPoints >= maxConsecutiveFails) {
