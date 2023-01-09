@@ -16,6 +16,7 @@ import { pick, getIp } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
 import redis from '#app/helpers/redis.mjs'
 import { code as appCode } from '#config/app.mjs'
+import rateLimit from '#app/middleware/rate-limit.mjs'
 
 const router = express.Router()
 
@@ -52,6 +53,7 @@ const increaseFailAttempt = async ip => {
 }
 
 
+// rateLimit('login_fail_consecutive', maxConsecutiveFails, 1 * 60)
 router.post('/login', async (request, response) => {
   const rules = {
     username: { required: true },

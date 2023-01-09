@@ -1,23 +1,45 @@
 import { RateLimiterRedis } from 'rate-limiter-flexible'
 import redis from '#app/helpers/redis.mjs'
+import { getIp } from '#app/helpers/common.mjs'
 
-const rateLimit = (keyPrefix, points, duration) => {
+/**
+ * Rate limit middleware.
+ * @param {string} keyPrefix
+ * @param {number} points
+ * @param {number} duration Số giây
+ * @param {number} blockDuration Số giây, nếu không nhập thì bằng duration
+ * @returns {Function}
+ */
+const rateLimit = (keyPrefix, points, duration, blockDuration) => {
+  if (! blockDuration) {
+    blockDuration = duration
+  }
   const limiter = new RateLimiterRedis({
     redis,
     keyPrefix,
     points,
     duration,
+    blockDuration,
   })
 
   const func = (request, response, next) => {
-    limiter.consume(request.ip)
+    const ip = getIp(request)
+    limiter.consume(ip)
       .then(() => {
         next()
       })
-      .catch(() => {
-        response
-          .status(429)
-          .send('Too Many Requests')
+      .catch(ex => {
+        if (ex instanceof Error) {
+          // Có thể bị lỗi kết nối Redis
+          throw ex
+        } else {
+          const retrySecs = Math.round(ex.msBeforeNext / 1000) || 1
+          response
+            .json({
+              code: 1,
+              message: 'Gọi request quá nhiều, vui lòng thử lại sau ' + retrySecs + ' giây',
+            })
+        }
       })
   }
 
