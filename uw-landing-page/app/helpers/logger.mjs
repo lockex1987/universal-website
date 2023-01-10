@@ -1,41 +1,59 @@
-import { logLevel } from '#config/log.mjs'
 import { createLogger, format, transports } from 'winston'
+import env from '#base/.env.mjs'
+
+const {
+  combine,
+  timestamp,
+  json,
+  errors,
+  printf,
+  prettyPrint,
+} = format
+
+const { File, Console } = transports
+
+const onlyMessage = printf(({ level, message, label, timestamp }) => {
+  return `${message}`
+})
 
 const logger = createLogger({
-  level: logLevel,
+  exitOnError: false,
 
-  format: format.combine(
-    format.timestamp(), // adds a timestamp property
-    format.json(),
-    format.errors({ stack: true }),
-    format.prettyPrint(),
+  format: combine(
+    timestamp(), // adds a timestamp property
+    json(),
+    errors({ stack: true }),
+    prettyPrint(),
   ),
 
   transports: [
-    new transports.Console(),
-    new transports.File({
+    new File({
       filename: 'logs/error.log',
-      level: 'warn',
+      level: 'error',
     }),
-    new transports.File({
+    new File({
       filename: 'logs/app.log',
     }),
   ],
 
-  // TODO: Cho luôn un-handle exception, rejection vào đây
+  exceptionHandlers: [
+    new File({
+      filename: 'logs/exceptions.log',
+    }),
+  ],
+
+  rejectionHandlers: [
+    new File({
+      filename: 'logs/rejections.log',
+    }),
+  ],
 })
 
-// Call exceptions.handle with a transport to handle exceptions
-logger.exceptions.handle(
-  new transports.File({
-    filename: 'logs/exceptions.log',
-  }),
-)
-
-logger.rejections.handle(
-  new transports.File({
-    filename: 'logs/rejections.log',
-  }),
-)
+if (env.ENV == 'dev') {
+  logger.add(new Console({
+    format: onlyMessage,
+    level: 'debug',
+  }))
+}
 
 export default logger

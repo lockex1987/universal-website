@@ -14,6 +14,7 @@ const {
   simple,
   colorize,
 } = format
+
 const { File, Console } = transports
 
 const onlyMessage = printf(({ level, message, label, timestamp }) => {

@@ -1,28 +1,30 @@
 // Sử dụng mongodb, không sử dụng mongoose, cho giống với khi sử dụng mongosh
-import { database, uri } from '#config/db.mjs'
 import { MongoClient } from 'mongodb'
+import { database, uri } from '#config/db.mjs'
+import logger from '#app/helpers/logger.mjs'
 
 const client = new MongoClient(uri, {
   // useNewUrlParser: true,
   // useUnifiedTopology: true,
 })
 
-let db
-
-export const connect = async () => {
+const connect = async () => {
   try {
     await client.connect()
-    db = client.db(database)
-    console.log('MongoDB connected')
+    const db = client.db(database)
+    logger.info('MongoDB connected')
 
     // Làm thế này thì những chỗ khác không cần import nữa
     globalThis.db = db
+
+    return db
   } catch (ex) {
-    // TODO: Log
-    console.error(ex)
+    logger.error(ex)
     process.exit(1)
   }
 }
+
+const db = await connect()
 
 export const close = async () => {
   await client.close()

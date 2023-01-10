@@ -1,11 +1,7 @@
 import { createClient } from 'redis'
 import logger from '#app/helpers/logger.mjs'
 
-/**
- * Tạo kết nối.
- * Trả về đối tượng Redis.
- */
-function init(legacyMode) {
+const init = legacyMode => {
   const redis = createClient({
     // Package 'rate-limiter-flexible' cần cấu hình này, nếu không sẽ bị lỗi 'TypeError: this.client.multi(...).get(...).pttl is not a function'
     // Tuy nhiên lại bị lỗi khi login do các hàm của Redis giờ là callback, không phải Promise
@@ -15,7 +11,7 @@ function init(legacyMode) {
   })
 
   redis.on('connect', () => {
-    logger.info('Redis connected')
+    logger.info('Redis connected with legacy mode ' + legacyMode)
   })
 
   redis.on('error', err => {

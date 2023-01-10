@@ -8,21 +8,23 @@ const client = new MongoClient(uri, {
   // useUnifiedTopology: true,
 })
 
-let db
-
-export const connect = async () => {
+const connect = async () => {
   try {
     await client.connect()
-    db = client.db(database)
+    const db = client.db(database)
     logger.info('MongoDB connected')
 
     // Làm thế này thì những chỗ khác không cần import nữa
     globalThis.db = db
+
+    return db
   } catch (ex) {
     logger.error(ex)
     process.exit(1)
   }
 }
+
+const db = await connect()
 
 export const close = async () => {
   await client.close()

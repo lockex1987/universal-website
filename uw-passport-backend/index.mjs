@@ -2,8 +2,8 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import fileUpload from 'express-fileupload'
 
-import { connect as connectMongodb } from '#app/helpers/mongodb.mjs'
-import redis from '#app/helpers/redis.mjs'
+import '#app/helpers/mongodb.mjs'
+import '#app/helpers/redis.mjs'
 import logger from '#app/helpers/logger.mjs'
 import checkLogin from '#app/middleware/check-login.mjs'
 import checkPermission from '#app/middleware/check-permission.mjs'
@@ -14,9 +14,6 @@ import routes from '#app/routes/index.mjs'
 import { port } from '#config/app.mjs'
 
 import '#app/helpers/validator.mjs'
-
-await connectMongodb()
-// await redis.connect()
 
 const app = express()
 app.use(express.static('public'))
