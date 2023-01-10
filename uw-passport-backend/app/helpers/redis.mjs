@@ -1,4 +1,5 @@
 import { createClient } from 'redis'
+import logger from '#app/helpers/logger.mjs'
 
 /**
  * Tạo kết nối.
@@ -14,17 +15,12 @@ function init(legacyMode) {
   })
 
   redis.on('connect', () => {
-    // TODO: Log
-    console.log('Redis connected')
+    logger.info('Redis connected')
   })
 
   redis.on('error', err => {
-    // TODO: Log
-    console.log('Đã có lỗi xảy ra')
-    console.error(err)
+    logger.error(err)
   })
-
-  // console.log(redis.v4)
 
   return redis
 }

@@ -11,9 +11,7 @@ const insertOne = async () => {
   const plainPassword = '123456aA@'
   const rounds = 10
   const hashedPassword = bcrypt.hashSync(plainPassword, rounds)
-  console.log(hashedPassword)
-  // console.log(bcrypt.compareSync(plainPassword, hashedPassword))
-  const result = await db.collection('users').insertOne({
+  await db.collection('users').insertOne({
     username,
     password: hashedPassword,
     totp: {
@@ -22,7 +20,6 @@ const insertOne = async () => {
       shouldShow: false,
     },
   })
-  console.log(result.insertedId)
 }
 
 

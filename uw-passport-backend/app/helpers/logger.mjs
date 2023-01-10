@@ -12,7 +12,7 @@ const logger = createLogger({
   ),
 
   transports: [
-    new transports.Console(),
+    new transports.Console(), // format riêng
     new transports.File({
       filename: 'logs/error.log',
       level: 'warn',

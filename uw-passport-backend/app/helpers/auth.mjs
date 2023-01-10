@@ -24,7 +24,6 @@ const getRedisKeyFromRequest = request => {
 
 const generateRandomSessionId = () => {
   const uuid = crypto.randomUUID()
-  // console.log(uuid)
 
   // TODO: Cần dài hơn
   /*
@@ -32,11 +31,9 @@ const generateRandomSessionId = () => {
   crypto.getRandomValues(array)
   const num = array[0]
   */
-  // console.log(num)
   const num = ''
 
   // const n2 = crypto.randomBytes(40).toString('hex')
-  // console.log(n2)
 
   const token = uuid + num
   return token

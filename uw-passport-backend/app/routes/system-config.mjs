@@ -6,7 +6,6 @@ const router = express.Router()
 
 // import { warningThreshold, getConfig } from '#app/helpers/systemConfig.mjs'
 // const test = await getConfig(warningThreshold)
-// console.log(test)
 
 
 router.get('/get-all', async (request, response) => {

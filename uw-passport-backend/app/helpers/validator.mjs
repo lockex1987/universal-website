@@ -38,11 +38,6 @@ const unique = async (rule, value, callback, source, options) => {
     return true
   }
 
-  // console.log(rule)
-  // console.log(value)
-  // console.log(source)
-  // console.log(options)
-
   const field = rule.dbField || rule.field
   const col = rule.dbCol
   const ignoredIdValue = rule.ignoredIdValue
@@ -56,7 +51,6 @@ const unique = async (rule, value, callback, source, options) => {
   }
   const count = await db.collection(col).count(query)
   if (count > 0) {
-    // console.log(options.messages)
     // vietnameseValidatorMessages.unique
     errors.push(options.messages.unique.replace('%s', rule.fullField ?? rule.field))
   }
