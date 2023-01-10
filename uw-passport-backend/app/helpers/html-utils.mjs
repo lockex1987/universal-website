@@ -1,6 +1,11 @@
 import { JSDOM } from 'jsdom'
 import serialize from 'w3c-xmlserializer'
 
+
+/**
+ * @param {Document} document
+ * @return {string}
+ */
 export const jsdomDocumentToXhtml = document => {
   const temp = serialize(document.documentElement)
     .replace(' xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml"', ' xmlns="http://www.w3.org/1999/xhtml"')
@@ -10,7 +15,10 @@ export const jsdomDocumentToXhtml = document => {
 }
 
 
-// document.body
+/**
+ * @param {HTMLBodyElement} documentBody Có thể lấy từ document.body
+ * @return {string}
+ */
 export const jsdomBodyToXml = documentBody => {
   return serialize(documentBody)
     .replace(' xmlns="http://www.w3.org/1999/xhtml"', '')
@@ -18,19 +26,28 @@ export const jsdomBodyToXml = documentBody => {
     .replace('</body>', '')
 }
 
+
+/**
+ * @param {HTMLElement} node
+ * @return {string}
+ */
 export const jsdomNodeToXml = node => {
   return serialize(node)
     .replace(' xmlns="http://www.w3.org/1999/xhtml"', '')
 }
 
+
+/**
+ * @param {string} html
+ * @return {Document}
+ */
 export const htmlToDocument = html => {
   const { document } = (new JSDOM(html)).window
   return document
 }
 
-// Tham khảo https://github.com/jitbit/HtmlSanitizer
 
-const _tagWhitelist = {
+const tagWhitelist = {
   A: true,
   ABBR: true,
   B: true,
@@ -77,13 +94,13 @@ const _tagWhitelist = {
   // SVG: true,
 }
 
-// tags that will be converted to DIVs
-const _contentTagWhiteList = {
+// Tags that will be converted to DIVs
+const contentTagWhiteList = {
   // FORM: true,
   // 'GOOGLE-SHEETS-HTML-ORIGIN': true,
 }
 
-const _attributeWhitelist = {
+const attributeWhitelist = {
   align: true,
   color: true,
   controls: true,
@@ -98,7 +115,7 @@ const _attributeWhitelist = {
   width: true,
 }
 
-const _cssWhitelist = {
+const cssWhitelist = {
   'background-color': true,
   color: true,
   'font-size': true,
@@ -108,8 +125,8 @@ const _cssWhitelist = {
   width: true,
 }
 
-// which "protocols" are allowed in "href", "src" etc
-const _schemaWhiteList = [
+// Which "protocols" are allowed in "href", "src" etc
+const schemaWhiteList = [
   'http:',
   'https:',
   'data:',
@@ -120,24 +137,31 @@ const _schemaWhiteList = [
   'pw:',
 ]
 
-const _uriAttributes = {
+const uriAttributes = {
   href: true,
   action: true,
 }
 
+
+/**
+ * @param {Document} document
+ * @param {HTMLElement} node
+ * @return {HTMLElement}
+ */
 const makeSanitizedCopy = (document, node) => {
   let newNode
-  if (node.nodeType == 3) { // Node.TEXT_NODE
+  if (node.nodeType == 3) { // Node.TEXT_NODE = 3
     // node.tagName là undefined
+    // node.nodeName là #text
     newNode = node.cloneNode(true)
-  } else if (node.nodeType == 1 /* Node.ELEMENT_NODE */
+  } else if (node.nodeType == 1 /* Node.ELEMENT_NODE = 1 */
     && (
-      _tagWhitelist[node.tagName]
-      || _contentTagWhiteList[node.tagName]
+      tagWhitelist[node.tagName]
+      || contentTagWhiteList[node.tagName]
     )
   ) {
     // is tag allowed?
-    if (_contentTagWhiteList[node.tagName]) {
+    if (contentTagWhiteList[node.tagName]) {
       // convert to DIV
       newNode = document.createElement('DIV')
     } else {
@@ -146,19 +170,19 @@ const makeSanitizedCopy = (document, node) => {
 
     for (let i = 0; i < node.attributes.length; i++) {
       const attr = node.attributes[i]
-      if (_attributeWhitelist[attr.name]) {
+      if (attributeWhitelist[attr.name]) {
         if (attr.name == 'style') {
           for (let s = 0; s < node.style.length; s++) {
             const styleName = node.style[s]
-            if (_cssWhitelist[styleName]) {
+            if (cssWhitelist[styleName]) {
               newNode.style.setProperty(styleName, node.style.getPropertyValue(styleName))
             }
           }
         } else {
-          if (_uriAttributes[attr.name]) {
+          if (uriAttributes[attr.name]) {
             // if this is a "uri" attribute, that can have "javascript:" or something
             if (attr.value.indexOf(':') > -1
-              && ! startsWithAny(attr.value, _schemaWhiteList)) {
+              && ! startsWithAny(attr.value, schemaWhiteList)) {
               continue
             }
           }
@@ -183,6 +207,12 @@ const makeSanitizedCopy = (document, node) => {
   return newNode
 }
 
+
+/**
+ * Tham khảo https://github.com/jitbit/HtmlSanitizer.
+ * @param {string} html
+ * @return {string}
+ */
 export const sanitizeHtml = html => {
   html = html ?? ''
   html = html.trim()
@@ -207,6 +237,12 @@ export const sanitizeHtml = html => {
   return jsdomBodyToXml(sanitizedBody)
 }
 
+
+/**
+ * @param {string} str
+ * @param {string[]} substrings
+ * @return {boolean}
+ */
 const startsWithAny = (str, substrings) => {
   for (let i = 0; i < substrings.length; i++) {
     if (str.indexOf(substrings[i]) == 0) {

@@ -2,6 +2,7 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
+import { sanitizeHtml } from '#app/helpers/html-utils.mjs'
 
 const router = express.Router()
 
@@ -50,11 +51,8 @@ router.post('/insert', async (request, response) => {
   }
   await request.validate(rules)
 
-  // TODO: sanitize HTML content
-  // jitbit/HtmlSanitizer: Fast JavaScript HTML Sanitizer, client-side (i.e. needs a browser, won't work in Node and other backend)
-  // https://github.com/jitbit/HtmlSanitizer
-
   const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
+  data.content = sanitizeHtml(data.content)
   const db = getDb()
   const result = await db.collection('products').insertOne(data)
 
@@ -80,10 +78,9 @@ router.put('/update', async (request, response) => {
   }
   await request.validate(rules)
 
-  // TODO: sanitize HTML content
-
   const query = { _id: objId }
   const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
+  data.content = sanitizeHtml(data.content)
   const db = getDb()
   const result = await db.collection('products').updateOne(query, { $set: data })
 
