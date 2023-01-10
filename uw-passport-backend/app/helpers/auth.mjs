@@ -1,8 +1,9 @@
 import crypto from 'node:crypto'
 // import { webcrypto as crypto } from 'node:crypto'
 import redis from '#app/helpers/redis.mjs'
+import logger from '#app/helpers/logger.mjs'
+import { getIp } from '#app/helpers/common.mjs'
 import { code } from '#config/app.mjs'
-import { getIp } from './common.mjs'
 
 const getSessionId = request => {
   const sessionId = request.cookies?.sessionId
@@ -23,19 +24,21 @@ const getRedisKeyFromRequest = request => {
 }
 
 const generateRandomSessionId = () => {
-  const uuid = crypto.randomUUID()
+  const uuid = crypto.randomUUID() // có 36 ký tự
+  // logger.debug(uuid)
 
-  // TODO: Cần dài hơn
   /*
-  const array = new Uint32Array(1)
-  crypto.getRandomValues(array)
-  const num = array[0]
+  const a = new Uint32Array(1)
+  crypto.getRandomValues(a)
+  const n = a[0]
+  logger.debug(n)
   */
-  const num = ''
 
-  // const n2 = crypto.randomBytes(40).toString('hex')
+  const bytesNum = 40
+  const s = crypto.randomBytes(bytesNum).toString('hex') // có bytesNum * 2 = 80 ký tự
+  // logger.debug(s)
 
-  const token = uuid + num
+  const token = uuid + s
   return token
 }
 
