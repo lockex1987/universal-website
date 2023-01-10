@@ -14,7 +14,7 @@ import {
 import { getDb } from '#app/helpers/mongodb.mjs'
 import { pick, getIp } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
-import redis from '#app/helpers/redis.mjs'
+import { redisV3 as redis } from '#app/helpers/redis.mjs'
 import { code as appCode } from '#config/app.mjs'
 import rateLimit from '#app/middleware/rate-limit.mjs'
 

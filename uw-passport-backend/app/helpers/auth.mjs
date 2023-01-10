@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 // import { webcrypto as crypto } from 'node:crypto'
 import redis from '#app/helpers/redis.mjs'
 import { code } from '#config/app.mjs'
+import { getIp } from './common.mjs'
 
 const getSessionId = request => {
   const sessionId = request.cookies?.sessionId
@@ -10,7 +11,7 @@ const getSessionId = request => {
 
 const getRedisKeyFromSessionId = (sessionId, request) => {
   // Thêm IP của người dùng để nếu lỡ bị lộ thông tin token thì cũng không thực hiện được ở máy khác
-  const ip = (request.header('x-forwarded-for') || request.socket.remoteAddress).replace('::ffff:', '')
+  const ip = getIp(request)
   const redisKey = code + '-session:' + sessionId + '-' + ip
   return redisKey
 }

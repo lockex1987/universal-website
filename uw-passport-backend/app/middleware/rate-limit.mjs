@@ -1,5 +1,5 @@
 import { RateLimiterRedis } from 'rate-limiter-flexible'
-import redis from '#app/helpers/redis.mjs'
+import { redisV3 as redis } from '#app/helpers/redis.mjs'
 import { getIp } from '#app/helpers/common.mjs'
 
 /**

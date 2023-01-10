@@ -15,7 +15,7 @@ import { port } from '#config/app.mjs'
 import '#app/helpers/validator.mjs'
 
 await connectMongodb()
-await redis.connect()
+// await redis.connect()
 
 const app = express()
 app.use(express.static('public'))

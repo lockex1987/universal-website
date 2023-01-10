@@ -150,9 +150,11 @@ const closeForm = () => {
 
 const openForm = row => {
   frmRef.value.resetFields()
+  console.log(row.content)
 
   if (row) {
     Object.assign(frm, row)
+    console.log(frm.content)
   } else {
     Object.assign(frm, defaultFrm)
   }
