@@ -11,7 +11,7 @@ import {
   setCookie,
   clearCookie,
 } from '#app/helpers/auth.mjs'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { pick, getIp } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
 import { redisV3 as redis } from '#app/helpers/redis.mjs'
@@ -76,7 +76,6 @@ router.post('/login', async (request, response) => {
   }
 
   const { username, password, totpCode } = request.body
-  const db = getDb()
   const query = { username: { $regex: '^' + username.toLowerCase() + '$', $options: 'i' } }
   const dbUser = await db.collection('users').findOne(query)
 
@@ -192,7 +191,6 @@ router.get('/me', async (request, response) => {
     })
   }
 
-  const db = getDb()
   const _id = redisUser._id
   const objId = ObjectId(_id)
   const dbUser = await db.collection('users').findOne({ _id: objId })
@@ -213,7 +211,6 @@ router.get('/me', async (request, response) => {
 
 
 const getUserPermissions = async objId => {
-  const db = getDb()
   const arr = await db.collection('users').aggregate([
     { $match: {
       _id: objId,

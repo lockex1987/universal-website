@@ -31,3 +31,5 @@ export const close = async () => {
 }
 
 export const getDb = () => db
+
+export default db
