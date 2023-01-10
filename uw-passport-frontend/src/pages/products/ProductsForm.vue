@@ -106,7 +106,11 @@ const frmRef = ref()
 
 const isSaving = ref(false)
 
-const emit = defineEmits(['close', 'inserted', 'updated'])
+const emit = defineEmits([
+  'close',
+  'inserted',
+  'updated',
+])
 
 const action = computed(() => {
   if (frm._id) {
@@ -150,11 +154,9 @@ const closeForm = () => {
 
 const openForm = row => {
   frmRef.value.resetFields()
-  console.log(row.content)
 
   if (row) {
     Object.assign(frm, row)
-    console.log(frm.content)
   } else {
     Object.assign(frm, defaultFrm)
   }
