@@ -1,41 +1,87 @@
-import { logLevel } from '#config/log.mjs'
 import { createLogger, format, transports } from 'winston'
+// import DailyRotateFile from 'winston-daily-rotate-file'
+import { logLevel } from '#config/log.mjs'
+import env from '#base/.env.mjs'
+
+const {
+  combine,
+  timestamp,
+  label,
+  json,
+  errors,
+  printf,
+  prettyPrint,
+  simple,
+  colorize,
+} = format
+const { File, Console } = transports
+
+const onlyMessage = printf(({ level, message, label, timestamp }) => {
+  // return `${timestamp} [${label}] ${level}: ${message}`
+  return `${message}`
+})
 
 const logger = createLogger({
-  level: logLevel,
+  exitOnError: false,
 
-  format: format.combine(
-    format.timestamp(), // adds a timestamp property
-    format.json(),
-    format.errors({ stack: true }),
-    format.prettyPrint(),
+  // Đang không được sử dụng vì từng Transport đang có level riêng
+  // level: logLevel,
+
+  format: combine(
+    timestamp(), // adds a timestamp property
+    json(),
+    errors({ stack: true }),
+    prettyPrint(),
   ),
 
   transports: [
-    new transports.Console(), // format riêng
-    new transports.File({
+    // Log lỗi ở riêng một file
+    new File({
       filename: 'logs/error.log',
-      level: 'warn',
+      level: 'error', // warn
     }),
-    new transports.File({
+
+    // File chứa tất cả log
+    new File({
       filename: 'logs/app.log',
+      level: 'info',
+    }),
+
+    // new DailyRotateFile(),
+    // Sử dụng rotate của Linux?
+  ],
+
+  // Xử lý un-handle exception, rejection
+  exceptionHandlers: [
+    new File({
+      filename: 'logs/exceptions.log',
     }),
   ],
 
-  // TODO: Cho luôn un-handle exception, rejection vào đây
+  // logger.exceptions.handle()
+  // logger.add({ ..., handleExceptions: true })
+
+  rejectionHandlers: [
+    new File({
+      filename: 'logs/rejections.log',
+    }),
+  ],
+
+  // logger.rejections.handle()
 })
 
-// Call exceptions.handle with a transport to handle exceptions
-logger.exceptions.handle(
-  new transports.File({
-    filename: 'logs/exceptions.log',
-  }),
-)
-
-logger.rejections.handle(
-  new transports.File({
-    filename: 'logs/rejections.log',
-  }),
-)
+if (env.ENV == 'dev') {
+  logger.add(new Console({
+    // format: simple(),
+    format: onlyMessage,
+    /*
+    format: combine(
+      colorize(),
+      onlyMessage,
+    ),
+    */
+    level: 'debug',
+  }))
+}
 
 export default logger
