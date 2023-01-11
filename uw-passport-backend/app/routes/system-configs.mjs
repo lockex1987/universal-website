@@ -1,6 +1,6 @@
 import express from 'express'
 import { getDb } from '#app/helpers/mongodb.mjs'
-import { configList } from '#app/helpers/system-config.mjs'
+import { configList } from '#app/helpers/system-configs.mjs'
 
 const router = express.Router()
 
@@ -10,7 +10,7 @@ const router = express.Router()
 
 router.get('/get-all', async (request, response) => {
   const db = getDb()
-  const list = await db.collection('systemConfig').find()
+  const list = await db.collection('systemConfigs').find()
     .toArray()
   configList.forEach(config => {
     const temp = list.find(e => e.code == config.code)
@@ -36,7 +36,7 @@ router.post('/save-config', async (request, response) => {
       name: config.name,
       value: config.value,
     }
-    await db.collection('systemConfig').replaceOne(query, data, options)
+    await db.collection('systemConfigs').replaceOne(query, data, options)
   }
   response.json({
     code: 0,

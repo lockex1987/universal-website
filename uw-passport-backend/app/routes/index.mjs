@@ -4,15 +4,17 @@ import dashboard from './dashboard.mjs'
 import orgs from './orgs.mjs'
 import roles from './roles.mjs'
 import users from './users.mjs'
-import systemConfig from './system-config.mjs'
+import systemConfigs from './system-configs.mjs'
 import products from './products.mjs'
+import actionLogs from './action-logs.mjs'
 
 import {
   Orgs,
   Roles,
   Users,
-  SystemConfig,
+  SystemConfigs,
   Products,
+  ActionLogs,
 } from '#app/helpers/permissions.mjs'
 
 export default [
@@ -22,6 +24,7 @@ export default [
   { path: '/orgs', router: orgs, auth: true, permission: Orgs },
   { path: '/roles', router: roles, auth: true, permission: Roles },
   { path: '/users', router: users, auth: true, permission: Users },
-  { path: '/system-config', router: systemConfig, auth: true, permission: SystemConfig },
+  { path: '/system-configs', router: systemConfigs, auth: true, permission: SystemConfigs },
   { path: '/products', router: products, auth: true, permission: Products },
+  { path: '/action-logs', router: actionLogs, auth: true, permission: ActionLogs },
 ]

@@ -62,7 +62,7 @@ const isSaving = ref(false)
 const saveConfig = async () => {
   isSaving.value = true
   const params = configList.value
-  const { data } = await axios.post('/api/system-config/save-config', params)
+  const { data } = await axios.post('/api/system-configs/save-config', params)
   isSaving.value = false
   if (data.code == 0) {
     noti.success('Lưu cấu hình thành công')
@@ -72,7 +72,7 @@ const saveConfig = async () => {
 }
 
 const getConfigList = async () => {
-  const { data } = await axios.get('/api/system-config/get-all')
+  const { data } = await axios.get('/api/system-configs/get-all')
   configList.value = data
 }
 

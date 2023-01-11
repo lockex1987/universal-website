@@ -3,8 +3,9 @@ import {
   Permissions,
   Roles,
   Users,
-  SystemConfig,
+  SystemConfigs,
   Products,
+  ActionLogs,
 } from '@/helpers/permissions.mjs'
 
 export default [
@@ -17,7 +18,8 @@ export default [
       { code: 'Permissions', name: 'Quyền', permission: Permissions },
       { code: 'Roles', name: 'Vai trò', permission: Roles },
       { code: 'Users', name: 'Người dùng', permission: Users },
-      { code: 'SystemConfig', name: 'Cấu hình hệ thống', permission: SystemConfig },
+      { code: 'SystemConfigs', name: 'Cấu hình hệ thống', permission: SystemConfigs },
+      { code: 'ActionLogs', name: 'Log người dùng', permission: ActionLogs },
     ],
   },
   {

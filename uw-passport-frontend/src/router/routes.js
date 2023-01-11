@@ -3,8 +3,9 @@ import {
   Permissions,
   Roles,
   Users,
-  SystemConfig,
+  SystemConfigs,
   Products,
+  ActionLogs,
 } from '@/helpers/permissions.mjs'
 
 export default [
@@ -53,16 +54,22 @@ export default [
         meta: { permission: Users },
       },
       {
-        path: 'system-config',
-        name: 'SystemConfig',
-        component: () => import('@/pages/system-config/SystemConfigIndex.vue'),
-        meta: { permission: SystemConfig },
+        path: 'system-configs',
+        name: 'SystemConfigs',
+        component: () => import('@/pages/system-configs/SystemConfigsIndex.vue'),
+        meta: { permission: SystemConfigs },
       },
       {
         path: 'products',
         name: 'Products',
         component: () => import('@/pages/products/ProductsIndex.vue'),
         meta: { permission: Products },
+      },
+      {
+        path: 'action-logs',
+        name: 'ActionLogs',
+        component: () => import('@/pages/action-logs/ActionLogsIndex.vue'),
+        meta: { permission: ActionLogs },
       },
       {
         path: 'demo-button',
