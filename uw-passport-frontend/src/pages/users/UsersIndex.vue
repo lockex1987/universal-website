@@ -242,19 +242,19 @@ const deleteRow = user => {
 }
 
 const getOrgTree = async () => {
-  const { data } = await axios.get('/api/users/get_all_orgs')
+  const { data } = await axios.get('/api/users/get-all-orgs')
   dropdowns.orgTree = convertToTreeData(data)
 }
 
 const getRoleList = async () => {
-  const { data } = await axios.get('/api/users/get_all_roles')
+  const { data } = await axios.get('/api/users/get-all-roles')
   dropdowns.roleList = data
 }
 
 // Test thôi, xem có hiển thị password không
 /*
 const getAllUsers = async () => {
-  const { data } = await axios.get('/api/users/get_all_users')
+  const { data } = await axios.get('/api/users/get-all-users')
   console.log(data)
 }
 */

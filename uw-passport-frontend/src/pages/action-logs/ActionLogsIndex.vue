@@ -2,124 +2,100 @@
   <Teleport to="#appBreadcrumb">
     <ol class="breadcrumb mb-0 ps-3">
       <li class="breadcrumb-item">Quản trị</li>
-      <li class="breadcrumb-item active">Vai trò</li>
+      <li class="breadcrumb-item active">Log người dùng</li>
     </ol>
   </Teleport>
 
-  <div v-show="screen == 'list'">
-    <div class="d-flex flex-wrap align-items-center">
-      <a-input
-        v-model:value="filter.text"
-        class="form-control-max-width mb-4"
-        placeholder="Tìm kiếm"
-        @input="debouncedSearch()"
-      />
 
-      <a-button
-        type="primary"
-        @click="openForm()"
-        class="mb-4 ms-auto"
-      >
-        Thêm mới
-      </a-button>
+  <div class="d-flex flex-wrap align-items-center">
+    <a-input
+      placeholder="IP"
+      v-model:value="filter.ip"
+      class="form-control-max-width mb-4"
+      @input="debouncedSearch()"
+    />
 
-      <a-button
-        type="primary"
-        @click="openImportForm()"
-        class="mb-4 ms-3"
-      >
-        Import
-      </a-button>
+    <a-select
+      placeholder="Người dùng"
+      v-model:value="filter.userId"
+      class="form-control-inline-width mb-4 ms-3"
+      :options="userList"
+      :showSearch="true"
+      :allowClear="true"
+      :filterOption="filterUser"
+      @change="search(1)"
+    />
 
-      <a-button
-        type="primary"
-        @click="exportExcel()"
-        class="mb-4 ms-3"
-      >
-        Export
-      </a-button>
-    </div>
-
-    <div
-      v-show="pagi.total == 0"
-      class="text-danger"
+    <a-button
+      type="danger"
+      @click="deleteMany()"
+      class="mb-4 ms-auto"
     >
-      <a-empty />
+      Xóa
+    </a-button>
+  </div>
+
+  <div
+    v-show="pagi.total == 0"
+    class="text-danger"
+  >
+    <a-empty />
+  </div>
+
+  <div v-show="pagi.total > 0">
+    <div class="table-responsive-md">
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th class="text-end">
+              #
+            </th>
+            <th>
+              Mã
+            </th>
+            <th>
+              Tên
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            v-for="(actionLog, i) in actionLogList"
+            :key="actionLog._id"
+          >
+            <td class="text-end">
+              {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
+            </td>
+            <td>
+              {{ actionLog.code }}
+            </td>
+            <td>
+              {{ actionLog.name }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div v-show="pagi.total > 0">
-      <div class="table-responsive-md">
-        <table class="table table-borderless">
-          <thead>
-            <tr>
-              <th class="text-end">
-                #
-              </th>
-              <th>
-                Mã
-              </th>
-              <th>
-                Tên
-              </th>
-              <th class="text-center">
-                Hành động
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              v-for="(role, i) in roleList"
-              :key="role._id"
-            >
-              <td class="text-end">
-                {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
-              </td>
-              <td>
-                {{ role.code }}
-              </td>
-              <td>
-                {{ role.name }}
-              </td>
-              <td class="text-center">
-                <i
-                  class="cursor-pointer text-primary bi bi-pencil-square"
-                  title="Cập nhật"
-                  @click="openForm(role)"
-                />
-
-                <i
-                  class="cursor-pointer text-primary bi bi-trash ms-3"
-                  title="Xóa"
-                  @click="deleteRow(role)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <a-pagination
-        v-model:current="pagi.currentPage"
-        :total="pagi.total"
-        :hideOnSinglePage="true"
-        :showSizeChanger="false"
-        :showTotal="total => `Tìm thấy ${total} bản ghi`"
-        @change="search"
-      />
-    </div>
+    <a-pagination
+      v-model:current="pagi.currentPage"
+      :total="pagi.total"
+      :hideOnSinglePage="true"
+      :showSizeChanger="false"
+      :showTotal="total => `Tìm thấy ${total} bản ghi`"
+      @change="search"
+    />
   </div>
 </template>
 
 
 <script setup>
-
-
 import { debounce } from '@/helpers/common.js'
-import { exportExcelCommon } from '@/helpers/excel.js'
 
 const filter = reactive({
-  text: '',
+  ip: '',
+  userId: null,
 })
 
 const pagi = reactive({
@@ -128,77 +104,67 @@ const pagi = reactive({
   currentPage: 1,
 })
 
-const roleList = ref([])
+const actionLogList = ref([])
 
-const frmRef = ref()
+const actionLogTypes = ref([])
 
-const rolesImport = ref()
-
-const screen = ref('list')
+const userList = ref([])
 
 const search = async page => {
   const params = {
-    text: filter.text.trim(),
+    ip: filter.ip.trim(),
+    userId: filter.userId,
     page,
     size: pagi.size,
   }
-  const { data } = await axios.post('/api/roles/search', params)
+  const { data } = await axios.post('/api/action-logs/search', params)
   pagi.total = data.total
   pagi.currentPage = page
-  roleList.value = data.list
+  actionLogList.value = data.list
 }
 
 const debouncedSearch = debounce(() => search(1), 500)
 
-const openForm = role => {
-  frmRef.value.openForm(role)
-  screen.value = 'form'
-}
-
-const deleteRow = role => {
-  noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
-    const { data } = await axios.delete('/api/roles/delete/' + role._id)
+const deleteMany = () => {
+  const message = 'Bạn có muốn xóa tất cả các bản ghi tìm thấy?'
+  const callback = async () => {
+    const { data } = await axios.delete('/api/action-logs/delete')
     if (data.code == 0) {
-      noti.success('Xóa bản ghi thành công')
+      noti.success('Xóa ' + data.deletedCount + ' bản ghi thành công')
       search(1)
     }
-  })
+  }
+  noti.confirm(message, callback)
 }
 
-const openImportForm = () => {
-  rolesImport.value.openImportForm()
+const getActionLogTypes = async () => {
+  const { data } = await axios.get('/api/action-logs/action-log-types')
+  actionLogTypes.value = data
 }
 
-const exportExcel = async () => {
-  const params = {
-    text: filter.text.trim(),
-  }
-  const { data } = await axios.post('/api/roles/search', params)
-  const list = data.list
+/**
+ * Mặc định tìm kiếm theo value, giờ chuyển sang tìm kiếm theo label.
+ * @param {string} input Xâu đang search
+ * @param {Object} option Từng phần tử
+ */
+const filterUser = (input, option) => {
+  // console.log(option)
+  const temp = input.toLowerCase()
+  return option.label.toLowerCase().includes(temp)
+}
 
-  if (list.length == 0) {
-    noti.warning('Không có dữ liệu')
-    return
-  }
-
-  const columns = [
-    {
-      header: 'Mã',
-      key: 'code',
-      width: 20,
-    },
-    {
-      header: 'Tên',
-      key: 'name',
-      width: 30,
-    },
-  ]
-  const sheetName = 'Roles'
-  const fileName = 'vai tro.xlsx'
-  exportExcelCommon(list, columns, sheetName, fileName)
+const getUserList = async () => {
+  const { data } = await axios.get('/api/action-logs/get-all-users')
+  userList.value = data.map(user => ({
+    // key: user._id,
+    value: user._id,
+    label: user.username,
+  }))
 }
 
 onMounted(() => {
   search(1)
+  getActionLogTypes()
+  getUserList()
 })
 </script>

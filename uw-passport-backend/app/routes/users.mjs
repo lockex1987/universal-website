@@ -106,13 +106,13 @@ export const getAllUsers = async (request, response) => {
 }
 
 
-// router.get('/get_all_users', getAllUsers)
+// router.get('/get-all-users', getAllUsers)
 
 
-router.get('/get_all_orgs', getAllOrgs)
+router.get('/get-all-orgs', getAllOrgs)
 
 
-router.get('/get_all_roles', getAllRoles)
+router.get('/get-all-roles', getAllRoles)
 
 
 router.post('/insert', async (request, response) => {
