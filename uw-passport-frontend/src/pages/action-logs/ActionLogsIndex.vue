@@ -8,17 +8,10 @@
 
 
   <div class="d-flex flex-wrap align-items-center">
-    <a-input
-      placeholder="IP"
-      v-model:value="filter.ip"
-      class="form-control-max-width mb-4"
-      @input="debouncedSearch()"
-    />
-
     <a-select
       placeholder="Người dùng"
       v-model:value="filter.userId"
-      class="form-control-inline-width mb-4 ms-3"
+      class="form-control-inline-width mb-4"
       :options="userList"
       :showSearch="true"
       :allowClear="true"
@@ -30,11 +23,18 @@
       placeholder="Hành động"
       v-model:value="filter.action"
       class="form-control-inline-width mb-4 ms-3"
-      :options="actionLogTypes"
+      :options="actionList"
       :showSearch="true"
       :allowClear="true"
       :filterOption="filterSelectByLabel"
       @change="search(1)"
+    />
+
+    <a-input
+      placeholder="IP"
+      v-model:value="filter.ip"
+      class="form-control-max-width mb-4 ms-3"
+      @input="debouncedSearch()"
     />
 
     <a-button
@@ -62,27 +62,39 @@
               #
             </th>
             <th>
-              Mã
+              Người dùng
             </th>
             <th>
-              Tên
+              Hành động
+            </th>
+            <th>
+              IP
+            </th>
+            <th class="text-center">
+              Thời gian
             </th>
           </tr>
         </thead>
 
         <tbody>
           <tr
-            v-for="(actionLog, i) in actionLogList"
-            :key="actionLog._id"
+            v-for="(log, i) in logList"
+            :key="log._id"
           >
             <td class="text-end">
               {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
             </td>
             <td>
-              {{ actionLog.code }}
+              {{ log.user?.[0]?.username }}
             </td>
             <td>
-              {{ actionLog.name }}
+              {{ log.actionName }}
+            </td>
+            <td>
+              {{ log.ip }}
+            </td>
+            <td class="text-center">
+              {{ formatDateTime(log.createdAt) }}
             </td>
           </tr>
         </tbody>
@@ -102,12 +114,12 @@
 
 
 <script setup>
-import { debounce, filterSelectByLabel } from '@/helpers/common.js'
+import { debounce, filterSelectByLabel, formatDateTime } from '@/helpers/common.js'
 
 const filter = reactive({
   ip: '',
-  userId: '',
-  action: '',
+  userId: null, // để là null thì mới hiển thị placeholder
+  action: null,
 })
 
 const pagi = reactive({
@@ -116,9 +128,9 @@ const pagi = reactive({
   currentPage: 1,
 })
 
-const actionLogList = ref([])
+const logList = ref([])
 
-const actionLogTypes = ref([])
+const actionList = ref([])
 
 const userList = ref([])
 
@@ -136,7 +148,7 @@ const search = async page => {
   const { data } = await axios.post('/api/action-logs/search', params)
   pagi.total = data.total
   pagi.currentPage = page
-  actionLogList.value = data.list
+  logList.value = data.list
 }
 
 const debouncedSearch = debounce(() => search(1), 500)
@@ -153,9 +165,9 @@ const deleteMany = () => {
   noti.confirm(message, callback)
 }
 
-const getActionLogTypes = async () => {
-  const { data } = await axios.get('/api/action-logs/action-log-types')
-  actionLogTypes.value = data.map(e => ({
+const getActionList = async () => {
+  const { data } = await axios.get('/api/action-logs/action-list')
+  actionList.value = data.map(e => ({
     value: e.id,
     label: e.name,
   }))
@@ -172,7 +184,7 @@ const getUserList = async () => {
 
 onMounted(() => {
   search(1)
-  getActionLogTypes()
+  getActionList()
   getUserList()
 })
 </script>

@@ -15,6 +15,7 @@ import db from '#app/helpers/mongodb.mjs'
 import { pick, getIp } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
 import { redisV3 as redis } from '#app/helpers/redis.mjs'
+import { LOGIN, LOGOUT, insertLog } from '#app/helpers/action-logs.mjs'
 import { code as appCode } from '#config/app.mjs'
 import rateLimit from '#app/middleware/rate-limit.mjs'
 
@@ -163,6 +164,8 @@ router.post('/login', async (request, response) => {
   await saveUser(redisUser, request, sessionId, expiredTimeSeconds)
   setCookie(response, sessionId, expiredTimeSeconds)
 
+  await insertLog(request, LOGIN, null, dbUser._id)
+
   response.json({
     code: 0,
     message: 'Login success',
@@ -172,6 +175,7 @@ router.post('/login', async (request, response) => {
 
 
 router.post('/logout', async (request, response) => {
+  await insertLog(request, LOGOUT)
   await removeUser(request)
   clearCookie(response)
   response.json({

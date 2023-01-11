@@ -1,3 +1,6 @@
+import dayjs from 'dayjs'
+
+
 /**
  * Hiển thị số có ngăn cách hàng nghìn.
  * @param {number|null} num Số
@@ -9,6 +12,25 @@ export const formatNumber = num => {
   }
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
+
+
+export const formatDate = text => {
+  if (! text) {
+    return ''
+  }
+
+  return dayjs(text).format('DD/MM/YYYY')
+}
+
+
+export const formatDateTime = text => {
+  if (! text) {
+    return ''
+  }
+
+  return dayjs(text).format('DD/MM/YYYY HH:mm:ss')
+}
+
 
 /**
  * Không thực hiện hàm luôn khi người dùng đang thao tác,
@@ -26,6 +48,7 @@ export const debounce = (fn, ms) => {
     }, ms)
   }
 }
+
 
 /**
  * Download dữ liệu Blob.

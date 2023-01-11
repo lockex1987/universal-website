@@ -1,7 +1,7 @@
 import express from 'express'
 import { ObjectId } from 'mongodb'
 import db from '#app/helpers/mongodb.mjs'
-import { actionLogTypes } from '#app/helpers/action-logs.mjs'
+import { actionList } from '#app/helpers/action-logs.mjs'
 import { getAllUsers } from './users.mjs'
 
 const router = express.Router()
@@ -33,8 +33,8 @@ const filter = request => {
 }
 
 
-router.get('/action-log-types', (request, response) => {
-  response.json(actionLogTypes)
+router.get('/action-list', (request, response) => {
+  response.json(actionList)
 })
 
 
@@ -45,41 +45,44 @@ router.post('/search', async (request, response) => {
   const { page, size } = request.body
   const query = filter(request)
   const col = db.collection('actionLogs')
-  const sort = { _id: -1 }
+  const sort = { createdAt: -1 }
+
+  const total = await col.count(query)
 
   /*
+  const list = await col.find(query)
+    .sort(sort)
+    .skip((page - 1) * size)
+    .limit(size)
+    .toArray()
+  */
+
   const list = await col.aggregate([
     { $match: query },
     { $sort: sort },
     { $skip: (page - 1) * size },
     { $limit: size },
     { $lookup: {
-      from: 'orgs',
-      localField: 'orgId',
+      from: 'users',
+      localField: 'userId',
       foreignField: '_id',
-      as: 'org',
+      as: 'user',
     } },
-    { $lookup: {
-      from: 'roles',
-      localField: 'roles',
-      foreignField: '_id',
-      as: 'roleList',
-    } },
+    /*
     { $project: {
       ...projection,
       org: { $arrayElemAt: ['$org', 0] },
       roleList: 1,
     } },
+    */
   ])
     .toArray()
-  */
 
-  const total = await col.count(query)
-  const list = await col.find(query)
-    .sort(sort)
-    .skip((page - 1) * size)
-    .limit(size)
-    .toArray()
+  list.forEach(log => {
+    const obj = actionList.find(action => action.id == log.action)
+    log.actionName = obj?.name
+  })
+
   response.json({
     total,
     list,
