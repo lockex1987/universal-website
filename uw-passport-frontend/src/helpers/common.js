@@ -1,7 +1,7 @@
 /**
  * Hiển thị số có ngăn cách hàng nghìn.
  * @param {number|null} num Số
- * @retrn {string}
+ * @return {string}
  */
 export const formatNumber = num => {
   if (! num) {
