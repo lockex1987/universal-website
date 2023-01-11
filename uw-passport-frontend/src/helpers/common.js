@@ -65,3 +65,15 @@ export const saveTextAsFile = (text, fileName) => {
 
   downloadBlob(textFileAsBlob, fileName)
 }
+
+
+/**
+ * Mặc định tìm kiếm theo value, giờ chuyển sang tìm kiếm theo label.
+ * @param {string} input Xâu đang search
+ * @param {Object} option Từng phần tử
+ */
+export const filterSelectByLabel = (input, option) => {
+  // console.log(option)
+  const temp = input.toLowerCase()
+  return option.label.toLowerCase().includes(temp)
+}

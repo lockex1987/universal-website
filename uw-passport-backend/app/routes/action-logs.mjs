@@ -8,7 +8,7 @@ const router = express.Router()
 
 
 const filter = request => {
-  const { userId, username, ip, createdFrom, createdTo } = request.body
+  const { userId, username, action, ip, createdFrom, createdTo } = request.body
 
   const query = {}
   if (userId) {
@@ -16,6 +16,9 @@ const filter = request => {
   }
   if (username) {
     // TODO: lookup collection users
+  }
+  if (action) {
+    query.action = action
   }
   if (ip) {
     query.ip = { $regex: ip, $options: 'i' }

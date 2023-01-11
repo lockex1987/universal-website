@@ -22,7 +22,18 @@
       :options="userList"
       :showSearch="true"
       :allowClear="true"
-      :filterOption="filterUser"
+      :filterOption="filterSelectByLabel"
+      @change="search(1)"
+    />
+
+    <a-select
+      placeholder="Hành động"
+      v-model:value="filter.action"
+      class="form-control-inline-width mb-4 ms-3"
+      :options="actionLogTypes"
+      :showSearch="true"
+      :allowClear="true"
+      :filterOption="filterSelectByLabel"
       @change="search(1)"
     />
 
@@ -91,11 +102,12 @@
 
 
 <script setup>
-import { debounce } from '@/helpers/common.js'
+import { debounce, filterSelectByLabel } from '@/helpers/common.js'
 
 const filter = reactive({
   ip: '',
-  userId: null,
+  userId: '',
+  action: '',
 })
 
 const pagi = reactive({
@@ -112,8 +124,12 @@ const userList = ref([])
 
 const search = async page => {
   const params = {
+    /*
     ip: filter.ip.trim(),
     userId: filter.userId,
+    action: filter.action,
+    */
+    ...filter,
     page,
     size: pagi.size,
   }
@@ -139,18 +155,10 @@ const deleteMany = () => {
 
 const getActionLogTypes = async () => {
   const { data } = await axios.get('/api/action-logs/action-log-types')
-  actionLogTypes.value = data
-}
-
-/**
- * Mặc định tìm kiếm theo value, giờ chuyển sang tìm kiếm theo label.
- * @param {string} input Xâu đang search
- * @param {Object} option Từng phần tử
- */
-const filterUser = (input, option) => {
-  // console.log(option)
-  const temp = input.toLowerCase()
-  return option.label.toLowerCase().includes(temp)
+  actionLogTypes.value = data.map(e => ({
+    value: e.id,
+    label: e.name,
+  }))
 }
 
 const getUserList = async () => {
