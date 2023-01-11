@@ -186,7 +186,6 @@ const openImportForm = () => {
 const exportExcel = async () => {
   const params = {
     text: filter.text.trim(),
-    size: -1,
   }
   const { data } = await axios.post('/api/roles/search', params)
   const list = data.list

@@ -1,6 +1,6 @@
 import express from 'express'
 import { ObjectId } from 'mongodb'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
@@ -18,14 +18,12 @@ router.post('/search', async (request, response) => {
     ]
   }
 
-  const db = getDb()
   const col = db.collection('roles')
   const sort = { _id: -1 }
 
   // Lấy tất cả các bản ghi khi export Excel
-  if (size == -1) {
-    const list = await col
-      .find(query)
+  if (! size) {
+    const list = await col.find(query)
       .sort(sort)
       .toArray()
     response.json({
@@ -35,8 +33,7 @@ router.post('/search', async (request, response) => {
   }
 
   const total = await col.count(query)
-  const list = await col
-    .find(query)
+  const list = await col.find(query)
     .sort(sort)
     .skip((page - 1) * size)
     .limit(size)
@@ -49,7 +46,6 @@ router.post('/search', async (request, response) => {
 
 
 export const getAllRoles = async (request, response) => {
-  const db = getDb()
   const list = await db.collection('roles').find()
     .sort({ name: 1 })
     .toArray()
@@ -71,9 +67,7 @@ router.post('/insert', async (request, response) => {
 
   const data = pick(request.body, 'code', 'name')
   data.permissions = request.body.permissions
-  const db = getDb()
   const result = await db.collection('roles').insertOne(data)
-
   response.json({
     code: 0,
     message: 'Inserted ' + result.insertedId,
@@ -95,9 +89,7 @@ router.put('/update', async (request, response) => {
   const query = { _id: ObjectId(_id) }
   const data = pick(request.body, 'code', 'name')
   data.permissions = request.body.permissions
-  const db = getDb()
   const result = await db.collection('roles').updateOne(query, { $set: data })
-
   response.json({
     code: 0,
     message: 'Updated ' + result.modifiedCount,
@@ -108,15 +100,14 @@ router.put('/update', async (request, response) => {
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const objId = ObjectId(_id)
-  const query = { _id: objId }
-  const db = getDb()
-  const result = await db.collection('roles').deleteOne(query)
 
   db.collection('users').updateMany(
     { roles: objId },
     { $pull: { roles: objId } },
   )
 
+  const query = { _id: objId }
+  const result = await db.collection('roles').deleteOne(query)
   response.json({
     code: 0,
     message: 'Deleted ' + result.deletedCount,
