@@ -2,6 +2,12 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import db from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
+import {
+  INSERT_ROLE,
+  UPDATE_ROLE,
+  DELETE_ROLE,
+  insertLog,
+} from '#app/helpers/action-logs.mjs'
 
 const router = express.Router()
 
@@ -68,6 +74,9 @@ router.post('/insert', async (request, response) => {
   const data = pick(request.body, 'code', 'name')
   data.permissions = request.body.permissions
   const result = await db.collection('roles').insertOne(data)
+
+  await insertLog(request, INSERT_ROLE, { id: result.insertedId, code: data.code, name: data.name })
+
   response.json({
     code: 0,
     message: 'Inserted ' + result.insertedId,
@@ -90,6 +99,9 @@ router.put('/update', async (request, response) => {
   const data = pick(request.body, 'code', 'name')
   data.permissions = request.body.permissions
   const result = await db.collection('roles').updateOne(query, { $set: data })
+
+  await insertLog(request, UPDATE_ROLE, { id: _id, code: data.code, name: data.name })
+
   response.json({
     code: 0,
     message: 'Updated ' + result.modifiedCount,
@@ -108,6 +120,9 @@ router.delete('/delete/:_id', async (request, response) => {
 
   const query = { _id: objId }
   const result = await db.collection('roles').deleteOne(query)
+
+  await insertLog(request, DELETE_ROLE, { id: _id })
+
   response.json({
     code: 0,
     message: 'Deleted ' + result.deletedCount,

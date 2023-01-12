@@ -82,6 +82,9 @@
             <th class="text-center">
               Thời gian
             </th>
+            <th>
+              Mô tả
+            </th>
           </tr>
         </thead>
 
@@ -104,6 +107,9 @@
             </td>
             <td class="text-center">
               {{ formatDateTime(log.createdAt) }}
+            </td>
+            <td>
+              {{ log.description }}
             </td>
           </tr>
         </tbody>
