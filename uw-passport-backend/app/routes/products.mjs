@@ -60,12 +60,12 @@ router.post('/insert', async (request, response) => {
   }
   await request.validate(rules)
 
-  const data = processData(request) // TODO: Chưa có ID
+  const data = processData(request)
   const result = await db.collection('products').insertOne(data)
-  response.json({
-    code: 0,
-    message: 'Inserted ' + result.insertedId,
-  })
+  const _id = result.insertedId
+  const content = processHtml(request, _id)
+  await db.collection('products').updateOne({ _id }, { $set: { content } })
+  response.json({ code: 0 })
 })
 
 
@@ -85,12 +85,10 @@ router.put('/update', async (request, response) => {
   await request.validate(rules)
 
   const query = { _id: objId }
-  const data = processData(request, _id)
-  const result = await db.collection('products').updateOne(query, { $set: data })
-  response.json({
-    code: 0,
-    message: 'Updated ' + result.modifiedCount,
-  })
+  const data = processData(request)
+  data.content = processHtml(request, _id)
+  await db.collection('products').updateOne(query, { $set: data })
+  response.json({ code: 0 })
 })
 
 
@@ -120,14 +118,18 @@ router.get('/content/:_id', async (request, response) => {
 })
 
 
-const processData = (request, productId) => {
+const processData = request => {
   const data = pick(request.body,
     'title',
     'description',
     'price',
     'image',
   )
+  return data
+}
 
+
+const processHtml = (request, productId) => {
   // data.content = sanitizeHtml(request.body.content)
 
   const html = '<body>' + request.body.content + '</body>'
@@ -135,9 +137,7 @@ const processData = (request, productId) => {
   const sanitizedBody = makeSanitizedCopy(document, document.body)
   saveBase64Image(sanitizedBody, productId)
   const xml = jsdomBodyToXml(sanitizedBody)
-  data.content = xml
-
-  return data
+  return xml
 }
 
 
