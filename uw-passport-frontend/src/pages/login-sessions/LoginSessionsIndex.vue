@@ -11,31 +11,24 @@
       <a-empty />
     </div>
 
-    <div
-      v-else
-      class="d-flex flex-wrap"
-    >
+    <div v-else>
       <div
         v-for="session in sessionList"
-        class="mb-4 me-4 p-4 border rounded"
+        class="mb-4 p-4 border rounded"
       >
-        <div class="ps-3">
-          <div>
-            {{ session.key }}
-          </div>
-          <div class="text-muted">
-            {{ session.user }}
-          </div>
+        <div>
+          {{ session.user }}
         </div>
 
-        <a-space>
+        <div>
           <a-button
             type="link"
+            class="px-0"
             @click="deleteFile(session.key)"
           >
             Xóa session
           </a-button>
-        </a-space>
+        </div>
       </div>
     </div>
   </div>

@@ -8,7 +8,6 @@ const router = express.Router()
 router.get('/list-sessions', async (request, response) => {
   const pattern = code + '-session:*'
   const options = {
-    TYPE: 'string', // SCAN only
     MATCH: pattern,
     COUNT: 100,
   }
