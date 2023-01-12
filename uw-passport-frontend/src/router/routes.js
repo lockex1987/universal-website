@@ -7,6 +7,7 @@ import {
   Products,
   ActionLogs,
   LogFiles,
+  LoginSessions,
 } from '@/helpers/permissions.mjs'
 
 export default [
@@ -82,6 +83,12 @@ export default [
         name: 'LogFiles',
         component: () => import('@/pages/log-files/LogFilesIndex.vue'),
         meta: { permission: LogFiles },
+      },
+      {
+        path: 'login-sessions',
+        name: 'LoginSessions',
+        component: () => import('@/pages/login-sessions/LoginSessionsIndex.vue'),
+        meta: { permission: LoginSessions },
       },
       {
         path: 'demo-button',

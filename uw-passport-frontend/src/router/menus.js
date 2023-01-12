@@ -7,6 +7,7 @@ import {
   Products,
   ActionLogs,
   LogFiles,
+  LoginSessions,
 } from '@/helpers/permissions.mjs'
 
 export default [
@@ -22,6 +23,7 @@ export default [
       { code: 'SystemConfigs', name: 'Cấu hình hệ thống', permission: SystemConfigs },
       { code: 'ActionLogs', name: 'Log tác động', permission: ActionLogs },
       { code: 'LogFiles', name: 'File log', permission: LogFiles },
+      { code: 'LoginSessions', name: 'Phiên đăng nhập', permission: LoginSessions },
     ],
   },
   {

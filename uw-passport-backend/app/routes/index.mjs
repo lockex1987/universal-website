@@ -9,6 +9,7 @@ import products from './products.mjs'
 import actionLogs from './action-logs.mjs'
 import userLogs from './user-logs.mjs'
 import logFiles from './log-files.mjs'
+import loginSessions from './login-sessions.mjs'
 
 import {
   Orgs,
@@ -18,6 +19,7 @@ import {
   Products,
   ActionLogs,
   LogFiles,
+  LoginSessions,
 } from '#app/helpers/permissions.mjs'
 
 export default [
@@ -32,4 +34,5 @@ export default [
   { path: '/products', router: products, auth: true, permission: Products },
   { path: '/action-logs', router: actionLogs, auth: true, permission: ActionLogs },
   { path: '/log-files', router: logFiles, auth: true, permission: LogFiles },
+  { path: '/login-sessions', router: loginSessions, auth: true, permission: LoginSessions },
 ]
