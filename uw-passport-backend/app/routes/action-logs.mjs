@@ -3,6 +3,8 @@ import { ObjectId } from 'mongodb'
 import db from '#app/helpers/mongodb.mjs'
 import { actionList } from '#app/helpers/action-logs.mjs'
 import { getAllUsers } from './users.mjs'
+import dayjs from 'dayjs'
+import logger from '#app/helpers/logger.mjs'
 
 const router = express.Router()
 
@@ -24,11 +26,24 @@ const filter = request => {
     query.ip = { $regex: ip, $options: 'i' }
   }
   if (createdFrom) {
-    // query.createdAt = { $gte: createdFrom }
+    // const startOfDay = new Date(dayjs(createdFrom).startOf('day').toISOString())
+    const startOfDay = dayjs(createdFrom).startOf('day').toDate()
+    logger.debug(startOfDay)
+    if (! query.createdAt) {
+      query.createdAt = {}
+    }
+    query.createdAt.$gte = startOfDay
   }
   if (createdTo) {
-    // query.createdAt = { $gte: createdTo }
+    // const endOfDay = new Date(dayjs(createdTo).endOf('day').toISOString()) // chạy được, 2023-01-13T16:59:59.999Z
+    const endOfDay = dayjs(createdTo).endOf('day').toDate() // cũng chạy được
+    logger.debug(endOfDay)
+    if (! query.createdAt) {
+      query.createdAt = {}
+    }
+    query.createdAt.$lte = endOfDay
   }
+  logger.debug(JSON.stringify(query))
   return query
 }
 
@@ -90,7 +105,7 @@ router.post('/search', async (request, response) => {
 })
 
 
-router.delete('/delete', async (request, response) => {
+router.post('/delete', async (request, response) => {
   const query = filter(request)
   const result = await db.collection('actionLogs').deleteMany(query)
   response.json({
