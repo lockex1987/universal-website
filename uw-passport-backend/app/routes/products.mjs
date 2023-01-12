@@ -1,6 +1,6 @@
 import express from 'express'
 import { ObjectId } from 'mongodb'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 import { sanitizeHtml } from '#app/helpers/html-utils.mjs'
 
@@ -19,13 +19,15 @@ router.post('/search', async (request, response) => {
     ]
   }
 
-  const db = getDb()
   const col = db.collection('products')
   const total = await col.count(query)
-
+  const projection = {
+    // Trường content có dung lượng lớn nên không trả về khi search
+    content: 0,
+  }
   const sort = { title: 1 }
   const list = await col
-    .find(query)
+    .find(query, { projection })
     .sort(sort)
     .skip((page - 1) * size)
     .limit(size)
@@ -45,7 +47,7 @@ router.post('/insert', async (request, response) => {
       { type: 'unique', dbCol: 'products', fullField: 'Tên' },
     ],
     description: [{ required: true, max: 500 }],
-    content: [{ required: true, max: 5000 }],
+    content: [{ required: true }], // , max: 5000
     image: [{ type: 'url', required: true, max: 500 }],
     price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
   }
@@ -53,9 +55,7 @@ router.post('/insert', async (request, response) => {
 
   const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
   data.content = sanitizeHtml(data.content)
-  const db = getDb()
   const result = await db.collection('products').insertOne(data)
-
   response.json({
     code: 0,
     message: 'Inserted ' + result.insertedId,
@@ -72,7 +72,7 @@ router.put('/update', async (request, response) => {
       { type: 'unique', dbCol: 'products', fullField: 'Tên', ignoredIdValue: objId },
     ],
     description: [{ required: true, max: 500 }],
-    content: [{ required: true, max: 5000 }],
+    content: [{ required: true }], // , max: 5000
     image: [{ type: 'url', required: true, max: 500 }],
     price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
   }
@@ -81,9 +81,7 @@ router.put('/update', async (request, response) => {
   const query = { _id: objId }
   const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
   data.content = sanitizeHtml(data.content)
-  const db = getDb()
   const result = await db.collection('products').updateOne(query, { $set: data })
-
   response.json({
     code: 0,
     message: 'Updated ' + result.modifiedCount,
@@ -95,13 +93,20 @@ router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const objId = ObjectId(_id)
   const query = { _id: objId }
-  const db = getDb()
   const result = await db.collection('products').deleteOne(query)
-
   response.json({
     code: 0,
     message: 'Deleted ' + result.deletedCount,
   })
+})
+
+
+router.get('/content/:_id', async (request, response) => {
+  const { _id } = request.params
+  const objId = ObjectId(_id)
+  const query = { _id: objId }
+  const row = await db.collection('products').findOne(query)
+  response.json(row)
 })
 
 

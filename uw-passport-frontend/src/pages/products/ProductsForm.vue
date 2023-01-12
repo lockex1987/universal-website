@@ -36,12 +36,13 @@
       <QuillEditor
         theme="snow"
         contentType="html"
+        toolbar="full"
         v-model:content="frm.content"
       />
 
-      <div>
+      <!--div>
         {{ frm.content }}
-      </div>
+      </div-->
     </div>
 
     <a-form-item
@@ -97,7 +98,7 @@ const frm = reactive({ ...defaultFrm })
 const rules = {
   title: [{ required: true, max: 200 }],
   description: [{ required: true, max: 500 }],
-  content: [{ required: true, max: 5000 }],
+  content: [{ required: true }], // , max: 5000
   image: [{ type: 'url', required: true, max: 500 }],
   price: [{ type: 'number', required: true, max: 1_000_000_000, min: 0 }],
 }
@@ -132,11 +133,9 @@ const action = computed(() => {
 
 const saveForm = async () => {
   isSaving.value = true
-
   const params = frm
   const { method, path, actionName, emitName } = action.value
   const { data } = await axios[method]('/api/products/' + path, params)
-
   isSaving.value = false
 
   if (data.code == 0) {
@@ -152,11 +151,11 @@ const closeForm = () => {
   emit('close')
 }
 
-const openForm = row => {
+const openForm = async row => {
   frmRef.value.resetFields()
-
   if (row) {
-    Object.assign(frm, row)
+    const { data } = await axios.get('/api/products/content/' + row._id)
+    Object.assign(frm, data)
   } else {
     Object.assign(frm, defaultFrm)
   }

@@ -159,19 +159,21 @@ const search = async page => {
 
 const debouncedSearch = debounce(() => search(1), 500)
 
-const openForm = role => {
-  frmRef.value.openForm(role)
+const openForm = row => {
+  frmRef.value.openForm(row)
   screen.value = 'form'
 }
 
-const deleteRow = role => {
-  noti.confirm('Bạn có muốn xóa bản ghi?', async () => {
-    const { data } = await axios.delete('/api/products/delete/' + role._id)
+const deleteRow = row => {
+  const message = 'Bạn có muốn xóa bản ghi?'
+  const callback = async () => {
+    const { data } = await axios.delete('/api/products/delete/' + row._id)
     if (data.code == 0) {
       noti.success('Xóa bản ghi thành công')
       search(1)
     }
-  })
+  }
+  noti.confirm(message, callback)
 }
 
 onMounted(() => {
