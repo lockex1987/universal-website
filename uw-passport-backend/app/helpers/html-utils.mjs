@@ -148,7 +148,7 @@ const uriAttributes = {
  * @param {HTMLElement} node
  * @return {HTMLElement}
  */
-const makeSanitizedCopy = (document, node) => {
+export const makeSanitizedCopy = (document, node) => {
   let newNode
   if (node.nodeType == 3) { // Node.TEXT_NODE = 3
     // node.tagName là undefined
@@ -216,24 +216,11 @@ const makeSanitizedCopy = (document, node) => {
 export const sanitizeHtml = html => {
   html = html ?? ''
   html = html.trim()
-  if (html == '') {
-    return ''
-  }
-
   if (html.indexOf('<body') == -1) {
     html = '<body>' + html + '</body>'
   }
-
   const document = htmlToDocument(html)
   const sanitizedBody = makeSanitizedCopy(document, document.body)
-
-  /*
-  // replace is just for cleaner code
-  return sanitizedBody.innerHTML
-    .replace(/<br[^>]*>(\S)/g, '<br>\n$1')
-    .replace(/div><div/g, 'div>\n<div')
-  */
-
   return jsdomBodyToXml(sanitizedBody)
 }
 

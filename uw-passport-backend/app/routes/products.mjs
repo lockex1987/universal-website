@@ -2,7 +2,12 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import db from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
-import { sanitizeHtml } from '#app/helpers/html-utils.mjs'
+import {
+  sanitizeHtml,
+  htmlToDocument,
+  makeSanitizedCopy,
+  jsdomBodyToXml,
+} from '#app/helpers/html-utils.mjs'
 
 const router = express.Router()
 
@@ -53,8 +58,7 @@ router.post('/insert', async (request, response) => {
   }
   await request.validate(rules)
 
-  const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
-  data.content = sanitizeHtml(data.content)
+  const data = processData(request)
   const result = await db.collection('products').insertOne(data)
   response.json({
     code: 0,
@@ -79,8 +83,7 @@ router.put('/update', async (request, response) => {
   await request.validate(rules)
 
   const query = { _id: objId }
-  const data = pick(request.body, 'title', 'description', 'content', 'price', 'image')
-  data.content = sanitizeHtml(data.content)
+  const data = processData(request)
   const result = await db.collection('products').updateOne(query, { $set: data })
   response.json({
     code: 0,
@@ -108,6 +111,26 @@ router.get('/content/:_id', async (request, response) => {
   const row = await db.collection('products').findOne(query)
   response.json(row)
 })
+
+
+const processData = request => {
+  const data = pick(request.body,
+    'title',
+    'description',
+    'price',
+    'image',
+  )
+
+  // data.content = sanitizeHtml(request.body.content)
+
+  const html = '<body>' + request.body.content + '</body>'
+  const document = htmlToDocument(html)
+  const sanitizedBody = makeSanitizedCopy(document, document.body)
+  const xml = jsdomBodyToXml(sanitizedBody)
+  data.content = xml
+
+  return data
+}
 
 
 export default router
