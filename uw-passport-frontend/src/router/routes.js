@@ -25,6 +25,11 @@ export default [
         component: () => import('@/pages/profile/ProfileIndex.vue'),
       },
       {
+        path: 'user-logs',
+        name: 'UserLogs',
+        component: () => import('@/pages/user-logs/UserLogsIndex.vue'),
+      },
+      {
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/pages/dashboard/DashboardIndex.vue'),

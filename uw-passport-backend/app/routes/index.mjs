@@ -7,6 +7,7 @@ import users from './users.mjs'
 import systemConfigs from './system-configs.mjs'
 import products from './products.mjs'
 import actionLogs from './action-logs.mjs'
+import userLogs from './user-logs.mjs'
 
 import {
   Orgs,
@@ -20,6 +21,7 @@ import {
 export default [
   { path: '/auth', router: auth, auth: false, permission: null },
   { path: '/profile', router: profile, auth: true, permission: null },
+  { path: '/user-logs', router: userLogs, auth: true, permission: null },
   { path: '/dashboard', router: dashboard, auth: true, permission: null },
   { path: '/orgs', router: orgs, auth: true, permission: Orgs },
   { path: '/roles', router: roles, auth: true, permission: Roles },

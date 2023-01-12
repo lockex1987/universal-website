@@ -2,23 +2,12 @@
   <Teleport to="#appBreadcrumb">
     <ol class="breadcrumb mb-0 ps-3">
       <li class="breadcrumb-item">Quản trị</li>
-      <li class="breadcrumb-item active">Log tác động</li>
+      <li class="breadcrumb-item active">Log người dùng</li>
     </ol>
   </Teleport>
 
 
   <div class="d-flex flex-wrap align-items-center">
-    <a-select
-      placeholder="Người dùng"
-      v-model:value="filter.userId"
-      class="form-control-inline-width mb-4"
-      :options="userList"
-      :showSearch="true"
-      :allowClear="true"
-      :filterOption="filterSelectByLabel"
-      @change="search(1)"
-    />
-
     <a-select
       placeholder="Hành động"
       v-model:value="filter.action"
@@ -45,14 +34,6 @@
       :allowEmpty="[true, true]"
       @change="search(1)"
     />
-
-    <a-button
-      type="danger"
-      @click="deleteMany()"
-      class="mb-4 ms-auto"
-    >
-      Xóa
-    </a-button>
   </div>
 
   <div
@@ -69,9 +50,6 @@
           <tr>
             <th class="text-end">
               #
-            </th>
-            <th>
-              Người dùng
             </th>
             <th>
               Hành động
@@ -95,9 +73,6 @@
           >
             <td class="text-end">
               {{ (pagi.currentPage - 1) * pagi.size + i + 1 }}
-            </td>
-            <td>
-              {{ log.user?.[0]?.username }}
             </td>
             <td>
               {{ log.actionName }}
@@ -133,7 +108,6 @@ import { debounce, filterSelectByLabel, formatDateTime } from '@/helpers/common.
 
 const filter = reactive({
   ip: '',
-  userId: null, // để là null thì mới hiển thị placeholder
   action: null,
   range: [null, null],
 })
@@ -148,20 +122,16 @@ const logList = ref([])
 
 const actionList = ref([])
 
-const userList = ref([])
-
 const getParams = () => {
   const params = {
     ip: filter.ip.trim(),
-    userId: filter.userId,
     action: filter.action,
-    // ...filter,
   }
   if (filter.range?.[0]) {
-    params.createdFrom = filter.range[0] // .format('YYYY-MM-DD')
+    params.createdFrom = filter.range[0]
   }
   if (filter.range?.[1]) {
-    params.createdTo = filter.range[1] // .format('YYYY-MM-DD')
+    params.createdTo = filter.range[1]
   }
   return params
 }
@@ -171,26 +141,13 @@ const search = async page => {
   params.page = page
   params.size = pagi.size
 
-  const { data } = await axios.post('/api/action-logs/search', params)
+  const { data } = await axios.post('/api/user-logs/search', params)
   pagi.total = data.total
   pagi.currentPage = page
   logList.value = data.list
 }
 
 const debouncedSearch = debounce(() => search(1), 500)
-
-const deleteMany = () => {
-  const message = 'Bạn có muốn xóa tất cả các bản ghi tìm thấy?'
-  const callback = async () => {
-    const params = getParams()
-    const { data } = await axios.post('/api/action-logs/delete', params)
-    if (data.code == 0) {
-      noti.success('Xóa ' + data.deletedCount + ' bản ghi thành công')
-      search(1)
-    }
-  }
-  noti.confirm(message, callback)
-}
 
 const getActionList = async () => {
   const { data } = await axios.get('/api/action-logs/action-list')
@@ -200,18 +157,8 @@ const getActionList = async () => {
   }))
 }
 
-const getUserList = async () => {
-  const { data } = await axios.get('/api/action-logs/get-all-users')
-  userList.value = data.map(user => ({
-    // key: user._id,
-    value: user._id,
-    label: user.username,
-  }))
-}
-
 onMounted(() => {
   search(1)
   getActionList()
-  getUserList()
 })
 </script>

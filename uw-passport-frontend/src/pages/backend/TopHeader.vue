@@ -50,6 +50,16 @@
         </li>
 
         <li>
+          <RouterLink
+            :to="{ name: 'UserLogs' }"
+            class="dropdown-item"
+            activeClass="active"
+          >
+            Log người dùng
+          </RouterLink>
+        </li>
+
+        <li>
           <a
             class="dropdown-item"
             href="#"

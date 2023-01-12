@@ -19,7 +19,7 @@ export default [
       { code: 'Roles', name: 'Vai trò', permission: Roles },
       { code: 'Users', name: 'Người dùng', permission: Users },
       { code: 'SystemConfigs', name: 'Cấu hình hệ thống', permission: SystemConfigs },
-      { code: 'ActionLogs', name: 'Log người dùng', permission: ActionLogs },
+      { code: 'ActionLogs', name: 'Log tác động', permission: ActionLogs },
     ],
   },
   {
