@@ -14,6 +14,38 @@ export const formatNumber = num => {
 }
 
 
+/**
+ * Hiển thị làm tròn số.
+ * @param {number} num
+ * @param {number|undefined} digits Số chữ số sau dấu phảy
+ */
+export const prettyNumber = (num, digits) => {
+  if (digits === undefined) {
+    digits = 1
+  }
+
+  const si = [
+    { value: 1E18, symbol: 'E' },
+    { value: 1E15, symbol: 'P' },
+    { value: 1E12, symbol: 'T' },
+    { value: 1E9, symbol: 'G' },
+    { value: 1E6, symbol: 'M' },
+    { value: 1E3, symbol: 'K' },
+  ]
+  for (let i = 0; i < si.length; i++) {
+    if (num >= si[i].value) {
+      const n = (num / si[i].value).toFixed(digits)
+
+      // Xóa những chữ số 0 đằng sau dấu thập phân
+      // Nếu chỉ để 0+ thì sẽ không xóa được dấu .
+      // Nếu chỉ để \.0+ thì sẽ không xử lý được trường hợp 123.400
+      return n.replace(/\.?0+$/, '') + si[i].symbol
+    }
+  }
+  return num
+}
+
+
 export const formatDate = text => {
   if (! text) {
     return ''
@@ -83,9 +115,7 @@ export const downloadBlob = (blob, fileName) => {
  * @param {string} fileName Tên file
  */
 export const saveTextAsFile = (text, fileName) => {
-  // Tạo đối tượng Blob
   const textFileAsBlob = new Blob([text], { type: 'text/plain' })
-
   downloadBlob(textFileAsBlob, fileName)
 }
 

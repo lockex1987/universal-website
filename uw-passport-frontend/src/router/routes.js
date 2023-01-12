@@ -6,6 +6,7 @@ import {
   SystemConfigs,
   Products,
   ActionLogs,
+  LogFiles,
 } from '@/helpers/permissions.mjs'
 
 export default [
@@ -75,6 +76,12 @@ export default [
         name: 'ActionLogs',
         component: () => import('@/pages/action-logs/ActionLogsIndex.vue'),
         meta: { permission: ActionLogs },
+      },
+      {
+        path: 'log-files',
+        name: 'LogFiles',
+        component: () => import('@/pages/log-files/LogFilesIndex.vue'),
+        meta: { permission: LogFiles },
       },
       {
         path: 'demo-button',

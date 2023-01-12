@@ -5,6 +5,7 @@ export const Users = 'Users'
 export const Products = 'Products'
 export const SystemConfigs = 'SystemConfigs'
 export const ActionLogs = 'ActionLogs'
+export const LogFiles = 'LogFiles'
 
 export const permissionList = [
   {
@@ -33,6 +34,10 @@ export const permissionList = [
   },
   {
     code: ActionLogs,
-    name: 'Log người dùng',
+    name: 'Log tác động',
+  },
+  {
+    code: LogFiles,
+    name: 'File log',
   },
 ]

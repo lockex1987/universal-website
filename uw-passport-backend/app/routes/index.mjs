@@ -8,6 +8,7 @@ import systemConfigs from './system-configs.mjs'
 import products from './products.mjs'
 import actionLogs from './action-logs.mjs'
 import userLogs from './user-logs.mjs'
+import logFiles from './log-files.mjs'
 
 import {
   Orgs,
@@ -16,6 +17,7 @@ import {
   SystemConfigs,
   Products,
   ActionLogs,
+  LogFiles,
 } from '#app/helpers/permissions.mjs'
 
 export default [
@@ -29,4 +31,5 @@ export default [
   { path: '/system-configs', router: systemConfigs, auth: true, permission: SystemConfigs },
   { path: '/products', router: products, auth: true, permission: Products },
   { path: '/action-logs', router: actionLogs, auth: true, permission: ActionLogs },
+  { path: '/log-files', router: logFiles, auth: true, permission: LogFiles },
 ]
