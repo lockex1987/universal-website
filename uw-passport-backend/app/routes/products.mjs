@@ -1,8 +1,9 @@
 import crypto from 'node:crypto'
+import fs from 'node:fs'
 import express from 'express'
 import { ObjectId } from 'mongodb'
 import db from '#app/helpers/mongodb.mjs'
-import { pick } from '#app/helpers/common.mjs'
+import { pick, getBasePath } from '#app/helpers/common.mjs'
 import {
   sanitizeHtml,
   htmlToDocument,
@@ -59,7 +60,7 @@ router.post('/insert', async (request, response) => {
   }
   await request.validate(rules)
 
-  const data = processData(request)
+  const data = processData(request) // TODO: Chưa có ID
   const result = await db.collection('products').insertOne(data)
   response.json({
     code: 0,
@@ -84,7 +85,7 @@ router.put('/update', async (request, response) => {
   await request.validate(rules)
 
   const query = { _id: objId }
-  const data = processData(request)
+  const data = processData(request, _id)
   const result = await db.collection('products').updateOne(query, { $set: data })
   response.json({
     code: 0,
@@ -95,6 +96,11 @@ router.put('/update', async (request, response) => {
 
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
+
+  const basePath = getBasePath()
+  const uploadFolder = getUploadFolder(_id)
+  fs.rmdirSync(basePath + uploadFolder, { recursive: true })
+
   const objId = ObjectId(_id)
   const query = { _id: objId }
   const result = await db.collection('products').deleteOne(query)
@@ -114,7 +120,7 @@ router.get('/content/:_id', async (request, response) => {
 })
 
 
-const processData = request => {
+const processData = (request, productId) => {
   const data = pick(request.body,
     'title',
     'description',
@@ -127,7 +133,7 @@ const processData = request => {
   const html = '<body>' + request.body.content + '</body>'
   const document = htmlToDocument(html)
   const sanitizedBody = makeSanitizedCopy(document, document.body)
-  saveBase64Image(sanitizedBody)
+  saveBase64Image(sanitizedBody, productId)
   const xml = jsdomBodyToXml(sanitizedBody)
   data.content = xml
 
@@ -135,7 +141,8 @@ const processData = request => {
 }
 
 
-const saveBase64Image = document => {
+const saveBase64Image = (document, productId) => {
+  const basePath = getBasePath()
   const imgList = document.querySelectorAll('img')
   imgList.forEach(img => {
     const src = img.src
@@ -143,16 +150,16 @@ const saveBase64Image = document => {
       const [, base64] = src.split(';')
       const [, data] = base64.split(',')
       const extension = data.startsWith('/9j') ? 'jpg' : 'png'
-      console.log(extension)
 
-      // const imagesFolder = getImagesFolder(contentId)
-      // const imagePath = imagesFolder + '/' + generateRandomName() + '.' + extension
-      // Storage::makeDirectory(imagesFolder)
+      const uploadFolder = getUploadFolder(productId)
+      if (! fs.existsSync(basePath + uploadFolder)) {
+        fs.mkdirSync(basePath + uploadFolder, { recursive: true })
+      }
 
-      // file_put_contents(storage_path('app/public/' . $imagePath), base64_decode($data));
-      // Storage::put($imagePath, base64_decode($data));
+      const imagePath = uploadFolder + '/' + generateRandomName() + '.' + extension
+      fs.writeFileSync(basePath + imagePath, data, 'base64')
 
-      // img.src = '/storage/' + imagePath
+      img.src = '/' + imagePath
     }
   })
 }
@@ -163,6 +170,11 @@ const generateRandomName = () => {
   const bytesNum = 10
   const random = crypto.randomBytes(bytesNum).toString('hex') // có bytesNum * 2 = 20 ký tự
   return uuid + random
+}
+
+
+const getUploadFolder = productId => {
+  return 'upload/products/' + productId
 }
 
 
