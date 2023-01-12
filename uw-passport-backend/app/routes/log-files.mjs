@@ -19,12 +19,15 @@ const checkPathTraversal = (inputPath, folder) => {
 
 router.get('/file-list', (request, response) => {
   const arr = fs.readdirSync(folder)
+  /*
   const HIDDEN = [
     // '.',
     // '..',
     '.gitignore',
   ]
-  const fileList = arr.filter(fileName => ! HIDDEN.includes(fileName))
+  // ! HIDDEN.includes(fileName)
+  */
+  const fileList = arr.filter(fileName => ! fileName.startsWith('.'))
     .map(fileName => {
       const path = folder + '/' + fileName
       const stat = fs.statSync(path)
@@ -42,6 +45,8 @@ router.get('/download-file', (request, response) => {
   const { fileName } = request.query
   const path = folder + '/' + fileName
   checkPathTraversal(path, folder)
+  // logger.debug(path)
+  // Download file có tên bắt đầu bằng dấu chấm . sẽ bị lỗi
   response.download(path)
 })
 

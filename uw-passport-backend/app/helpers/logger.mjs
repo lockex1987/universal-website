@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston'
-// import DailyRotateFile from 'winston-daily-rotate-file'
+import 'winston-daily-rotate-file'
 import { logLevel } from '#config/log.mjs'
 import env from '#base/.env.mjs'
 
@@ -15,7 +15,7 @@ const {
   colorize,
 } = format
 
-const { File, Console } = transports
+const { File, Console, DailyRotateFile } = transports
 
 const onlyMessage = printf(({ level, message, label, timestamp }) => {
   // return `${timestamp} [${label}] ${level}: ${message}`
@@ -43,9 +43,18 @@ const logger = createLogger({
     }),
 
     // File chứa tất cả log
+    /*
     new File({
       filename: 'logs/app.log',
       level: 'info',
+    }),
+    */
+
+    new DailyRotateFile({
+      filename: 'logs/app-%DATE%.log',
+      level: 'info',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '14d',
     }),
 
     // new DailyRotateFile(),
