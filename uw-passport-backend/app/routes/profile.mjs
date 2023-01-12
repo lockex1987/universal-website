@@ -6,7 +6,7 @@ import fs from 'node:fs/promises'
 import { ObjectId } from 'mongodb'
 import Jimp from 'jimp'
 import { authenticator } from 'otplib'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { getUser } from '#app/helpers/auth.mjs'
 import { pick, getBasePath } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
@@ -27,8 +27,6 @@ router.post('/change_password', async (request, response) => {
 
   const { oldPassword, newPassword } = request.body
   const redisUser = await getUser(request)
-
-  const db = getDb()
   const dbUser = await db.collection('users').findOne({ _id: ObjectId(redisUser._id) })
   if (! dbUser) {
     return response.json({
@@ -49,7 +47,6 @@ router.post('/change_password', async (request, response) => {
   const query = { _id: ObjectId(redisUser._id) }
   const data = { password: hashedPassword }
   const result = await db.collection('users').updateOne(query, { $set: data })
-
   response.json({
     code: 0,
     message: 'Đổi mật khẩu thành công',
@@ -61,7 +58,6 @@ router.post('/change_password', async (request, response) => {
 router.get('/get_user_info', async (request, response) => {
   const redisUser = await getUser(request)
   const { _id } = redisUser
-  const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
   const projection = {
@@ -125,7 +121,6 @@ router.get('/get_user_info', async (request, response) => {
 router.get('/get_totp', async (request, response) => {
   const redisUser = await getUser(request)
   const { _id } = redisUser
-  const db = getDb()
   const query = { _id: ObjectId(_id) }
   // Không trả về các thông tin nhạy cảm như mật khẩu
   const projection = {
@@ -157,7 +152,6 @@ router.post('/update_totp', async (request, response) => {
   const { _id } = redisUser
   const query = { _id: ObjectId(_id) }
   const data = { 'totp.enabled': request.body.totpEnabled }
-  const db = getDb()
   await db.collection('users').updateOne(query, { $set: data })
   response.json({ code: 0 })
 })
@@ -173,10 +167,8 @@ router.post('/update_user_info', async (request, response) => {
   await request.validate(rules)
 
   const redisUser = await getUser(request)
-  const db = getDb()
   const query = { _id: ObjectId(redisUser._id) }
   const dbUser = await db.collection('users').findOne(query)
-
   if (! dbUser) {
     return response.json({
       code: 1,
@@ -197,13 +189,13 @@ router.post('/update_user_info', async (request, response) => {
     // Thêm ảnh mới
     const randomName = crypto.randomUUID()
     const extension = path.extname(avatarFile.name).toLowerCase()
-    avatarPath = 'upload/' + randomName + extension
+    avatarPath = 'upload/avatar/' + randomName + extension
     await avatarFile.mv(basePath + avatarPath)
 
     // Ảnh nhỏ
     const width = 24
     const height = 24
-    thumbnailPath = 'upload/' + randomName + `-${width}x${height}` + extension
+    thumbnailPath = 'upload/avatar/' + randomName + `-${width}x${height}` + extension
     await resizeImage(basePath + avatarPath, basePath + thumbnailPath, width, height)
   }
 
@@ -232,6 +224,7 @@ router.post('/update_user_info', async (request, response) => {
  * @param {string} outputPath
  * @param {number} width
  * @param {number} height
+ * @return {Promise<void>}
  */
 const resizeImage = async (inputPath, outputPath, width, height) => {
   const image = await Jimp.read(inputPath)

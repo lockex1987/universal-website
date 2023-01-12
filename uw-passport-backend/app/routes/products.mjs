@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import express from 'express'
 import { ObjectId } from 'mongodb'
 import db from '#app/helpers/mongodb.mjs'
@@ -126,10 +127,42 @@ const processData = request => {
   const html = '<body>' + request.body.content + '</body>'
   const document = htmlToDocument(html)
   const sanitizedBody = makeSanitizedCopy(document, document.body)
+  saveBase64Image(sanitizedBody)
   const xml = jsdomBodyToXml(sanitizedBody)
   data.content = xml
 
   return data
+}
+
+
+const saveBase64Image = document => {
+  const imgList = document.querySelectorAll('img')
+  imgList.forEach(img => {
+    const src = img.src
+    if (src.includes(';')) {
+      const [, base64] = src.split(';')
+      const [, data] = base64.split(',')
+      const extension = data.startsWith('/9j') ? 'jpg' : 'png'
+      console.log(extension)
+
+      // const imagesFolder = getImagesFolder(contentId)
+      // const imagePath = imagesFolder + '/' + generateRandomName() + '.' + extension
+      // Storage::makeDirectory(imagesFolder)
+
+      // file_put_contents(storage_path('app/public/' . $imagePath), base64_decode($data));
+      // Storage::put($imagePath, base64_decode($data));
+
+      // img.src = '/storage/' + imagePath
+    }
+  })
+}
+
+
+const generateRandomName = () => {
+  const uuid = crypto.randomUUID() // có 36 ký tự
+  const bytesNum = 10
+  const random = crypto.randomBytes(bytesNum).toString('hex') // có bytesNum * 2 = 20 ký tự
+  return uuid + random
 }
 
 
