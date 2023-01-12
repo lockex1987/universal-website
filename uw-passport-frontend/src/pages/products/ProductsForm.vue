@@ -29,7 +29,7 @@
     </a-form-item>
 
     <div class="mb-4">
-      <label class="form-label">
+      <label class="form-label required">
         HTML
       </label>
 
@@ -39,10 +39,6 @@
         toolbar="full"
         v-model:content="frm.content"
       />
-
-      <!--div>
-        {{ frm.content }}
-      </div-->
     </div>
 
     <a-form-item
@@ -82,7 +78,6 @@
 
 <script setup>
 import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 const defaultFrm = {
   _id: null,
