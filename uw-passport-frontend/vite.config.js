@@ -6,6 +6,10 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
+  // Không copy nội dung thư mục public (static, upload)
+  // Khi phát triển thì cần
+  publicDir: true,
+
   plugins: [
     vue(),
 
@@ -38,7 +42,6 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://localhost:3000',
-      '/upload': 'http://localhost:3000',
     },
   },
 

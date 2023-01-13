@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --fix --ext .js,.vue src"
+    "lint": "eslint --fix --ext .js,.vue src",
+    "upload-link": "ln -s /home/huyennv9/projects/universal-website/uw-passport-backend/upload public/upload"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
