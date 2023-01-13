@@ -3,6 +3,7 @@ import express from 'express'
 import { ObjectId } from 'mongodb'
 import { authenticator } from 'otplib'
 import { RateLimiterRedis } from 'rate-limiter-flexible'
+import uaParser from 'ua-parser-js'
 import {
   generateRandomSessionId,
   getUser,
@@ -164,7 +165,8 @@ router.post('/login', async (request, response) => {
   await saveUser(redisUser, request, sessionId, expiredTimeSeconds)
   setCookie(response, sessionId, expiredTimeSeconds)
 
-  await insertLog(request, LOGIN, null, dbUser._id)
+  const ua = uaParser(request.headers['user-agent'])
+  await insertLog(request, LOGIN, ua, dbUser._id)
 
   response.json({
     code: 0,

@@ -108,8 +108,10 @@
             <td class="text-center">
               {{ formatDateTime(log.createdAt) }}
             </td>
-            <td>
-              {{ log.description }}
+            <td style="max-width: 550px">
+              <div class="line-clamp-ellipsis-1">
+                {{ log.description }}
+              </div>
             </td>
           </tr>
         </tbody>

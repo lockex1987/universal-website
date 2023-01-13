@@ -83,8 +83,14 @@
             <td class="text-center">
               {{ formatDateTime(log.createdAt) }}
             </td>
-            <td>
-              {{ log.description }}
+            <td style="max-width: 550px">
+              <div
+                :title="JSON.stringify(log.description)"
+                class="d-inline-block text-truncate"
+                style="max-width: 100%"
+              >
+                {{ log.description }}
+              </div>
             </td>
           </tr>
         </tbody>
