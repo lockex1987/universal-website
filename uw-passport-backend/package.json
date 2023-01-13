@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index.mjs",
+    "start": "node index.mjs",
     "upload-link": "ln -s /home/huyennv9/projects/universal-website/uw-passport-backend/upload public/upload"
   },
   "dependencies": {

@@ -7,7 +7,7 @@ import { ObjectId } from 'mongodb'
 import Jimp from 'jimp'
 import { authenticator } from 'otplib'
 import db from '#app/helpers/mongodb.mjs'
-import { getUser } from '#app/helpers/auth.mjs'
+import { getUser, updateUser } from '#app/helpers/auth.mjs'
 import { pick, getBasePath } from '#app/helpers/common.mjs'
 import { encrypt, decrypt } from '#app/helpers/encryption.mjs'
 import { code as appCode } from '#config/app.mjs'
@@ -205,6 +205,15 @@ router.post('/update_user_info', async (request, response) => {
     data.thumbnail = thumbnailPath
   }
   await db.collection('users').updateOne(query, { $set: data })
+
+  // Cập nhật thông tin ở Redis
+  const newUser = {
+    ...redisUser,
+    ...data,
+  }
+  console.log(newUser)
+  await updateUser(newUser, request)
+
   response.json({
     code: 0,
     message: 'Updated',
