@@ -1,4 +1,4 @@
-import { connect, close, getDb } from '#app/helpers/mongodb.mjs'
+import db, { close } from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 import axios from 'axios'
 
@@ -20,8 +20,6 @@ const productList = data.map(e => pick(e,
   'rating',
 ))
 
-await connect()
-const db = getDb()
 const result = await db.collection('products').insertMany(productList)
 console.log(result.insertedCount)
 close()

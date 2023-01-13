@@ -2,7 +2,7 @@ import { request } from 'express'
 import path from 'node:path'
 import asyncValidator from 'async-validator'
 import { ObjectId } from 'mongodb'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import vietnameseValidatorMessages from './vietnamese-validator-messages.mjs'
 
 const Schema = asyncValidator.default
@@ -44,7 +44,6 @@ const unique = async (rule, value, callback, source, options) => {
   const idField = rule.idField ?? '_id'
 
   const errors = []
-  const db = getDb()
   const query = { [field]: { $regex: '^' + value + '$', $options: 'i' } }
   if (ignoredIdValue) {
     query[idField] = { $ne: ignoredIdValue }
@@ -64,7 +63,6 @@ const exist = async (rule, value, callback, source, options) => {
 
   const col = rule.dbCol
   const errors = []
-  const db = getDb()
   const query = { _id: ObjectId(value) }
   const count = await db.collection(col).count(query)
   if (count == 0) {

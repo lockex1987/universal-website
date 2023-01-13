@@ -1,7 +1,7 @@
 import express from 'express'
 import { ObjectId } from 'mongodb'
 import bcrypt from 'bcrypt'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 import { getAllOrgs } from './orgs.mjs'
 import { getAllRoles } from './roles.mjs'
@@ -24,7 +24,6 @@ router.post('/search', async (request, response) => {
   }
 
   const sort = { _id: -1 }
-  const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
   const projection = {
     _id: 1,
@@ -78,7 +77,6 @@ router.post('/search', async (request, response) => {
 
 
 export const getAllUsers = async (request, response) => {
-  const db = getDb()
   // Không trả về các thông tin nhạy cảm như mật khẩu
   const projection = {
     _id: 1,
@@ -146,7 +144,6 @@ router.post('/insert', async (request, response) => {
     shouldShow: false,
   }
   data.password = bcrypt.hashSync(password, 10)
-  const db = getDb()
   const result = await db.collection('users').insertOne(data)
 
   response.json({
@@ -187,7 +184,6 @@ router.put('/update', async (request, response) => {
   if (password) {
     data.password = bcrypt.hashSync(password, 10)
   }
-  const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
 
   response.json({
@@ -200,7 +196,6 @@ router.put('/update', async (request, response) => {
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const query = { _id: ObjectId(_id) }
-  const db = getDb()
   // const result = await db.collection('users').deleteOne(query)
   // Collection users được ánh xạ từ nhiều chỗ, không nên xóa thực sự
   const data = { deletedAt: new Date() }
@@ -216,7 +211,6 @@ router.post('/show_totp_qr', async (request, response) => {
   const { _id } = request.body
   const query = { _id: ObjectId(_id) }
   const data = { 'totp.shouldShow': true }
-  const db = getDb()
   const result = await db.collection('users').updateOne(query, { $set: data })
   response.json({
     code: 0,

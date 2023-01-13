@@ -1,4 +1,4 @@
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 
 export const warningThreshold = 'warningThreshold'
 
@@ -11,7 +11,6 @@ export const configList = [
 ]
 
 export const getConfig = async code => {
-  const db = getDb()
   const query = { _id: code }
   const config = await db.collection('systemConfig').findOne(query)
   if (! config) {

@@ -1,5 +1,5 @@
 import express from 'express'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { configList } from '#app/helpers/system-configs.mjs'
 
 const router = express.Router()
@@ -9,7 +9,6 @@ const router = express.Router()
 
 
 router.get('/get-all', async (request, response) => {
-  const db = getDb()
   const list = await db.collection('systemConfigs').find()
     .toArray()
   configList.forEach(config => {
@@ -26,7 +25,6 @@ router.get('/get-all', async (request, response) => {
 
 router.post('/save-config', async (request, response) => {
   const configList = request.body
-  const db = getDb()
   for (const config of configList) {
     const query = { _id: config.code }
     const options = { upsert: true }

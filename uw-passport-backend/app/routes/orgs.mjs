@@ -1,6 +1,6 @@
 import express from 'express'
 import { ObjectId } from 'mongodb'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 import { pick } from '#app/helpers/common.mjs'
 
 const router = express.Router()
@@ -20,7 +20,6 @@ router.post('/search', async (request, response) => {
   selectedOrg && (query.path = { $regex: '/' + selectedOrg + '/' })
 
   const order = { _id: -1 }
-  const db = getDb()
   const col = db.collection('orgs')
   const total = await col.count(query)
 
@@ -39,7 +38,6 @@ router.post('/search', async (request, response) => {
 
 
 export const getAllOrgs = async (request, response) => {
-  const db = getDb()
   const list = await db.collection('orgs').find()
     .toArray()
   response.json(list)
@@ -62,7 +60,6 @@ router.post('/insert', async (request, response) => {
   const { parentId } = request.body
   const data = pick(request.body, 'name', 'description')
   data.parentId = parentId ? ObjectId(parentId) : null
-  const db = getDb()
   const result = await db.collection('orgs').insertOne(data)
 
   // await updatePaths()
@@ -104,7 +101,6 @@ router.put('/update', async (request, response) => {
   }
   await request.validate(rules)
 
-  const db = getDb()
   let parentObj
   if (parentId) {
     parentObj = await db.collection('orgs').findOne({ _id: ObjectId(parentId) })
@@ -152,7 +148,6 @@ router.put('/update', async (request, response) => {
 router.delete('/delete/:_id', async (request, response) => {
   const { _id } = request.params
   const objId = ObjectId(_id)
-  const db = getDb()
 
   // Chú ý cần xóa cả các bản ghi con
   // Hoặc để các bản ghi con ra ngoài
@@ -210,7 +205,6 @@ const updatePaths = async () => {
     } },
   ])
   */
-  const db = getDb()
   const data = await db.collection('orgs').find().toArray()
   generatePathOfRootNodes(data)
   for (const row of data) {

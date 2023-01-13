@@ -1,10 +1,7 @@
 import bcrypt from 'bcrypt'
 import { faker } from '@faker-js/faker'
-import { connect, close, getDb } from '#app/helpers/mongodb.mjs'
+import db, { close } from '#app/helpers/mongodb.mjs'
 
-await connect()
-
-const db = getDb()
 
 const insertOne = async () => {
   const username = 'lockex1987'

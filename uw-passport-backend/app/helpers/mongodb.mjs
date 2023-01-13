@@ -30,6 +30,4 @@ export const close = async () => {
   await client.close()
 }
 
-export const getDb = () => db
-
 export default db

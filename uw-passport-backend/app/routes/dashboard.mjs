@@ -1,11 +1,10 @@
 import express from 'express'
-import { getDb } from '#app/helpers/mongodb.mjs'
+import db from '#app/helpers/mongodb.mjs'
 
 const router = express.Router()
 
 
 router.get('/stats', async (request, response) => {
-  const db = getDb()
   const promises = [
     db.collection('permissions').count({}),
     db.collection('roles').count({}),
