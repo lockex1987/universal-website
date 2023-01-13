@@ -6,7 +6,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
-  // Không copy nội dung thư mục public (static, upload)
   // Khi phát triển thì cần
   publicDir: true,
 
@@ -50,6 +49,9 @@ export default defineConfig({
     // khi build thì không nhìn được
     // Phải chuyển thành true để nhìn được khi build
     sourcemap: true, // true, false, 'inline', 'hidden'
+
+    // Không copy nội dung thư mục public (static, upload) khi build
+    copyPublicDir: false,
   },
 
   css: {
