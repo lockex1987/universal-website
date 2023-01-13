@@ -211,7 +211,6 @@ router.post('/update_user_info', async (request, response) => {
     ...redisUser,
     ...data,
   }
-  console.log(newUser)
   await updateUser(newUser, request)
 
   response.json({
