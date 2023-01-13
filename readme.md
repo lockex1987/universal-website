@@ -986,6 +986,8 @@ Tạo thư mục upload rỗng. Tạo thư mục con avatar, products.
 
 Chỉnh PORT, ENV ở .env.mjs. PORT nên lẻ lẻ một tý. ENV là prod.
 
+Cập nhật file .env.
+
 Chạy npm run start. TODO: pm2.
 
 esbuild ra một file thôi.
