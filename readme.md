@@ -988,6 +988,8 @@ Chỉnh PORT, ENV ở .env.mjs. PORT nên lẻ lẻ một tý. ENV là prod.
 
 Chạy npm run start. TODO: pm2.
 
+esbuild ra một file thôi.
+
 #### Frontend
 
 Chạy

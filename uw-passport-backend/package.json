@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index.mjs",
-    "start": "node index.mjs",
-    "upload-link": "ln -s /home/huyennv9/projects/universal-website/uw-passport-backend/upload public/upload"
+    "build": "esbuild index.mjs --bundle --platform=node --minify --sourcemap=inline --target=esnext --format=esm --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --outfile=dist/index.mjs",
+    "start": "node --enable-source-maps dist/index.mjs"
   },
   "dependencies": {
     "async-validator": "^4.2.5",
@@ -13,6 +13,7 @@
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
     "express": "^5.0.0-beta.1",
     "express-fileupload": "^1.4.0",
     "jimp": "^0.16.2",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
+    "esbuild": "^0.16.17",
     "eslint": "^8.26.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
