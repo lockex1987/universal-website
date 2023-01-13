@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index.mjs",
-    "build": "esbuild index.mjs --bundle --platform=node --minify --sourcemap=inline --target=esnext --format=esm --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --outfile=dist/index.mjs",
+    "build": "node build.mjs",
     "start": "node --enable-source-maps dist/index.mjs"
   },
   "dependencies": {

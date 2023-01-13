@@ -990,6 +990,18 @@ Chạy npm run start. TODO: pm2.
 
 esbuild ra một file thôi.
 
+```bash
+npm run build
+```
+
+Copy file dist/index.mjs
+
+Chạy:
+
+```bash
+node --enable-source-maps dist/index.mjs
+```
+
 #### Frontend
 
 Chạy
@@ -998,7 +1010,9 @@ Chạy
 npm run build
 ```
 
-Copy thư mục dist. Chú ý giữ thư mục static. Chỉ nên thay thư mục assets và file index.html.
+Copy thư mục dist. Chỉ nên thay thư mục assets và file index.html.
+
+Chú ý khởi tạo, giữ thư mục static.
 
 Link đến thư mục upload:
 

@@ -6,9 +6,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
-  // Khi phát triển thì cần
-  publicDir: true,
-
   plugins: [
     vue(),
 
