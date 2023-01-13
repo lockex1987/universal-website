@@ -17,12 +17,27 @@ Clone:
 #### Features
 
 - Admin
-  - Authentication
-  - Change password
-  - Category
-  - Product
-  - Order
+  - Xác thực
+  - Đổi mật khẩu
+  - 2FA, TOPTP
+  - Log tác động, log người dùng
   - Dashboard
+  - Tổ chức
+  - Quyền
+  - Vai trò
+  - Người dùng
+  - Cấu hình hệ thống
+  - File log
+  - Phiên đăng nhập
+  - Demo
+    - Button
+    - Tree
+    - Tree Select
+    - Date Picker
+  - -- Category
+  - Sản phẩm
+  - -- Order
+  - 
 - Shopping
   - Home
   - Product
@@ -38,7 +53,7 @@ Vue 3 (Composition API), Vue Router
 
 Không sử dụng Pinia, sử dụng Composition cho đồng bộ, đơn giản
 
-Bootstrap
+Bootstrap 5
 
 Ant Design Vue, async-validator
 
@@ -49,8 +64,6 @@ Express
 MongoDB, Redis
 
 Nginx
-
-Highcharts
 
 ### Auto import package, Vue component
 
@@ -193,7 +206,7 @@ https://github.com/vueComponent/ant-design-vue
 
 Cả EP và ADV đều sử dụng async-validator, dayjs.
 
-#### On-demand Import
+### On-demand Import
 
 Auto import (Recommend)
 
@@ -237,7 +250,7 @@ Không có rule required => Không bắt buộc, không có ký tự *
 
 
 
-#### Plan, steps
+### Plan, steps
 
 GitHub branch each step
 
@@ -281,7 +294,7 @@ Product
 
 Upload image
 
-Step 10: AdonisJS Edge template
+Step 10: Express Edge template
 
 Step 11: Deploy
 
@@ -293,7 +306,7 @@ Step 13: Order
 
 status
 
-Step 10: Validate (Vue, AdonisJS)
+Step 10: Validate (Vue, Express)
 
 Step 14: Dashboard
 
@@ -307,7 +320,7 @@ Node.js
 
 Ubuntu (Linux)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin). ESLint extension too.
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur). ESLint extension too.
 
 JS, CSS, HTML knowledge
 
@@ -438,16 +451,7 @@ npm run dev
 
 http://localhost:3000/
 
-#### Type Support for `.vue` Imports in TS
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
 #### ESLint
 
@@ -459,7 +463,7 @@ Format, Lint on Save Vue, JS, JSON, TS, HTML
 
 .vscode/settings.json
 
-```
+```json
 {
   "editor.formatOnSave": true,
   "[json]": {
@@ -500,23 +504,25 @@ Format, Lint on Save Vue, JS, JSON, TS, HTML
 
 Add some custom rules to .eslintrc.cjs
 
-```
-rules: {
-  'semi': ['error', 'never'],
-  'indent': ['error', 2],
-  'space-before-function-paren': [
-    'error',
-    {
-      anonymous: 'always',
-      named: 'never',
-      asyncArrow: 'always',
-    },
-  ],
-  'operator-linebreak': ['error', 'before'],
-  'comma-dangle': ['error', 'always-multiline'],
-  'quotes': ['error', 'single'],
-  'quote-props': ['error', 'consistent-as-needed'],
-},
+```javascript
+{
+  rules: {
+    'semi': ['error', 'never'],
+    'indent': ['error', 2],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
+      },
+    ],
+    'operator-linebreak': ['error', 'before'],
+    'comma-dangle': ['error', 'always-multiline'],
+    'quotes': ['error', 'single'],
+    'quote-props': ['error', 'consistent-as-needed'],
+  },
+}
 ```
 
 #### GitHub
@@ -737,7 +743,7 @@ CSS is processed by JS.
 
 scss/style.scss
 
-### Axios, Fake API, Pinia
+### Axios, Fake API
 
 #### Axios
 
@@ -749,7 +755,7 @@ npm instal axios
 
 
 
-#### Pinia Store
+#### Store
 
 stores/cart.ts
 
@@ -897,7 +903,7 @@ AdonisJS Middleware
 
 Vue Router Middleware
 
-TODO: Rate Limit
+Rate Limit
 
 ### Change password
 
@@ -933,7 +939,7 @@ Element Plus pagination
 
 Add CSS, JS libraries by npm. No CDN, static files.
 
-Debounce function TypeScript
+Debounce function
 
 User
 
@@ -944,33 +950,104 @@ Upload image
 ### Facebook Messenger
 
 ```javascript
-var chatbox = document.getElementById('fb-customer-chat');
-    chatbox.setAttribute("page_id", "2307562982605619");
-    chatbox.setAttribute("attribution", "biz_inbox");
+var chatbox = document.getElementById('fb-customer-chat')
+chatbox.setAttribute("page_id", "2307562982605619")
+chatbox.setAttribute("attribution", "biz_inbox")
 
-    window.fbAsyncInit = function() {
-      FB.init({
-        xfbml            : true,
-        version          : 'v12.0'
-      });
-    };
+window.fbAsyncInit = function() {
+  FB.init({
+    xfbml: true,
+    version: 'v12.0',
+  })
+}
 
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0]
+  if (d.getElementById(id)) return
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'))
 ```
 
 
 
+### Deploy
 
+#### Backend
 
+Copy cả pnpm-lock.yaml
 
+Không copy node_modules, .vscode, public, upload, .env.example.mjs, .eslintrc.cjs, .gitignore, jsconfig.json, logs
 
+Tạo thư mục logs rỗng
 
+Tạo thư mục upload rỗng. Tạo thư mục con avatar, products.
 
+Chỉnh PORT, ENV ở .env.mjs. PORT nên lẻ lẻ một tý. ENV là prod.
 
+Chạy npm run start. TODO: pm2.
 
+#### Frontend
+
+Chạy
+
+```bash
+npm run build
+```
+
+Copy thư mục dist. Chú ý giữ thư mục static. Chỉ nên thay thư mục assets và file index.html.
+
+Link đến thư mục upload:
+
+```bash
+ln -s /home/huyennv9/projects/universal-website/deploy/backend/upload upload
+```
+
+Sửa file static/js/.env.js ? Không cần.
+
+Tạo Nginx /etc/nginx/conf.d/uw.conf:
+
+```nginx
+server {
+  listen 80;
+  server_name uw.local.vn;
+
+  root  /home/huyennv9/projects/universal-website/deploy/frontend;
+  index  index.html;
+  client_max_body_size 1000M;
+  
+  location / {
+    # Xử lý SPA
+    try_files $uri /index.html;
+  }
+
+  # Không có / ở cuối ở /api và http://localhost:3002
+  location /api {
+    proxy_pass http://localhost:3002;
+
+    # proxy_http_version 1.1;
+    # proxy_set_header Upgrade $http_upgrade;
+    # proxy_set_header Connection "upgrade";
+    # proxy_set_header Host $host;
+  }
+}
+```
+
+Chạy lại Nginx:
+
+```bash
+sudo systemctl restart nginx
+```
+
+```bash
+sudo systemctl status nginx
+```
+
+Sửa file /etc/hosts:
+
+```
+127.0.0.1    uw.local.vn
+```
+
+Truy cập http://uw.local.vn.
