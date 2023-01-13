@@ -996,7 +996,7 @@ esbuild ra một file thôi.
 npm run build
 ```
 
-Copy file dist/index.mjs
+Copy file dist/index.mjs, package.json, .env.
 
 Chạy:
 

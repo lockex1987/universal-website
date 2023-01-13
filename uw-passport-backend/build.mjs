@@ -7,9 +7,11 @@ esbuild.build({
   minify: true,
   sourcemap: 'inline',
   target: 'esnext',
-  format: 'esm',
+  // có thể bị lỗi ReferenceError: __dirname is not defined in ES module scope
+  // format: 'esm',
+  format: 'cjs',
   banner: {
-    js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
+    // js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
   },
   external: [
     'canvas',
@@ -17,5 +19,6 @@ esbuild.build({
     'aws-sdk',
     'mock-aws-s3',
   ],
-  outfile: 'dist/index.mjs',
+  // outfile: 'dist/index.mjs',
+  outfile: 'dist/index.js',
 }).catch(() => process.exit(1))
